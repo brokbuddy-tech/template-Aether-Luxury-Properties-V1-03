@@ -236,10 +236,10 @@ export const newsArticles: NewsArticle[] = [
 ];
 
 export const communities: Community[] = [
-    { name: "Palm Jumeirah", image: "community-palm", href: "#"},
-    { name: "Dubai Marina", image: "community-marina", href: "#"},
-    { name: "Downtown Dubai", image: "hero-dubai", href: "#"},
-    { name: "Emirates Hills", image: "property-1-ext", href: "#"},
+    { name: "Palm Jumeirah", image: "community-palm", href: "#", description: "Iconic man-made island known for its luxurious villas and high-end hotels."},
+    { name: "Dubai Marina", image: "community-marina", href: "#", description: "A vibrant waterfront community with skyscrapers, restaurants, and entertainment."},
+    { name: "Downtown Dubai", image: "hero-dubai", href: "#", description: "Home to the Burj Khalifa and The Dubai Mall, the heart of the city's buzz."},
+    { name: "Emirates Hills", image: "property-1-ext", href: "#", description: "An exclusive gated community with sprawling villas and lush green golf courses."},
 ]
 
 export const socialLinks: SocialLink[] = [

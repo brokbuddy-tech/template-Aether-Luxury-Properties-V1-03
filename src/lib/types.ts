@@ -64,6 +64,7 @@ export type Community = {
   name: string;
   image: string;
   href: string;
+  description: string;
 };
 
 export type SocialLink = {

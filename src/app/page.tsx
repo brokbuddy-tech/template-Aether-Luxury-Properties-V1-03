@@ -528,10 +528,13 @@ export default function Home() {
                                className="object-cover transition-transform duration-500 group-hover:scale-110"
                              />
                            )}
-                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                           <div className="absolute bottom-0 left-0 right-0 p-4">
-                              <div className="rounded-lg bg-white/10 p-4 backdrop-blur-md border border-white/20">
+                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                           <div className="absolute bottom-0 left-0 right-0 p-6">
+                              <div className="p-4 rounded-lg md:bg-transparent md:backdrop-blur-none md:border-transparent group-hover:bg-white/10 group-hover:backdrop-blur-md group-hover:border group-hover:border-white/20 transition-all duration-300 bg-white/10 backdrop-blur-md border border-white/20">
                                 <h3 className="text-3xl font-bold text-white font-headline">{community.name}</h3>
+                                <p className="text-white/80 mt-2 line-clamp-2 md:max-h-0 md:opacity-0 group-hover:max-h-12 group-hover:opacity-100 transition-all duration-300 delay-100 ease-in-out overflow-hidden">
+                                  {community.description}
+                                </p>
                               </div>
                            </div>
                          </div>
