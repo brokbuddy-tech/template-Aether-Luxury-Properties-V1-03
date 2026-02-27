@@ -101,6 +101,12 @@
       "description": "Dubai Marina skyline with yachts",
       "imageUrl": "https://images.unsplash.com/photo-1541439695502-3868a8f7c505?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkdWJhaSUyMG1hcmluYXxlbnwwfHx8fDE3NzI1MDI1MjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "dubai marina"
+    },
+    {
+      "id": "team-group",
+      "description": "A diverse group of professional real estate agents in a modern office",
+      "imageUrl": "https://images.unsplash.com/photo-1573496130407-57329f01f769?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxidXNpbmVzcyUyMHRlYW18ZW58MHx8fHwxNzcyNTg2NzAyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "business team"
     }
   ]
 }

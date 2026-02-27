@@ -17,14 +17,13 @@ import {
   Users,
   Video,
 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import {
   services,
   stats,
-  teamMembers,
-  newsArticles,
   communities,
   socialLinks,
 } from '@/lib/data';
@@ -33,8 +32,6 @@ import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
 import {
   Card,
   CardContent,
-  CardFooter,
-  CardHeader,
 } from '@/components/ui/card';
 import {
   Carousel,
@@ -46,7 +43,6 @@ import {
 } from '@/components/ui/carousel';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Label } from '@/components/ui/label';
@@ -59,11 +55,32 @@ export default function Home() {
   const [priceRange, setPriceRange] = useState([0]);
   const [currency, setCurrency] = useState('AED');
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-2');
-  const awardsImage = PlaceHolderImages.find(p => p.id === 'awards-1');
   const { openModal: openAiSearchModal } = useAiSearchModal();
 
   const [serviceCarouselApi, setServiceCarouselApi] = useState<CarouselApi>()
   const [scrollProgress, setScrollProgress] = useState(0)
+
+  const [expertiseCarouselApi, setExpertiseCarouselApi] = useState<CarouselApi>()
+  const [currentSlide, setCurrentSlide] = useState(0)
+
+  const expertiseSlides = [
+    {
+      tagline: 'WHY AETHER LUXURY',
+      headline: 'Property Expertise, Backed by Structure',
+      body: 'Our agents have deep expertise in Dubai and the systems to back it up – so your move is informed and smooth.',
+    },
+    {
+      tagline: 'DATA-DRIVEN & TECH-ENABLED',
+      headline: 'A Smoother Path to Completion',
+      body: "Aether's structured approach and dedicated client managers are setting new standards for efficiency and transparency in property transactions, powered by market-leading technology.",
+    },
+    {
+      tagline: 'AWARD-WINNING SERVICE',
+      headline: 'Recognised for Excellence',
+      body: 'Our commitment to client success has earned us numerous accolades. We combine market intelligence with a passion for service to deliver exceptional results.',
+    },
+  ];
+  const teamImage = PlaceHolderImages.find(p => p.id === 'team-group');
 
   useEffect(() => {
     if (!serviceCarouselApi) {
@@ -85,6 +102,25 @@ export default function Home() {
       }
     }
   }, [serviceCarouselApi])
+  
+  useEffect(() => {
+    if (!expertiseCarouselApi) {
+      return
+    }
+    const onSelect = () => {
+      setCurrentSlide(expertiseCarouselApi.selectedScrollSnap())
+    }
+    expertiseCarouselApi.on('select', onSelect)
+    expertiseCarouselApi.on('reInit', onSelect)
+    onSelect()
+    
+    return () => {
+      if(expertiseCarouselApi) {
+        expertiseCarouselApi.off('select', onSelect)
+        expertiseCarouselApi.off('reInit', onSelect)
+      }
+    }
+  }, [expertiseCarouselApi])
 
   const formatPrice = (value: number) => {
     const prefix = currency === 'USD' ? '$' : '';
@@ -344,100 +380,57 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 5: Team, Awards, & Content Hub */}
-      <section className="py-16 md:py-24 bg-secondary/50">
+      {/* Section 5: Why Aether Luxury */}
+      <section className="py-16 md:py-24 bg-background">
         <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <FadeInOnScroll>
-              <h2 className="text-4xl font-bold mb-8">
-                Property Expertise,
-                <br />
-                Backed by Structure.
-              </h2>
-              <div className="space-y-8">
-                <Card>
-                  <CardHeader>
-                    <h3 className="text-2xl font-bold">Meet The Team</h3>
-                  </CardHeader>
-                  <CardContent>
-                    <Carousel opts={{ loop: true }}>
-                      <CarouselContent>
-                        {teamMembers.map((member) => {
-                          const memberImage = PlaceHolderImages.find(
-                            p => p.id === member.image
-                          );
-                          return (
-                            <CarouselItem key={member.name} className="md:basis-1/2">
-                              <div className="flex items-center gap-4">
-                                <Avatar className="h-20 w-20">
-                                  {memberImage && <AvatarImage src={memberImage.imageUrl} />}
-                                  <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
-                                </Avatar>
-                                <div>
-                                  <p className="font-bold">{member.name}</p>
-                                  <p className="text-sm text-muted-foreground">{member.role}</p>
-                                </div>
-                              </div>
-                            </CarouselItem>
-                          );
-                        })}
-                      </CarouselContent>
-                       <CarouselPrevious className="-left-4"/>
-                       <CarouselNext className="-right-4"/>
-                    </Carousel>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <Carousel opts={{ loop: true }}>
-                    <CarouselContent>
-                      {newsArticles.map((article, i) => (
-                        <CarouselItem key={i}>
-                          <CardHeader>
-                            <h3 className="text-2xl font-bold">{article.title}</h3>
-                          </CardHeader>
-                          <CardContent>
-                            <p className="text-muted-foreground mb-4">{article.description}</p>
-                            <Button variant="link" asChild className="p-0 h-auto text-accent">
-                              <Link href={article.href}>Read More <ArrowRight className="ml-2 h-4 w-4"/></Link>
-                            </Button>
-                          </CardContent>
-                        </CarouselItem>
-                      ))}
-                    </CarouselContent>
-                     <CarouselPrevious className="top-8 right-16"/>
-                     <CarouselNext className="top-8 right-4"/>
-                  </Carousel>
-                </Card>
+              <div className="relative h-[400px] md:h-[600px]">
+                {teamImage && (
+                  <Image
+                    src={teamImage.imageUrl}
+                    alt={teamImage.description}
+                    data-ai-hint={teamImage.imageHint}
+                    fill
+                    className="object-contain object-center drop-shadow-2xl"
+                  />
+                )}
               </div>
             </FadeInOnScroll>
 
-            <div className="space-y-8">
-               <FadeInOnScroll delay={100}>
-                {awardsImage && (
-                  <Card className="overflow-hidden">
-                    <div className="relative h-64 w-full">
-                       <Image src={awardsImage.imageUrl} alt="Awards" data-ai-hint={awardsImage.imageHint} fill className="object-cover"/>
-                       <div className="absolute inset-0 bg-black/40"/>
-                       <div className="absolute bottom-6 left-6">
-                          <h3 className="text-2xl font-bold text-white">Aether recognised with four awards.</h3>
-                       </div>
-                    </div>
-                  </Card>
-                )}
-               </FadeInOnScroll>
-               <FadeInOnScroll delay={200}>
-                <div className="grid grid-cols-2 gap-8">
-                  {socialLinks.map(link => (
-                    <Link href={link.href} key={link.title}>
-                      <Card className="text-center p-8 hover:bg-muted transition-colors">
-                        <link.icon className="h-10 w-10 mx-auto text-accent mb-4"/>
-                        <h4 className="font-bold text-lg">{link.title}</h4>
-                      </Card>
-                    </Link>
+            <FadeInOnScroll delay={200}>
+              <Carousel setApi={setExpertiseCarouselApi}>
+                <CarouselContent>
+                  {expertiseSlides.map((slide, index) => (
+                    <CarouselItem key={index}>
+                      <div className="text-left">
+                        <p className="text-sm font-bold uppercase tracking-widest text-accent mb-4">
+                          {slide.tagline}
+                        </p>
+                        <h2 className="text-4xl font-extrabold leading-tight text-primary mb-6">
+                          {slide.headline}
+                        </h2>
+                        <p className="text-lg leading-relaxed text-muted-foreground">
+                          {slide.body}
+                        </p>
+                      </div>
+                    </CarouselItem>
                   ))}
-                </div>
-               </FadeInOnScroll>
-            </div>
+                </CarouselContent>
+              </Carousel>
+              <div className="flex gap-2 mt-8 justify-start">
+                {expertiseSlides.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => expertiseCarouselApi?.scrollTo(index)}
+                    className={cn(
+                      'h-2 w-2 rounded-full transition-all',
+                      currentSlide === index ? 'w-6 bg-accent' : 'bg-muted'
+                    )}
+                  />
+                ))}
+              </div>
+            </FadeInOnScroll>
           </div>
         </div>
       </section>
