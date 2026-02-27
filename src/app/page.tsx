@@ -554,7 +554,7 @@ export default function Home() {
        {/* Section 7: Lead Magnet */}
        <section className="relative bg-black py-16 md:py-24 overflow-hidden">
         {ctaImage && (
-            <ParallaxImage
+            <Image
                 src={ctaImage.imageUrl}
                 alt={ctaImage.description}
                 data-ai-hint={ctaImage.imageHint}
