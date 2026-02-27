@@ -486,7 +486,7 @@ export default function Home() {
       </section>
 
       {/* As Seen On Section */}
-      <section className="pb-12 pt-2.5 bg-muted">
+      <section className="py-12 bg-muted pt-0 mt-0">
         <div className="container">
           <FadeInOnScroll>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center text-muted-foreground/80 grayscale">
@@ -503,7 +503,12 @@ export default function Home() {
       <section className="py-16 md:py-24 bg-background">
         <div className="container">
           <FadeInOnScroll>
-             <h2 className="text-4xl font-bold text-center mb-12">Community Guides</h2>
+            <div className="text-center max-w-[900px] mx-auto mb-12">
+              <h2 className="text-4xl font-bold text-primary mb-4 font-headline">Explore Communities in Dubai</h2>
+              <p className="text-lg text-muted-foreground">
+                Choosing the right community is as fundamental as choosing the property itself. At <strong>Aether Luxury Properties</strong>, our specialized area experts provide you with deep, data-driven insights into localized pricing, market demand, and long-term investment value. We empower you to make confident, informed decisions rather than rushed ones—ensuring your future home or investment perfectly aligns with your lifestyle goals.
+              </p>
+            </div>
           </FadeInOnScroll>
           <Carousel opts={{ align: 'start' }}>
             <CarouselContent className="-ml-4">
@@ -523,8 +528,12 @@ export default function Home() {
                                className="object-cover transition-transform duration-500 group-hover:scale-110"
                              />
                            )}
-                           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                           <h3 className="absolute bottom-6 left-6 text-3xl font-bold text-white">{community.name}</h3>
+                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                           <div className="absolute bottom-0 left-0 right-0 p-4">
+                              <div className="rounded-lg bg-white/10 p-4 backdrop-blur-md border border-white/20">
+                                <h3 className="text-3xl font-bold text-white font-headline">{community.name}</h3>
+                              </div>
+                           </div>
                          </div>
                       </Link>
                      </FadeInOnScroll>
@@ -559,6 +568,7 @@ export default function Home() {
     
 
     
+
 
 
 
