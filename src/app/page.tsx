@@ -47,7 +47,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 
 export default function Home() {
-  const heroImage = PlaceHolderImages.find(p => p.id === 'hero-1');
+  const heroImage = PlaceHolderImages.find(p => p.id === 'hero-dubai');
   const awardsImage = PlaceHolderImages.find(p => p.id === 'awards-1');
 
   return (
@@ -60,11 +60,11 @@ export default function Home() {
             alt={heroImage.description}
             data-ai-hint={heroImage.imageHint}
             fill
-            className="object-cover z-[-1]"
+            className="object-cover z-[-2]"
             priority
           />
         )}
-        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-black/60 z-[-1]" />
         <div className="relative flex h-full flex-col items-center justify-center text-center text-white p-4">
           <FadeInOnScroll>
             <h1 className="text-4xl md:text-7xl font-bold tracking-widest">
