@@ -71,7 +71,7 @@ export default function Home() {
             </h1>
           </FadeInOnScroll>
           <FadeInOnScroll delay={200}>
-            <div className="mt-12 w-full max-w-4xl">
+            <div className="mt-12 w-full">
               <div className="p-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20">
                 <Tabs defaultValue="buy">
                   <TabsList className="bg-transparent">
@@ -102,7 +102,7 @@ export default function Home() {
 
       {/* Section 3: Service Discovery Grid */}
       <section className="py-16 md:py-24 bg-background">
-        <div className="container max-w-7xl">
+        <div className="container">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {services.map((service, index) => {
               const serviceImage = PlaceHolderImages.find(p => p.id === service.image);
@@ -139,7 +139,7 @@ export default function Home() {
 
       {/* Section 4: Data-Driven Performance Bar */}
       <section className="py-12 bg-[hsl(var(--chart-2))] text-white">
-        <div className="container max-w-7xl">
+        <div className="container">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             {stats.map((stat) => (
               <FadeInOnScroll key={stat.label}>
@@ -154,7 +154,7 @@ export default function Home() {
 
       {/* Section 5: Team, Awards, & Content Hub */}
       <section className="py-16 md:py-24 bg-secondary/50">
-        <div className="container max-w-7xl">
+        <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             <FadeInOnScroll>
               <h2 className="text-4xl font-bold mb-8">
@@ -252,7 +252,7 @@ export default function Home() {
 
       {/* Section 6: Community Guide Scroller */}
       <section className="py-16 md:py-24 bg-background">
-        <div className="container max-w-7xl">
+        <div className="container">
           <FadeInOnScroll>
              <h2 className="text-4xl font-bold text-center mb-12">Community Guides</h2>
           </FadeInOnScroll>
@@ -291,7 +291,7 @@ export default function Home() {
 
        {/* Section 7: Lead Magnet */}
        <section className="bg-muted py-16 md:py-24">
-        <div className="container max-w-3xl text-center">
+        <div className="container text-center">
           <FadeInOnScroll>
             <h2 className="text-3xl font-bold mb-4">Ready to Begin Your Journey?</h2>
             <p className="text-muted-foreground mb-8 text-lg">

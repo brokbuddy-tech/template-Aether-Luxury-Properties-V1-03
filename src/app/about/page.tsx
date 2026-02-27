@@ -28,7 +28,7 @@ export default function AboutPage() {
         </div>
       </section>
       <section className="py-16 md:py-24">
-        <div className="container max-w-4xl mx-auto">
+        <div className="container mx-auto">
           <FadeInOnScroll>
             <div className="prose lg:prose-lg max-w-none text-foreground">
               <h2 className="font-headline text-3xl font-bold">Our Mission</h2>

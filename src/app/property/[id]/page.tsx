@@ -20,7 +20,7 @@ export default function PropertyDetailPage({ params }: { params: { id: string } 
   const agentImage = PlaceHolderImages.find(p => p.id === property.agent.image);
 
   return (
-    <div className="container max-w-6xl py-12">
+    <div className="container py-12">
       <FadeInOnScroll threshold={0.01}>
         <Carousel className="w-full mb-8">
           <CarouselContent>

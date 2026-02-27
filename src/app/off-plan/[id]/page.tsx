@@ -14,7 +14,7 @@ export default function OffPlanDetailPage({ params }: { params: { id: string } }
   }
 
   return (
-    <div className="container max-w-6xl py-12">
+    <div className="container py-12">
       <Carousel className="w-full mb-8">
         <CarouselContent>
           {project.images.map((imgId, index) => {

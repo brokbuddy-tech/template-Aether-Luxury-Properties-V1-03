@@ -79,7 +79,7 @@ export default function DescriptionGeneratorPage() {
   };
 
   return (
-    <div className="container max-w-7xl grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="container grid grid-cols-1 lg:grid-cols-2 gap-8">
       <Card>
         <CardHeader>
           <CardTitle>AI Property Description Generator</CardTitle>
