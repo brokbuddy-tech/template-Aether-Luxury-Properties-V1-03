@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -53,9 +54,17 @@ import { useAiSearchModal } from '@/hooks/use-ai-search-modal';
 
 
 export default function Home() {
+  const [priceRange, setPriceRange] = useState([500000, 5000000]);
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-2');
   const awardsImage = PlaceHolderImages.find(p => p.id === 'awards-1');
   const { openModal: openAiSearchModal } = useAiSearchModal();
+
+  const formatPrice = (value: number) => {
+    if (value >= 10000000) return '$10M+';
+    if (value >= 1000000) return `$${(value / 1000000).toFixed(value % 1000000 === 0 ? 0 : 1)}M`;
+    if (value >= 1000) return `$${value / 1000}k`;
+    return `$${value}`;
+  };
 
   return (
     <div className="flex flex-col">
@@ -132,18 +141,24 @@ export default function Home() {
                             </div>
                             <div className="grid gap-y-6">
                                 <div className="space-y-3">
+                                  <div className="flex justify-between items-center">
                                     <Label htmlFor="price-range-popover" className='text-white'>Price Range (USD)</Label>
-                                    <Slider
-                                        id="price-range-popover"
-                                        defaultValue={[500000, 5000000]}
-                                        min={0}
-                                        max={10000000}
-                                        step={100000}
-                                    />
-                                    <div className="flex justify-between text-sm text-white/80">
-                                        <span>$500k</span>
-                                        <span>$10M+</span>
-                                    </div>
+                                    <span className='text-sm text-white/90'>
+                                      {formatPrice(priceRange[0])} - {formatPrice(priceRange[1])}
+                                    </span>
+                                  </div>
+                                  <Slider
+                                      id="price-range-popover"
+                                      value={priceRange}
+                                      onValueChange={setPriceRange}
+                                      min={0}
+                                      max={10000000}
+                                      step={100000}
+                                  />
+                                  <div className="flex justify-between text-sm text-white/80">
+                                      <span>{formatPrice(0)}</span>
+                                      <span>{formatPrice(10000000)}</span>
+                                  </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                   <div className="space-y-2">
