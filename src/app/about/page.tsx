@@ -1,3 +1,4 @@
+"use client";
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,6 +9,7 @@ import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
 import { Button } from '@/components/ui/button';
 import { teamMembers } from '@/lib/data';
 import { Card, CardContent } from '@/components/ui/card';
+import { ParallaxImage } from '@/components/parallax-image';
 
 const coreValues = [
   {
@@ -33,6 +35,7 @@ const coreValues = [
 ];
 
 export default function AboutPage() {
+  const aboutHeroImage = PlaceHolderImages.find(p => p.id === 'hero-dubai');
   const videoPlaceholder = PlaceHolderImages.find(p => p.id === 'property-1-int');
   const teamPortrait = PlaceHolderImages.find(p => p.id === 'team-group');
   const ceoPortrait = PlaceHolderImages.find(p => p.id === 'agent-1'); // Isabella Rossi - Founder & CEO
@@ -40,6 +43,30 @@ export default function AboutPage() {
 
   return (
     <div className="flex flex-col">
+      <section className="relative h-[50vh] w-full overflow-hidden">
+        {aboutHeroImage && (
+          <ParallaxImage
+            src={aboutHeroImage.imageUrl}
+            alt={aboutHeroImage.description}
+            data-ai-hint={aboutHeroImage.imageHint}
+            fill
+            className="object-cover"
+            priority
+          />
+        )}
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="relative flex h-full flex-col items-center justify-center text-center text-white p-4">
+          <FadeInOnScroll>
+            <h1 className="text-4xl md:text-6xl font-bold tracking-widest font-headline">
+              About Us
+            </h1>
+            <p className="mt-6 max-w-3xl text-lg text-white/90">
+              Redefining Dubai's real estate landscape through clarity, accountability, and data-driven insights.
+            </p>
+          </FadeInOnScroll>
+        </div>
+      </section>
+
       {/* 1. Hero: "Who We Are" */}
       <section className="bg-background py-16 md:py-24">
         <div className="container">
