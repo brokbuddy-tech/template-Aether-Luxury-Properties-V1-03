@@ -556,7 +556,7 @@ export default function Home() {
        {/* Section 7: Find Your Next Home CTA */}
       <section className="relative h-[500px] w-full overflow-hidden">
         {ctaImage && (
-          <ParallaxImage
+          <Image
             src={ctaImage.imageUrl}
             alt={ctaImage.description}
             data-ai-hint={ctaImage.imageHint}
