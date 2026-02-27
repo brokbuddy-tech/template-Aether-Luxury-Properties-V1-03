@@ -60,28 +60,6 @@ export default function Home() {
   const [serviceCarouselApi, setServiceCarouselApi] = useState<CarouselApi>()
   const [scrollProgress, setScrollProgress] = useState(0)
 
-  const [expertiseCarouselApi, setExpertiseCarouselApi] = useState<CarouselApi>()
-  const [currentSlide, setCurrentSlide] = useState(0)
-
-  const expertiseSlides = [
-    {
-      tagline: 'WHY AETHER LUXURY',
-      headline: 'Property Expertise, Backed by Structure',
-      body: 'Our agents have deep expertise in Dubai and the systems to back it up – so your move is informed and smooth.',
-    },
-    {
-      tagline: 'DATA-DRIVEN & TECH-ENABLED',
-      headline: 'A Smoother Path to Completion',
-      body: "Aether's structured approach and dedicated client managers are setting new standards for efficiency and transparency in property transactions, powered by market-leading technology.",
-    },
-    {
-      tagline: 'AWARD-WINNING SERVICE',
-      headline: 'Recognised for Excellence',
-      body: 'Our commitment to client success has earned us numerous accolades. We combine market intelligence with a passion for service to deliver exceptional results.',
-    },
-  ];
-  const teamImage = PlaceHolderImages.find(p => p.id === 'team-group');
-
   useEffect(() => {
     if (!serviceCarouselApi) {
       return
@@ -102,25 +80,6 @@ export default function Home() {
       }
     }
   }, [serviceCarouselApi])
-  
-  useEffect(() => {
-    if (!expertiseCarouselApi) {
-      return
-    }
-    const onSelect = () => {
-      setCurrentSlide(expertiseCarouselApi.selectedScrollSnap())
-    }
-    expertiseCarouselApi.on('select', onSelect)
-    expertiseCarouselApi.on('reInit', onSelect)
-    onSelect()
-    
-    return () => {
-      if(expertiseCarouselApi) {
-        expertiseCarouselApi.off('select', onSelect)
-        expertiseCarouselApi.off('reInit', onSelect)
-      }
-    }
-  }, [expertiseCarouselApi])
 
   const formatPrice = (value: number) => {
     const prefix = currency === 'USD' ? '$' : '';
@@ -380,61 +339,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 5: Why Aether Luxury */}
-      <section className="py-16 md:py-24 bg-background">
-        <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <FadeInOnScroll>
-              <div className="relative h-[400px] md:h-[600px]">
-                {teamImage && (
-                  <Image
-                    src={teamImage.imageUrl}
-                    alt={teamImage.description}
-                    data-ai-hint={teamImage.imageHint}
-                    fill
-                    className="object-contain object-center drop-shadow-2xl"
-                  />
-                )}
-              </div>
-            </FadeInOnScroll>
-
-            <FadeInOnScroll delay={200}>
-              <Carousel setApi={setExpertiseCarouselApi}>
-                <CarouselContent>
-                  {expertiseSlides.map((slide, index) => (
-                    <CarouselItem key={index}>
-                      <div className="text-left">
-                        <p className="text-sm font-bold uppercase tracking-widest text-accent mb-4">
-                          {slide.tagline}
-                        </p>
-                        <h2 className="text-4xl font-extrabold leading-tight text-primary mb-6">
-                          {slide.headline}
-                        </h2>
-                        <p className="text-lg leading-relaxed text-muted-foreground">
-                          {slide.body}
-                        </p>
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-              </Carousel>
-              <div className="flex gap-2 mt-8 justify-start">
-                {expertiseSlides.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => expertiseCarouselApi?.scrollTo(index)}
-                    className={cn(
-                      'h-2 w-2 rounded-full transition-all',
-                      currentSlide === index ? 'w-6 bg-accent' : 'bg-muted'
-                    )}
-                  />
-                ))}
-              </div>
-            </FadeInOnScroll>
-          </div>
-        </div>
-      </section>
-
       {/* Section 6: Community Guide Scroller */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container">
@@ -491,15 +395,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
