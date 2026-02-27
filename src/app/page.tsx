@@ -156,10 +156,6 @@ export default function Home() {
                                       step={100000}
                                       dir="ltr"
                                   />
-                                  <div className="flex justify-between text-sm text-white/80">
-                                      <span>{formatPrice(0)}</span>
-                                      <span>{formatPrice(10000000)}</span>
-                                  </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                   <div className="space-y-2">
@@ -430,5 +426,7 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     
