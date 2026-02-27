@@ -86,9 +86,9 @@
     },
     {
       "id": "awards-1",
-      "description": "Close up of a golden trophy",
-      "imageUrl": "https://images.unsplash.com/photo-1583324113620-9118b53057e4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhd2FyZCUyMHRyb3BoeXxlbnwwfHx8fDE3NzI1MDI0MTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "award trophy"
+      "description": "A collection of awards on a shelf",
+      "imageUrl": "https://images.unsplash.com/photo-1656761961831-bf4f231500b1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxNXx8YXdhcmRzJTIwfGVufDB8fHx8MTc3MjIwODU0OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "awards"
     },
     {
       "id": "community-palm",
