@@ -246,37 +246,48 @@ export default function Home() {
       {/* Section 3: Service Discovery Grid */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {services.map((service, index) => {
-              const serviceImage = PlaceHolderImages.find(p => p.id === service.image);
-              return (
-                <FadeInOnScroll key={service.title} delay={index * 100}>
-                  <Link href={service.href}>
-                    <Card className="group relative h-[400px] overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105">
-                      {serviceImage && (
-                        <Image
-                          src={serviceImage.imageUrl}
-                          alt={service.title}
-                          data-ai-hint={serviceImage.imageHint}
-                          fill
-                          className="object-cover transition-transform group-hover:scale-110"
-                        />
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                      <div className="absolute bottom-0 left-0 right-0 p-6">
-                        <div className="p-4 rounded-lg bg-white/10 backdrop-blur-md border border-white/20">
-                          <h3 className="text-2xl font-bold text-white">
-                            {service.title}
-                          </h3>
-                          <p className="text-white/80 mt-2 line-clamp-2">{service.description}</p>
-                        </div>
-                      </div>
-                    </Card>
-                  </Link>
-                </FadeInOnScroll>
-              );
-            })}
-          </div>
+          <Carousel
+            opts={{
+              align: "start",
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-4">
+              {services.map((service, index) => {
+                const serviceImage = PlaceHolderImages.find(p => p.id === service.image);
+                return (
+                  <CarouselItem key={service.title} className="pl-4 sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+                    <FadeInOnScroll delay={index * 100}>
+                      <Link href={service.href}>
+                        <Card className="group relative h-[400px] overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105">
+                          {serviceImage && (
+                            <Image
+                              src={serviceImage.imageUrl}
+                              alt={service.title}
+                              data-ai-hint={serviceImage.imageHint}
+                              fill
+                              className="object-cover transition-transform group-hover:scale-110"
+                            />
+                          )}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                          <div className="absolute bottom-0 left-0 right-0 p-6">
+                            <div className="p-4 rounded-lg bg-white/10 backdrop-blur-md border border-white/20">
+                              <h3 className="text-2xl font-bold text-white">
+                                {service.title}
+                              </h3>
+                              <p className="text-white/80 mt-2 line-clamp-2">{service.description}</p>
+                            </div>
+                          </div>
+                        </Card>
+                      </Link>
+                    </FadeInOnScroll>
+                  </CarouselItem>
+                );
+              })}
+            </CarouselContent>
+            <CarouselPrevious className="ml-14" />
+            <CarouselNext className="mr-14" />
+          </Carousel>
         </div>
       </section>
 
@@ -449,6 +460,8 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     
 
