@@ -8,6 +8,7 @@ import {
   Mic,
   Search,
   SlidersHorizontal,
+  Sparkles,
   Star,
   TrendingUp,
   Users,
@@ -102,6 +103,10 @@ export default function Home() {
                   <Button className="bg-accent hover:bg-accent/90 text-accent-foreground w-full md:w-auto">
                     <Search className="mr-2 h-4 w-4" />
                     Search
+                  </Button>
+                  <Button variant="ghost" className="text-white hover:bg-white/20 hover:text-white w-full md:w-auto">
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    AI Search
                   </Button>
                   <Button variant="ghost" className="text-white hover:bg-white/20 hover:text-white w-full md:w-auto">
                     <SlidersHorizontal className="mr-2 h-4 w-4" />
