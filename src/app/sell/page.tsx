@@ -1,13 +1,22 @@
 
 "use client";
 
-import { Award, Handshake, Target } from 'lucide-react';
+import { Award, Handshake, Target, CheckCircle, Loader2 } from 'lucide-react';
+import { useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
 import { useContactModal } from '@/hooks/use-contact-modal';
 import { ParallaxImage } from '@/components/parallax-image';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
 
 const workPrinciples = [
   {
@@ -27,9 +36,44 @@ const workPrinciples = [
   },
 ];
 
+const valuationSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Invalid email address'),
+  phone: z.string().min(1, 'Phone number is required'),
+  propertyAddress: z.string().min(1, 'Property address is required'),
+  propertyType: z.enum(['villa', 'apartment', 'townhouse', 'penthouse', 'land']),
+  bedrooms: z.coerce.number().int().min(0, 'Bedrooms are required'),
+});
+
+type ValuationFormValues = z.infer<typeof valuationSchema>;
+
+
 export default function SellPage() {
   const { openModal } = useContactModal();
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-sell');
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const form = useForm<ValuationFormValues>({
+    resolver: zodResolver(valuationSchema),
+    defaultValues: {
+        propertyType: 'villa',
+        bedrooms: 1,
+    },
+  });
+
+  const onSubmit: SubmitHandler<ValuationFormValues> = async (data) => {
+      setIsSubmitting(true);
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log(data);
+      setIsSubmitting(false);
+      toast({
+          title: "Valuation Request Sent",
+          description: "Thank you! An agent will be in touch with your property valuation shortly.",
+      });
+      form.reset();
+  };
 
   return (
     <div>
@@ -76,16 +120,84 @@ export default function SellPage() {
       </section>
 
       <section className="bg-muted py-16 md:py-24">
-        <div className="container text-center">
-          <FadeInOnScroll>
-            <h2 className="text-3xl font-bold mb-4">Ready to Begin Your Selling Journey?</h2>
-            <p className="text-muted-foreground mb-8 text-lg">
-              Contact one of our expert agents today for a complimentary property valuation and consultation.
-            </p>
-            <Button onClick={openModal} size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-              Contact an Agent
-            </Button>
-          </FadeInOnScroll>
+        <div className="container grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+              <FadeInOnScroll>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-4 font-headline">Ready to Begin Your Selling Journey?</h2>
+                  <p className="text-muted-foreground mb-8 text-lg">
+                      Receive a complimentary, data-driven valuation of your property from one of our expert agents. Simply fill out the form, and we'll be in touch to provide you with an accurate market assessment and a tailored selling strategy.
+                  </p>
+                  <div className="space-y-4 text-muted-foreground">
+                      <p className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-600" /> No-obligation valuation</p>
+                      <p className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-600" /> Expert market insights</p>
+                      <p className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-600" /> Confidential consultation</p>
+                  </div>
+                   <Button onClick={openModal} size="lg" variant="outline" className="mt-8 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                      Or, Contact an Agent Directly
+                    </Button>
+              </FadeInOnScroll>
+          </div>
+          <div>
+              <FadeInOnScroll delay={200}>
+                  <Card>
+                      <CardHeader>
+                          <CardTitle>Get a Free Property Valuation</CardTitle>
+                          <CardDescription>Fill in the details below to get started.</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                          <Form {...form}>
+                              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                                  <FormField control={form.control} name="name" render={({ field }) => (
+                                      <FormItem><FormLabel>Full Name</FormLabel><FormControl><Input placeholder="John Doe" {...field} /></FormControl><FormMessage /></FormItem>
+                                  )} />
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <FormField control={form.control} name="email" render={({ field }) => (
+                                        <FormItem><FormLabel>Email</FormLabel><FormControl><Input type="email" placeholder="john.doe@example.com" {...field} /></FormControl><FormMessage /></FormItem>
+                                    )} />
+                                    <FormField control={form.control} name="phone" render={({ field }) => (
+                                        <FormItem><FormLabel>Phone</FormLabel><FormControl><Input type="tel" placeholder="+971..." {...field} /></FormControl><FormMessage /></FormItem>
+                                    )} />
+                                  </div>
+                                  <FormField control={form.control} name="propertyAddress" render={({ field }) => (
+                                      <FormItem><FormLabel>Property Address</FormLabel><FormControl><Input placeholder="e.g., Apt 101, Downtown Views, Dubai" {...field} /></FormControl><FormMessage /></FormItem>
+                                  )} />
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <FormField control={form.control} name="propertyType" render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Property Type</FormLabel>
+                                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                                <FormControl><SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger></FormControl>
+                                                <SelectContent>
+                                                    {['villa', 'apartment', 'townhouse', 'penthouse', 'land'].map(type => (
+                                                        <SelectItem key={type} value={type} className="capitalize">{type}</SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )} />
+                                     <FormField control={form.control} name="bedrooms" render={({ field }) => (
+                                      <FormItem><FormLabel>Bedrooms</FormLabel>
+                                       <Select onValueChange={(value) => field.onChange(Number(value))} defaultValue={String(field.value)}>
+                                          <FormControl><SelectTrigger><SelectValue placeholder="Select bedrooms" /></SelectTrigger></FormControl>
+                                          <SelectContent>
+                                            {[0, 1, 2, 3, 4, 5, 6].map(num => (
+                                              <SelectItem key={num} value={String(num)}>{num === 0 ? 'Studio' : `${num} Bedroom${num > 1 ? 's' : ''}`}</SelectItem>
+                                            ))}
+                                          </SelectContent>
+                                        </Select>
+                                      <FormMessage /></FormItem>
+                                    )} />
+                                  </div>
+                                  <Button type="submit" disabled={isSubmitting} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                                      {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Submitting...</> : 'Get My Valuation'}
+                                  </Button>
+                              </form>
+                          </Form>
+                      </CardContent>
+                  </Card>
+              </FadeInOnScroll>
+          </div>
         </div>
       </section>
     </div>
