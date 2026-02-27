@@ -301,16 +301,18 @@ export default function Home() {
                               alt={service.title}
                               data-ai-hint={serviceImage.imageHint}
                               fill
-                              className="object-cover transition-transform group-hover:scale-110"
+                              className="object-cover transition-transform group-hover:scale-110 duration-500"
                             />
                           )}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
                           <div className="absolute bottom-0 left-0 right-0 p-6">
-                            <div className="p-4 rounded-lg bg-white/10 backdrop-blur-md border border-white/20">
+                            <div className="p-4 rounded-lg bg-transparent group-hover:bg-white/10 group-hover:backdrop-blur-md group-hover:border group-hover:border-white/20 transition-all duration-300">
                               <h3 className="text-2xl font-bold text-white">
                                 {service.title}
                               </h3>
-                              <p className="text-white/80 mt-2 line-clamp-2">{service.description}</p>
+                              <p className="text-white/80 mt-2 line-clamp-2 max-h-0 opacity-0 group-hover:max-h-12 group-hover:opacity-100 transition-all duration-300 delay-100 ease-in-out overflow-hidden">
+                                {service.description}
+                              </p>
                             </div>
                           </div>
                         </Card>
