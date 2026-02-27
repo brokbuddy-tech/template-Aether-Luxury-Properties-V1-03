@@ -44,6 +44,9 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Label } from '@/components/ui/label';
+import { Slider } from '@/components/ui/slider';
 
 
 export default function Home() {
@@ -108,10 +111,75 @@ export default function Home() {
                     <Sparkles className="mr-2 h-4 w-4" />
                     AI Search
                   </Button>
-                  <Button variant="ghost" className="text-white hover:bg-white/20 hover:text-white w-full md:w-auto">
-                    <SlidersHorizontal className="mr-2 h-4 w-4" />
-                    Advanced Filters
-                  </Button>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                        <Button variant="ghost" className="text-white hover:bg-white/20 hover:text-white w-full md:w-auto">
+                            <SlidersHorizontal className="mr-2 h-4 w-4" />
+                            Advanced Filters
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-80 bg-background/90 text-white border-white/20 backdrop-blur-xl">
+                        <div className="grid gap-4">
+                            <div className="space-y-2">
+                                <h4 className="font-medium leading-none">Advanced Filters</h4>
+                                <p className="text-sm text-white/80">
+                                    Refine your search criteria.
+                                </p>
+                            </div>
+                            <div className="grid gap-y-6">
+                                <div className="space-y-3">
+                                    <Label htmlFor="price-range-popover" className='text-white'>Price Range (USD)</Label>
+                                    <Slider
+                                        id="price-range-popover"
+                                        defaultValue={[500000, 5000000]}
+                                        min={0}
+                                        max={10000000}
+                                        step={100000}
+                                    />
+                                    <div className="flex justify-between text-sm text-white/80">
+                                        <span>$500k</span>
+                                        <span>$10M+</span>
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label className='text-white'>Bedrooms</Label>
+                                    <Select>
+                                        <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
+                                            <SelectValue placeholder="Any" />
+                                        </SelectTrigger>
+                                        <SelectContent className='bg-background/80 text-white border-white/20 backdrop-blur-xl'>
+                                            <SelectItem value="any">Any</SelectItem>
+                                            <SelectItem value="1">1+ Beds</SelectItem>
+                                            <SelectItem value="2">2+ Beds</SelectItem>
+                                            <SelectItem value="3">3+ Beds</SelectItem>
+                                            <SelectItem value="4">4+ Beds</SelectItem>
+                                            <SelectItem value="5">5+ Beds</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label className='text-white'>Bathrooms</Label>
+                                    <Select>
+                                        <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
+                                            <SelectValue placeholder="Any" />
+                                        </SelectTrigger>
+                                        <SelectContent className='bg-background/80 text-white border-white/20 backdrop-blur-xl'>
+                                            <SelectItem value="any">Any</SelectItem>
+                                            <SelectItem value="1">1+ Baths</SelectItem>
+                                            <SelectItem value="2">2+ Baths</SelectItem>
+                                            <SelectItem value="3">3+ Baths</SelectItem>
+                                            <SelectItem value="4">4+ Baths</SelectItem>
+                                            <SelectItem value="5">5+ Baths</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <Button className="bg-accent hover:bg-accent/90 text-accent-foreground w-full">
+                                    Apply Filters
+                                  </Button>
+                            </div>
+                        </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
             </div>
