@@ -378,20 +378,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* As Seen On Section */}
-      <section className="py-12 bg-muted">
-        <div className="container">
-          <FadeInOnScroll>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center text-muted-foreground/80 grayscale">
-              <span className="text-2xl font-headline font-semibold">Arabian Business</span>
-              <span className="text-3xl font-headline font-bold tracking-wider">INSIDER</span>
-              <span className="text-2xl font-headline font-bold">GULF NEWS</span>
-              <span className="text-2xl font-headline font-bold">The National</span>
-            </div>
-          </FadeInOnScroll>
-        </div>
-      </section>
-
        {/* Section 5: Professional Expertise Section */}
        <section className="py-16 md:py-24 bg-background">
         <div className="container">
@@ -499,6 +485,20 @@ export default function Home() {
         </div>
       </section>
 
+      {/* As Seen On Section */}
+      <section className="py-12 bg-muted">
+        <div className="container">
+          <FadeInOnScroll>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center text-muted-foreground/80 grayscale">
+              <span className="text-2xl font-headline font-semibold">Arabian Business</span>
+              <span className="text-3xl font-headline font-bold tracking-wider">INSIDER</span>
+              <span className="text-2xl font-headline font-bold">GULF NEWS</span>
+              <span className="text-2xl font-headline font-bold">The National</span>
+            </div>
+          </FadeInOnScroll>
+        </div>
+      </section>
+
       {/* Section 6: Community Guide Scroller */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container">
@@ -559,4 +559,5 @@ export default function Home() {
     
 
     
+
 
