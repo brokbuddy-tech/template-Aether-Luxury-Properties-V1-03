@@ -6,6 +6,8 @@ import { Footer } from '@/components/layout/footer';
 import { Toaster } from "@/components/ui/toaster"
 import { ContactModalProvider } from '@/hooks/use-contact-modal';
 import { ContactModal } from '@/components/contact-modal';
+import { AiSearchModalProvider } from '@/hooks/use-ai-search-modal';
+import { AiSearchModal } from '@/components/ai-search-modal';
 
 
 export const metadata: Metadata = {
@@ -27,13 +29,16 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <ContactModalProvider>
-          <div className="flex min-h-screen flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-          <ContactModal />
-          <Toaster />
+          <AiSearchModalProvider>
+            <div className="flex min-h-screen flex-col">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+            <ContactModal />
+            <AiSearchModal />
+            <Toaster />
+          </AiSearchModalProvider>
         </ContactModalProvider>
       </body>
     </html>

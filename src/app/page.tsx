@@ -1,4 +1,6 @@
 
+"use client";
+
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -47,11 +49,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
+import { useAiSearchModal } from '@/hooks/use-ai-search-modal';
 
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-2');
   const awardsImage = PlaceHolderImages.find(p => p.id === 'awards-1');
+  const { openModal: openAiSearchModal } = useAiSearchModal();
 
   return (
     <div className="flex flex-col">
@@ -96,7 +100,7 @@ export default function Home() {
                     <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0 w-full md:w-[220px]">
                       <SelectValue placeholder="Property Type" />
                     </SelectTrigger>
-                    <SelectContent className='bg-background/80 text-white border-white/20 backdrop-blur-xl'>
+                    <SelectContent className='bg-black/50 text-white border-white/20 backdrop-blur-xl'>
                       <SelectItem value="apartments">Apartments</SelectItem>
                       <SelectItem value="villas">Villas</SelectItem>
                       <SelectItem value="penthouses">Penthouses</SelectItem>
@@ -107,7 +111,7 @@ export default function Home() {
                     <Search className="mr-2 h-4 w-4" />
                     Search
                   </Button>
-                  <Button variant="ghost" className="text-white hover:bg-white/20 hover:text-white w-full md:w-auto">
+                  <Button variant="ghost" className="text-white hover:bg-white/20 hover:text-white w-full md:w-auto" onClick={openAiSearchModal}>
                     <Sparkles className="mr-2 h-4 w-4" />
                     AI Search
                   </Button>
@@ -118,7 +122,7 @@ export default function Home() {
                             Advanced Filters
                         </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-80 border border-white/20 bg-black/30 text-white backdrop-blur-lg">
+                    <PopoverContent className="w-80 border border-white/20 bg-black/50 text-white backdrop-blur-lg">
                         <div className="grid gap-4">
                             <div className="space-y-2">
                                 <h4 className="font-medium leading-none">Advanced Filters</h4>
