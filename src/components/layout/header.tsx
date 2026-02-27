@@ -40,7 +40,7 @@ export function Header() {
   );
   
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/20 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-border/30 bg-background/50 backdrop-blur-lg supports-[backdrop-filter]:bg-background/30">
       <div className="container flex h-16 items-center justify-between">
         <Logo />
         
