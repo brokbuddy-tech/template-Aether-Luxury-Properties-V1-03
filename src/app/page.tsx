@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -42,6 +42,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from '@/components/ui/carousel';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
@@ -51,6 +52,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { useAiSearchModal } from '@/hooks/use-ai-search-modal';
+import { Progress } from '@/components/ui/progress';
 
 
 export default function Home() {
@@ -59,6 +61,28 @@ export default function Home() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-2');
   const awardsImage = PlaceHolderImages.find(p => p.id === 'awards-1');
   const { openModal: openAiSearchModal } = useAiSearchModal();
+
+  const [serviceCarouselApi, setServiceCarouselApi] = useState<CarouselApi>()
+  const [scrollProgress, setScrollProgress] = useState(0)
+
+  useEffect(() => {
+    if (!serviceCarouselApi) {
+      return
+    }
+
+    const onScroll = () => {
+      setScrollProgress(serviceCarouselApi.scrollProgress() * 100)
+    }
+
+    serviceCarouselApi.on('scroll', onScroll)
+    serviceCarouselApi.on('reInit', onScroll)
+    onScroll()
+
+    return () => {
+      serviceCarouselApi.off('scroll', onScroll)
+      serviceCarouselApi.off('reInit', onScroll)
+    }
+  }, [serviceCarouselApi])
 
   const formatPrice = (value: number) => {
     const prefix = currency === 'USD' ? '$' : '';
@@ -247,6 +271,7 @@ export default function Home() {
       <section className="py-16 md:py-24 bg-background">
         <div className="container">
           <Carousel
+            setApi={setServiceCarouselApi}
             opts={{
               align: "start",
             }}
@@ -288,6 +313,7 @@ export default function Home() {
             <CarouselPrevious className="ml-14" />
             <CarouselNext className="mr-14" />
           </Carousel>
+          <Progress value={scrollProgress} className="mt-4 w-1/3 mx-auto" />
         </div>
       </section>
 
@@ -460,6 +486,8 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     
 
