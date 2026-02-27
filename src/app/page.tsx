@@ -55,15 +55,25 @@ import { useAiSearchModal } from '@/hooks/use-ai-search-modal';
 
 export default function Home() {
   const [priceRange, setPriceRange] = useState([0]);
+  const [currency, setCurrency] = useState('AED');
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-2');
   const awardsImage = PlaceHolderImages.find(p => p.id === 'awards-1');
   const { openModal: openAiSearchModal } = useAiSearchModal();
 
   const formatPrice = (value: number) => {
-    if (value >= 10000000) return '$10M+';
-    if (value >= 1000000) return `$${(value / 1000000).toFixed(value % 1000000 === 0 ? 0 : 1)}M`;
-    if (value >= 1000) return `$${value / 1000}k`;
-    return `$${value}`;
+    const prefix = currency === 'USD' ? '$' : '';
+    const suffix = currency !== 'USD' ? ` ${currency}` : '';
+
+    if (value >= 10000000) {
+      return `${prefix}10M+${suffix}`;
+    }
+    if (value >= 1000000) {
+      return `${prefix}${(value / 1000000).toFixed(value % 1000000 === 0 ? 0 : 1)}M${suffix}`;
+    }
+    if (value >= 1000) {
+      return `${prefix}${(value / 1000).toFixed(value % 1000 === 0 ? 0 : 1)}k${suffix}`;
+    }
+    return `${prefix}${value}${suffix}`;
   };
 
   return (
@@ -142,7 +152,20 @@ export default function Home() {
                             <div className="grid gap-y-6">
                                 <div className="space-y-3">
                                   <div className="flex justify-between items-center">
-                                    <Label htmlFor="price-range-popover" className='text-white'>Max Price (USD)</Label>
+                                    <div className="flex items-center gap-2">
+                                      <Label htmlFor="price-range-popover" className='text-white'>Max Price</Label>
+                                      <Select value={currency} onValueChange={setCurrency}>
+                                          <SelectTrigger className="w-[90px] h-7 text-xs bg-white/20 border-0 text-white focus:ring-accent focus:ring-offset-0">
+                                              <SelectValue />
+                                          </SelectTrigger>
+                                          <SelectContent className='border border-white/20 bg-black/50 text-white backdrop-blur-lg'>
+                                              <SelectItem value="AED">AED</SelectItem>
+                                              <SelectItem value="USD">USD</SelectItem>
+                                              <SelectItem value="EUR">EUR</SelectItem>
+                                              <SelectItem value="GBP">GBP</SelectItem>
+                                          </SelectContent>
+                                      </Select>
+                                    </div>
                                     <span className='text-sm text-white/90'>
                                       {formatPrice(priceRange[0])}
                                     </span>
@@ -426,5 +449,7 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     
