@@ -489,7 +489,7 @@ export default function Home() {
       </section>
 
       {/* As Seen On Section */}
-      <section className="py-12 bg-muted pt-0 mt-0">
+      <section className="py-12 bg-muted pt-0 mt-[10px]">
         <div className="container">
           <FadeInOnScroll>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center text-muted-foreground/80 grayscale">
@@ -554,16 +554,12 @@ export default function Home() {
       </section>
 
        {/* Section 7: Find Your Next Home CTA */}
-      <section className="relative h-[500px] w-full overflow-hidden">
-        {ctaImage && (
-          <Image
-            src={ctaImage.imageUrl}
-            alt={ctaImage.description}
-            data-ai-hint={ctaImage.imageHint}
-            fill
-            className="object-cover"
-          />
-        )}
+      <section
+        className="relative h-[500px] w-full bg-cover bg-center bg-fixed"
+        style={{
+          backgroundImage: ctaImage ? `url(${ctaImage.imageUrl})` : 'none',
+        }}
+      >
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white p-4">
           <FadeInOnScroll>
@@ -597,4 +593,5 @@ export default function Home() {
 
 
     
+
 
