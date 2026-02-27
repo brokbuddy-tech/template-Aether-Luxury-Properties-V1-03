@@ -102,6 +102,13 @@ export default function Home() {
     }
   }, [serviceCarouselApi])
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setExpertiseIndex(prevIndex => (prevIndex + 1) % expertiseSlides.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [expertiseSlides.length]);
+
   const formatPrice = (value: number) => {
     const prefix = currency === 'USD' ? '$' : '';
     const suffix = currency !== 'USD' ? ` ${currency}` : '';
@@ -466,5 +473,7 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     
