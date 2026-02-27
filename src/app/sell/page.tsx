@@ -47,6 +47,25 @@ const valuationSchema = z.object({
 
 type ValuationFormValues = z.infer<typeof valuationSchema>;
 
+const sellPillars = [
+    {
+      title: "Accurate, Market-Led Valuations",
+      description: "Valuations based on real-time data and local insight to help you price your property right."
+    },
+    {
+      title: "Serious Buyers, Ready to Move",
+      description: "Access one of Dubai’s largest buyer networks actively searching for homes just like yours."
+    },
+    {
+      title: "Marketing That Makes an Impact",
+      description: "Professional photography, premium listings, and paid campaigns designed to attract attention and drive enquiries."
+    },
+    {
+      title: "Personal Service, Start to Sold",
+      description: "Your dedicated agent handles everything — from viewings to negotiation — ensuring a seamless sales journey."
+    }
+];
+
 
 export default function SellPage() {
   const { openModal } = useContactModal();
@@ -200,6 +219,33 @@ export default function SellPage() {
           </div>
         </div>
       </section>
+
+      <section className="py-16 md:py-24 bg-background">
+        <div className="container flex flex-col items-center">
+            <FadeInOnScroll>
+                <div className="text-center max-w-4xl">
+                    <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Why Sell With Us?</h2>
+                    <p className="text-lg text-muted-foreground leading-relaxed">
+                        At Aether Luxury Properties, selling your property is more than a transaction — it’s a partnership built on trust, transparency, and results. Our mission is to deliver the smoothest, most rewarding selling experience in the Dubai property market.
+                    </p>
+                </div>
+            </FadeInOnScroll>
+            
+            <div className="border-t my-10 w-full" />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
+                {sellPillars.map((pillar, index) => (
+                    <FadeInOnScroll key={pillar.title} delay={index * 100}>
+                        <div>
+                            <h3 className="text-xl font-bold text-primary mb-3 font-headline">{pillar.title}</h3>
+                            <p className="text-base text-muted-foreground leading-relaxed">{pillar.description}</p>
+                        </div>
+                    </FadeInOnScroll>
+                ))}
+            </div>
+        </div>
+      </section>
+
     </div>
   );
 }
