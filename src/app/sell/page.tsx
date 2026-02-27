@@ -17,6 +17,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 const workPrinciples = [
   {
@@ -66,6 +67,32 @@ const sellPillars = [
     }
 ];
 
+const faqs = [
+  {
+    question: "How much does a property valuation cost?",
+    answer: "Our property valuations are completely complimentary and come with no obligation. It's the first step in our commitment to providing you with transparent, expert advice."
+  },
+  {
+    question: "How long does it take to get my valuation?",
+    answer: "After you submit your request, one of our dedicated market experts will typically be in touch within 24 hours to discuss your property and provide an initial data-driven assessment."
+  },
+  {
+    question: "What factors affect my property's value?",
+    answer: "A property's value is determined by a combination of factors, including location, size, condition, unique features, recent comparable sales in the area, and current market trends. Our experts analyze all these data points to provide the most accurate valuation."
+  },
+  {
+    question: "Do I need to prepare anything before the valuation?",
+    answer: "While not essential, having a list of any recent upgrades or renovations, and details of service charges or community fees can be helpful. Our agent will guide you through everything else during the consultation."
+  },
+  {
+    question: "How will my property be marketed?",
+    answer: "We employ a bespoke marketing strategy for each property, which includes professional photography and videography, premium placements on top property portals, targeted social media campaigns, and exposure to our exclusive network of qualified buyers."
+  },
+  {
+    question: "What happens after I list my property?",
+    answer: "Once listed, your dedicated agent will manage all viewings, provide regular feedback, and handle all negotiations on your behalf. We manage the entire process, from listing to closing, ensuring a seamless and successful sale."
+  }
+];
 
 export default function SellPage() {
   const { openModal } = useContactModal();
@@ -243,6 +270,36 @@ export default function SellPage() {
                     </FadeInOnScroll>
                 ))}
             </div>
+        </div>
+      </section>
+
+      <section className="py-16 md:py-24 bg-background">
+        <div className="container grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div className="lg:col-span-1">
+            <div className="sticky top-24">
+              <FadeInOnScroll>
+                <h2 className="text-4xl font-extrabold text-primary font-headline">
+                  Valuation FAQs
+                </h2>
+              </FadeInOnScroll>
+            </div>
+          </div>
+          <div className="lg:col-span-2">
+            <FadeInOnScroll delay={200}>
+              <Accordion type="single" collapsible className="w-full">
+                {faqs.map((faq, index) => (
+                  <AccordionItem value={`item-${index}`} key={index} className="border-b py-6">
+                    <AccordionTrigger className="text-lg font-semibold text-left hover:text-accent transition-colors">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="pt-4 text-muted-foreground leading-relaxed">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </FadeInOnScroll>
+          </div>
         </div>
       </section>
 
