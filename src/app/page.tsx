@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from 'next/link';
@@ -67,11 +66,11 @@ export default function Home() {
             alt={heroImage.description}
             data-ai-hint={heroImage.imageHint}
             fill
-            className="object-cover z-[-2]"
+            className="object-cover"
             priority
           />
         )}
-        <div className="absolute inset-0 bg-black/60 z-[-1]" />
+        <div className="absolute inset-0 bg-black/60" />
         <div className="relative flex h-full flex-col items-center justify-center text-center text-white p-4">
           <FadeInOnScroll>
             <h1 className="text-4xl md:text-7xl font-bold tracking-widest">
@@ -174,6 +173,21 @@ export default function Home() {
                                             <SelectItem value="3">3+ Baths</SelectItem>
                                             <SelectItem value="4">4+ Baths</SelectItem>
                                             <SelectItem value="5">5+ Baths</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label className='text-white'>Amenities</Label>
+                                    <Select>
+                                        <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
+                                            <SelectValue placeholder="Any" />
+                                        </SelectTrigger>
+                                        <SelectContent className='border border-white/20 bg-black/50 text-white backdrop-blur-lg'>
+                                            <SelectItem value="any">Any</SelectItem>
+                                            <SelectItem value="pool">Swimming Pool</SelectItem>
+                                            <SelectItem value="gym">Gym</SelectItem>
+                                            <SelectItem value="view">Ocean View</SelectItem>
+                                            <SelectItem value="theater">Home Theater</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
