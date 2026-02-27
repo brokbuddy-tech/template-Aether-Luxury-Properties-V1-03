@@ -118,7 +118,7 @@ export default function Home() {
                             Advanced Filters
                         </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-80 bg-background/90 text-white border-white/20 backdrop-blur-xl">
+                    <PopoverContent className="w-80 border border-white/20 bg-black/30 text-white backdrop-blur-lg">
                         <div className="grid gap-4">
                             <div className="space-y-2">
                                 <h4 className="font-medium leading-none">Advanced Filters</h4>
@@ -147,7 +147,7 @@ export default function Home() {
                                         <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
                                             <SelectValue placeholder="Any" />
                                         </SelectTrigger>
-                                        <SelectContent className='bg-background/80 text-white border-white/20 backdrop-blur-xl'>
+                                        <SelectContent className='border border-white/20 bg-black/50 text-white backdrop-blur-lg'>
                                             <SelectItem value="any">Any</SelectItem>
                                             <SelectItem value="1">1+ Beds</SelectItem>
                                             <SelectItem value="2">2+ Beds</SelectItem>
@@ -163,7 +163,7 @@ export default function Home() {
                                         <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
                                             <SelectValue placeholder="Any" />
                                         </SelectTrigger>
-                                        <SelectContent className='bg-background/80 text-white border-white/20 backdrop-blur-xl'>
+                                        <SelectContent className='border border-white/20 bg-black/50 text-white backdrop-blur-lg'>
                                             <SelectItem value="any">Any</SelectItem>
                                             <SelectItem value="1">1+ Baths</SelectItem>
                                             <SelectItem value="2">2+ Baths</SelectItem>
