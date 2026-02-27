@@ -26,6 +26,7 @@ import {
   stats,
   communities,
   socialLinks,
+  newsArticles,
 } from '@/lib/data';
 import { ParallaxImage } from '@/components/parallax-image';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
@@ -57,8 +58,10 @@ export default function Home() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-2');
   const { openModal: openAiSearchModal } = useAiSearchModal();
   const [expertiseIndex, setExpertiseIndex] = useState(0);
+  const [newsIndex, setNewsIndex] = useState(0);
 
   const teamImage = PlaceHolderImages.find(p => p.id === 'team-group');
+  const awardsImage = PlaceHolderImages.find(p => p.id === 'awards-1');
 
   const expertiseSlides = [
     {
@@ -412,6 +415,63 @@ export default function Home() {
                   />
                 ))}
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Section 5.5: Insights & Achievements */}
+      <section className="bg-muted py-16 md:py-24">
+        <div className="container">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Column: News Carousel */}
+            <div className="flex flex-col justify-center">
+              <div key={newsIndex}>
+                <FadeInOnScroll>
+                  <p className="text-xs font-bold uppercase tracking-widest text-accent">
+                    NEWS & UPDATES
+                  </p>
+                  <h2 className="mt-4 mb-4 text-4xl font-extrabold text-primary font-headline">
+                    {newsArticles[newsIndex].title}
+                  </h2>
+                  <p className="text-lg leading-relaxed text-muted-foreground">
+                    {newsArticles[newsIndex].description}
+                  </p>
+                  <Link href={newsArticles[newsIndex].href} className="mt-6 inline-block font-bold text-primary hover:underline">
+                    READ MORE »
+                  </Link>
+                </FadeInOnScroll>
+              </div>
+
+              <div className="flex gap-3 mt-8">
+                {newsArticles.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setNewsIndex(index)}
+                    className={cn(
+                      'h-3 w-3 rounded-full transition-colors',
+                      newsIndex === index ? 'bg-accent' : 'bg-gray-300 hover:bg-gray-400'
+                    )}
+                    aria-label={`Go to news slide ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Right Column: Awards Image */}
+            <div>
+              <FadeInOnScroll delay={200}>
+                  {awardsImage && (
+                    <Image
+                        src={awardsImage.imageUrl}
+                        alt={awardsImage.description}
+                        data-ai-hint={awardsImage.imageHint}
+                        width={800}
+                        height={600}
+                        className="rounded-lg object-cover aspect-video"
+                    />
+                  )}
+              </FadeInOnScroll>
             </div>
           </div>
         </div>

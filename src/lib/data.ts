@@ -228,6 +228,11 @@ export const newsArticles: NewsArticle[] = [
         description: "We dive deep into the growing trend of branded residences in Dubai and what it means for luxury real estate investors.",
         href: '#'
     },
+    {
+        title: "When is the Best Time to Renovate?",
+        description: "Timing your renovation after purchasing a property in Dubai is key, whether for personal use or investment. Learn the optimal strategies.",
+        href: '#'
+    }
 ];
 
 export const communities: Community[] = [
