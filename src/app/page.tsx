@@ -272,7 +272,7 @@ export default function Home() {
       {/* Section 3: Service Discovery Grid */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container">
-          <div className="text-left max-w-3xl mb-12">
+          <div className="text-left max-w-3xl mb-12 ml-[10px]">
              <FadeInOnScroll>
                 <h2 className="text-4xl font-bold font-headline">Explore Property in Dubai</h2>
                 <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
@@ -496,6 +496,8 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     
 
