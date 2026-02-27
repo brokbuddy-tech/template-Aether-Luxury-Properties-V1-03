@@ -518,7 +518,7 @@ export default function Home() {
                   <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
                      <FadeInOnScroll delay={index * 100}>
                       <Link href={community.href}>
-                         <div className="group relative h-[450px] overflow-hidden rounded-lg">
+                         <Card className="group relative h-[450px] overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105">
                            {communityImage && (
                              <Image
                                src={communityImage.imageUrl}
@@ -537,7 +537,7 @@ export default function Home() {
                                 </p>
                               </div>
                            </div>
-                         </div>
+                         </Card>
                       </Link>
                      </FadeInOnScroll>
                   </CarouselItem>
@@ -577,3 +577,4 @@ export default function Home() {
 
 
     
+
