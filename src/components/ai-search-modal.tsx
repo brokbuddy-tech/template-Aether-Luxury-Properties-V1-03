@@ -12,13 +12,13 @@ export function AiSearchModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>
-      <DialogContent className="bg-background/80 backdrop-blur-lg border-border/20 sm:max-w-lg">
+      <DialogContent className="bg-black/50 backdrop-blur-lg border-white/20 text-white sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="font-headline text-2xl flex items-center gap-2">
             <Sparkles className="h-6 w-6 text-accent" />
             AI-Powered Property Search
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-white/80">
             Describe your ideal property in your own words, and our AI will find the perfect match for you.
           </DialogDescription>
         </DialogHeader>
@@ -28,7 +28,7 @@ export function AiSearchModal() {
             <Textarea 
               id="ai-search-message" 
               placeholder="e.g., 'A 3-bedroom villa in Dubai Hills with a private pool and a modern kitchen, close to a park. My budget is around $2M.'"
-              className="min-h-[120px]"
+              className="min-h-[120px] bg-black/20 border-white/30 placeholder:text-gray-400 focus-visible:ring-accent"
             />
           </div>
           <Button type="submit" className="w-full mt-2 bg-accent hover:bg-accent/90 text-accent-foreground">
