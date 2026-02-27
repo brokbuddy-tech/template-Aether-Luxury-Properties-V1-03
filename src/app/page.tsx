@@ -54,7 +54,7 @@ import { useAiSearchModal } from '@/hooks/use-ai-search-modal';
 
 
 export default function Home() {
-  const [priceRange, setPriceRange] = useState([500000, 5000000]);
+  const [priceRange, setPriceRange] = useState([5000000]);
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-2');
   const awardsImage = PlaceHolderImages.find(p => p.id === 'awards-1');
   const { openModal: openAiSearchModal } = useAiSearchModal();
@@ -142,9 +142,9 @@ export default function Home() {
                             <div className="grid gap-y-6">
                                 <div className="space-y-3">
                                   <div className="flex justify-between items-center">
-                                    <Label htmlFor="price-range-popover" className='text-white'>Price Range (USD)</Label>
+                                    <Label htmlFor="price-range-popover" className='text-white'>Max Price (USD)</Label>
                                     <span className='text-sm text-white/90'>
-                                      {formatPrice(priceRange[0])} - {formatPrice(priceRange[1])}
+                                      {formatPrice(priceRange[0])}
                                     </span>
                                   </div>
                                   <Slider
