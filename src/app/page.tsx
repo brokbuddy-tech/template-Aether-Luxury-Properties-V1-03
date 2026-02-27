@@ -50,6 +50,7 @@ import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { useAiSearchModal } from '@/hooks/use-ai-search-modal';
 import { Progress } from '@/components/ui/progress';
+import { useContactModal } from '@/hooks/use-contact-modal';
 
 
 export default function Home() {
@@ -57,6 +58,7 @@ export default function Home() {
   const [currency, setCurrency] = useState('AED');
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-2');
   const { openModal: openAiSearchModal } = useAiSearchModal();
+  const { openModal } = useContactModal();
   const [expertiseIndex, setExpertiseIndex] = useState(0);
   const [newsIndex, setNewsIndex] = useState(0);
 
@@ -551,27 +553,34 @@ export default function Home() {
         </div>
       </section>
 
-       {/* Section 7: Lead Magnet */}
-       <section className="relative bg-black py-16 md:py-24 overflow-hidden">
+       {/* Section 7: Find Your Next Home CTA */}
+      <section className="relative h-[500px] w-full overflow-hidden">
         {ctaImage && (
-            <Image
-                src={ctaImage.imageUrl}
-                alt={ctaImage.description}
-                data-ai-hint={ctaImage.imageHint}
-                fill
-                className="object-cover"
-            />
+          <ParallaxImage
+            src={ctaImage.imageUrl}
+            alt={ctaImage.description}
+            data-ai-hint={ctaImage.imageHint}
+            fill
+            className="object-cover"
+          />
         )}
-        <div className="absolute inset-0 bg-black/60" />
-        <div className="container relative z-10 text-center">
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white p-4">
           <FadeInOnScroll>
-            <h2 className="text-3xl font-bold mb-4 text-white">Ready to Begin Your Journey?</h2>
-            <p className="text-white/90 mb-8 text-lg">
-              Contact one of our expert agents today for a complimentary property valuation and consultation.
+            <h2 className="text-5xl font-extrabold tracking-tight">
+              Find Your Next Home With Aether Luxury.
+            </h2>
+            <p className="mt-6 max-w-2xl mx-auto text-lg leading-relaxed text-white/90">
+              Looking to buy, rent, or invest in Dubai? Our team is here to guide you every step of the way. Let’s make your property journey simple, smooth, and successful.
             </p>
-            <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-              <Link href="/sell">List Your Property</Link>
-            </Button>
+            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" variant="outline" className="font-headline border-white border-2 bg-transparent text-white hover:bg-white hover:text-black transition-all duration-300 px-8 py-3 h-auto">
+                <Link href="/buy">SEARCH PROPERTIES</Link>
+              </Button>
+              <Button onClick={openModal} size="lg" variant="outline" className="font-headline border-white border-2 bg-transparent text-white hover:bg-white hover:text-black transition-all duration-300 px-8 py-3 h-auto">
+                CONTACT US
+              </Button>
+            </div>
           </FadeInOnScroll>
         </div>
       </section>
@@ -588,3 +597,4 @@ export default function Home() {
 
 
     
+
