@@ -54,7 +54,7 @@ import { useAiSearchModal } from '@/hooks/use-ai-search-modal';
 
 
 export default function Home() {
-  const [priceRange, setPriceRange] = useState([5000000]);
+  const [priceRange, setPriceRange] = useState([0]);
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-2');
   const awardsImage = PlaceHolderImages.find(p => p.id === 'awards-1');
   const { openModal: openAiSearchModal } = useAiSearchModal();
@@ -426,7 +426,5 @@ export default function Home() {
     </div>
   );
 }
-
-    
 
     
