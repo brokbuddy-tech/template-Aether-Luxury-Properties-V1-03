@@ -486,7 +486,7 @@ export default function Home() {
       </section>
 
       {/* As Seen On Section */}
-      <section className="py-12 bg-muted">
+      <section className="pb-12 pt-2.5 bg-muted">
         <div className="container">
           <FadeInOnScroll>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center text-muted-foreground/80 grayscale">
@@ -559,5 +559,6 @@ export default function Home() {
     
 
     
+
 
 
