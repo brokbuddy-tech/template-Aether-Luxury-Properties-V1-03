@@ -1,0 +1,19 @@
+# **App Name**: Aether Luxury Properties
+
+## Core Features:
+
+- Interactive Global Navigation: A full-width, sticky glassmorphic header ('backdrop-filter: blur(20px)') with the Aether Luxury Properties logo, direct links for BUY, RENT, SELL, OFF-PLAN, ABOUT US, COMMERCIAL, a high-contrast CONTACT US button, and a minimalist 'Hamburger' menu icon.
+- Property Search & Listings Portal: Dedicated pages for 'BUY' and 'RENT' listings featuring a glassmorphic 'Command Center' filter dashboard and a 4-column property card grid. Each card links to a dynamic /property/[id] template.
+- Dynamic Property Detail Pages: Comprehensive individual property listing pages for /property/[id] with specific 'BUY' or 'RENT' transaction tags and a parallax fade transition for content elements.
+- Off-Plan Project Showcase: A dedicated section accessible via 'OFF-PLAN' nav link, displaying a 4-column grid of architectural renders with 'Exclusive' badges. Clicking 'EXPLORE' leads to a dynamic /off-plan/[id] payment plan template.
+- Seller Engagement Portal: An editorial-style page for 'SELL' inquiries featuring an 'Executive Close' hero image and a 3-column 'Work Principles' grid, including a 'CONTACT AN AGENT' button that triggers a glassmorphic lead capture modal.
+- Interactive Contact Modal: A high-priority, glassmorphic ('backdrop-filter: blur(15px)') 'CONTACT US' modal, triggered from various points on the site, to capture user inquiries and leads.
+- AI-Powered Property Description Tool: An internal tool that uses AI to automatically generate detailed and engaging property descriptions for new listings, ensuring consistency and rich content based on property attributes.
+
+## Style Guidelines:
+
+- The brand's aesthetic combines 'Luxury' and the 'Aether' concept (celestial, expansive) with a 'Glassmorphism' UI. A light color scheme allows for transparency effects to stand out. Primary Color: A deep, muted indigo (#4A3561) represents sophistication and depth, serving as a grounding element. Background Color: A very light, subtle lavender (#F0EDF3) provides an ethereal canvas that emphasizes the transparency and luminous quality of the glassmorphic elements. Accent Color: A serene sky blue (#5C89CC), analogous to the primary, offers a contrasting yet harmonious pop for interactive elements and calls to action.
+- Headlines and prominent text will use 'Playfair', a modern serif font known for its elegant, high-contrast, and fashionable feel, aligning with luxury branding. Body text will utilize 'PT Sans', a humanist sans-serif, chosen for its modern look, legibility, and slight warmth, providing a comfortable reading experience for longer content blocks.
+- Utilize minimalist and clean line-art icons that complement the modern and glass-centric aesthetic. Icons should feel light and sophisticated, consistent with a luxury brand.
+- Layouts prioritize clean lines and spatial balance. Implement 4-column grid systems for property and off-plan listings and 3-column grids for elements like 'Work Principles' or payment plans. Core UI components like the navigation bar and search bar will be sticky and prominent, employing a `backdrop-filter: blur(15px)` for all primary UI components.
+- Implement 'ScrollTrigger' parallax effects for Hero sections and community scrollers. Ensure high-resolution background assets use `will-change: transform` to facilitate a smooth 0.5x ratio movement. All interactive elements and page transitions, such as card clicks to detail pages, will feature subtle parallax fade transitions. Glassmorphic modals should animate in with a smooth, refined motion.

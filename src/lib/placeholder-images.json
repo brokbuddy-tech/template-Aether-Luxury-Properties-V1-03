@@ -1,3 +1,82 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero-1",
+      "description": "Modern glass building at dusk",
+      "imageUrl": "https://images.unsplash.com/photo-1546349851-64285be8e9fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxtb2Rlcm4lMjBhcmNoaXRlY3R1cmV8ZW58MHx8fHwxNzcyMTUzNjI1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "modern architecture"
+    },
+    {
+      "id": "hero-2",
+      "description": "Luxury villa with a pool",
+      "imageUrl": "https://images.unsplash.com/photo-1622015663319-e97e697503ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxsdXh1cnklMjB2aWxsYXxlbnwwfHx8fDE3NzIxMTM0NzZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "luxury villa"
+    },
+    {
+      "id": "hero-sell",
+      "description": "Professionals signing documents in a modern office",
+      "imageUrl": "https://images.unsplash.com/photo-1606836591695-4d58a73eba1e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxidXNpbmVzcyUyMG1lZXRpbmd8ZW58MHx8fHwxNzcyMTcwMTUyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "business meeting"
+    },
+    {
+      "id": "property-1-ext",
+      "description": "Exterior of a modern suburban house",
+      "imageUrl": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxtb2Rlcm4lMjBob3VzZXxlbnwwfHx8fDE3NzIxNjczMTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "modern house"
+    },
+    {
+      "id": "property-1-int",
+      "description": "Spacious living room with minimalist design",
+      "imageUrl": "https://images.unsplash.com/photo-1605774337664-7a846e9cdf17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxsaXZpbmclMjByb29tfGVufDB8fHx8MTc3MjE3NDM2NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "living room"
+    },
+    {
+      "id": "property-2-ext",
+      "description": "Luxury condo building with balconies",
+      "imageUrl": "https://images.unsplash.com/photo-1612637968894-660373e23b03?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhcGFydG1lbnQlMjBidWlsZGluZ3xlbnwwfHx8fDE3NzIxMzE1MTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "apartment building"
+    },
+    {
+      "id": "property-2-int",
+      "description": "Modern kitchen with marble island",
+      "imageUrl": "https://images.unsplash.com/photo-1682888813913-e13f18692019?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxtb2Rlcm4lMjBraXRjaGVufGVufDB8fHx8MTc3MjEwNDUyMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "modern kitchen"
+    },
+    {
+      "id": "property-3-ext",
+      "description": "Beachfront villa with ocean view",
+      "imageUrl": "https://images.unsplash.com/photo-1605549339992-83721992836e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxiZWFjaCUyMGhvdXNlfGVufDB8fHx8MTc3MjE3ODcwMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "beach house"
+    },
+    {
+      "id": "property-3-int",
+      "description": "Bedroom with a large window overlooking the sea",
+      "imageUrl": "https://images.unsplash.com/photo-1701527318649-3dab97f88226?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxiZWRyb29tJTIwdmlld3xlbnwwfHx8fDE3NzIxNzg3MDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "bedroom view"
+    },
+    {
+      "id": "offplan-1",
+      "description": "Architectural render of a futuristic residential tower",
+      "imageUrl": "https://images.unsplash.com/photo-1568809682098-b6dd0f6689da?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxhcmNoaXRlY3R1cmFsJTIwcmVuZGVyfGVufDB8fHx8MTc3MjE3ODcwMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "architectural render"
+    },
+    {
+      "id": "offplan-2",
+      "description": "3D model of a new community development",
+      "imageUrl": "https://images.unsplash.com/photo-1721929178169-4eb6f456e93d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxjb21tdW5pdHklMjBkZXZlbG9wbWVudHxlbnwwfHx8fDE3NzIxNzg3MDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "community development"
+    },
+    {
+      "id": "agent-1",
+      "description": "Portrait of a smiling female real estate agent",
+      "imageUrl": "https://images.unsplash.com/photo-1546961329-78bef0414d7c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx3b21hbiUyMHBvcnRyYWl0fGVufDB8fHx8MTc3MjE1Mjc0OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman portrait"
+    },
+    {
+      "id": "agent-2",
+      "description": "Portrait of a confident male real estate agent",
+      "imageUrl": "https://images.unsplash.com/photo-1583195763986-0231686dcd43?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxtYW4lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NzIxNjYzNzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man portrait"
+    }
+  ]
 }
