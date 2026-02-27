@@ -47,7 +47,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 
 export default function Home() {
-  const heroImage = PlaceHolderImages.find(p => p.id === 'hero-dubai');
+  const heroImage = PlaceHolderImages.find(p => p.id === 'hero-1');
   const awardsImage = PlaceHolderImages.find(p => p.id === 'awards-1');
 
   return (
@@ -60,12 +60,12 @@ export default function Home() {
             alt={heroImage.description}
             data-ai-hint={heroImage.imageHint}
             fill
-            className="object-cover"
+            className="object-cover z-[-1]"
             priority
           />
         )}
         <div className="absolute inset-0 bg-black/60" />
-        <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white p-4">
+        <div className="relative flex h-full flex-col items-center justify-center text-center text-white p-4">
           <FadeInOnScroll>
             <h1 className="text-4xl md:text-7xl font-bold tracking-widest">
               Dubai Real Estate. Built Better.
