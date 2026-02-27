@@ -340,7 +340,7 @@ export default function Home() {
                           )}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
                           <div className="absolute bottom-0 left-0 right-0 p-6">
-                            <div className="p-4 rounded-lg bg-white/10 backdrop-blur-md border border-white/20 md:bg-transparent md:backdrop-blur-none md:border-transparent group-hover:bg-white/10 group-hover:backdrop-blur-md group-hover:border group-hover:border-white/20 transition-all duration-300">
+                            <div className="p-4 rounded-lg md:bg-transparent md:backdrop-blur-none md:border-transparent group-hover:bg-white/10 group-hover:backdrop-blur-md group-hover:border group-hover:border-white/20 transition-all duration-300 bg-white/10 backdrop-blur-md border border-white/20">
                               <h3 className="text-2xl font-bold text-white">
                                 {service.title}
                               </h3>
@@ -375,6 +375,20 @@ export default function Home() {
               </FadeInOnScroll>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* As Seen On Section */}
+      <section className="py-12 bg-muted">
+        <div className="container">
+          <FadeInOnScroll>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center text-muted-foreground/80 grayscale">
+              <span className="text-2xl font-headline font-semibold">Arabian Business</span>
+              <span className="text-3xl font-headline font-bold tracking-wider">INSIDER</span>
+              <span className="text-2xl font-headline font-bold">GULF NEWS</span>
+              <span className="text-2xl font-headline font-bold">The National</span>
+            </div>
+          </FadeInOnScroll>
         </div>
       </section>
 
@@ -545,3 +559,4 @@ export default function Home() {
     
 
     
+
