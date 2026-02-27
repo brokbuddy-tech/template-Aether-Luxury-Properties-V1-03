@@ -106,11 +106,19 @@ export default function Home() {
   }, [serviceCarouselApi])
 
   useEffect(() => {
-    const timer = setInterval(() => {
+    const expertiseTimer = setInterval(() => {
       setExpertiseIndex(prevIndex => (prevIndex + 1) % expertiseSlides.length);
     }, 3000);
-    return () => clearInterval(timer);
-  }, [expertiseSlides.length]);
+    
+    const newsTimer = setInterval(() => {
+      setNewsIndex(prevIndex => (prevIndex + 1) % newsArticles.length);
+    }, 3000);
+
+    return () => {
+      clearInterval(expertiseTimer);
+      clearInterval(newsTimer);
+    };
+  }, [expertiseSlides.length, newsArticles.length]);
 
   const formatPrice = (value: number) => {
     const prefix = currency === 'USD' ? '$' : '';
