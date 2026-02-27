@@ -1,3 +1,6 @@
+
+import type { LucideIcon } from 'lucide-react';
+
 export type Property = {
   id: string;
   type: 'BUY' | 'RENT';
@@ -30,4 +33,41 @@ export type OffPlanProject = {
     percentage: number;
     amount: number;
   }[];
+};
+
+export type Service = {
+  title: string;
+  description: string;
+  href: string;
+  image: string;
+};
+
+export type Stat = {
+  value: string;
+  label: string;
+  icon: LucideIcon;
+};
+
+export type TeamMember = {
+  name: string;
+  role: string;
+  image: string;
+};
+
+export type NewsArticle = {
+  title: string;
+  description: string;
+  href: string;
+};
+
+export type Community = {
+  name: string;
+  image: string;
+  href: string;
+};
+
+export type SocialLink = {
+  title: string;
+  href: string;
+  icon: LucideIcon;
 };

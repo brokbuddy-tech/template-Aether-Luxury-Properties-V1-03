@@ -1,19 +1,56 @@
 
 import Link from 'next/link';
+import Image from 'next/image';
+import {
+  ArrowRight,
+  Briefcase,
+  ChevronDown,
+  Clock,
+  Mic,
+  Search,
+  Star,
+  TrendingUp,
+  Users,
+  Video,
+} from 'lucide-react';
 
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
-import { properties } from '@/lib/data';
-import { PropertyCard } from '@/components/property-card';
+import {
+  services,
+  stats,
+  teamMembers,
+  newsArticles,
+  communities,
+  socialLinks,
+} from '@/lib/data';
 import { ParallaxImage } from '@/components/parallax-image';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from '@/components/ui/card';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Input } from '@/components/ui/input';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export default function Home() {
-  const heroImage = PlaceHolderImages.find(p => p.id === 'hero-1');
+  const heroImage = PlaceHolderImages.find(p => p.id === 'hero-dubai');
+  const awardsImage = PlaceHolderImages.find(p => p.id === 'awards-1');
 
   return (
     <div className="flex flex-col">
-      <section className="relative h-[80vh] w-full overflow-hidden">
+      {/* Section 2: Hero & Search */}
+      <section className="relative h-[90vh] w-full overflow-hidden">
         {heroImage && (
           <ParallaxImage
             src={heroImage.imageUrl}
@@ -24,42 +61,246 @@ export default function Home() {
             priority
           />
         )}
-        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white p-4">
           <FadeInOnScroll>
-            <h1 className="text-4xl md:text-6xl font-bold font-headline leading-tight">
-              Discover Your Celestial Home
+            <h1 className="text-4xl md:text-7xl font-black uppercase tracking-widest">
+              Dubai Real Estate
+              <br />
+              Built Better.
             </h1>
-            <p className="mt-4 max-w-2xl text-lg text-gray-200">
-              Aether Luxury Properties offers an exclusive portfolio of the world's most prestigious homes.
-            </p>
           </FadeInOnScroll>
           <FadeInOnScroll delay={200}>
-            <div className="mt-8 flex gap-4">
-              <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                <Link href="/buy">Explore Properties</Link>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-black">
-                <Link href="/sell">List with Us</Link>
-              </Button>
+            <div className="mt-12 w-full max-w-4xl">
+              <div className="p-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20">
+                <Tabs defaultValue="buy">
+                  <TabsList className="bg-transparent">
+                    <TabsTrigger value="buy" className="text-white data-[state=active]:bg-white/20 data-[state=active]:text-white">BUY</TabsTrigger>
+                    <TabsTrigger value="rent" className="text-white data-[state=active]:bg-white/20 data-[state=active]:text-white">RENT</TabsTrigger>
+                  </TabsList>
+                </Tabs>
+                <div className="mt-2 flex flex-col md:flex-row gap-2">
+                  <Input
+                    type="text"
+                    placeholder="Enter location, community, or building"
+                    className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus-visible:ring-accent"
+                  />
+                  <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                    <Search className="mr-2 h-4 w-4" />
+                    Search
+                  </Button>
+                  <Button variant="ghost" className="text-white hover:bg-white/20 hover:text-white">
+                    Advanced Search
+                    <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
             </div>
           </FadeInOnScroll>
         </div>
       </section>
 
+      {/* Section 3: Service Discovery Grid */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container max-w-7xl">
-          <FadeInOnScroll>
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-2">Featured Properties</h2>
-            <p className="text-center text-muted-foreground mb-12">Handpicked for the discerning eye.</p>
-          </FadeInOnScroll>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {properties.slice(0, 4).map((property, index) => (
-              <FadeInOnScroll key={property.id} delay={index * 100}>
-                <PropertyCard property={property} />
+            {services.map((service, index) => {
+              const serviceImage = PlaceHolderImages.find(p => p.id === service.image);
+              return (
+                <FadeInOnScroll key={service.title} delay={index * 100}>
+                  <Link href={service.href}>
+                    <Card className="group relative h-[400px] overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105">
+                      {serviceImage && (
+                        <Image
+                          src={serviceImage.imageUrl}
+                          alt={service.title}
+                          data-ai-hint={serviceImage.imageHint}
+                          fill
+                          className="object-cover transition-transform group-hover:scale-110"
+                        />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-6">
+                        <div className="p-4 rounded-lg bg-white/10 backdrop-blur-md border border-white/20">
+                          <h3 className="text-2xl font-bold text-white">
+                            {service.title}
+                          </h3>
+                          <p className="text-white/80 mt-2 line-clamp-2">{service.description}</p>
+                        </div>
+                      </div>
+                    </Card>
+                  </Link>
+                </FadeInOnScroll>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Section 4: Data-Driven Performance Bar */}
+      <section className="py-12 bg-[hsl(var(--chart-2))] text-white">
+        <div className="container max-w-7xl">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {stats.map((stat) => (
+              <FadeInOnScroll key={stat.label}>
+                <stat.icon className="h-10 w-10 mx-auto mb-2" />
+                <p className="text-4xl font-bold">{stat.value}</p>
+                <p className="text-sm uppercase tracking-wider">{stat.label}</p>
               </FadeInOnScroll>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Section 5: Team, Awards, & Content Hub */}
+      <section className="py-16 md:py-24 bg-secondary/50">
+        <div className="container max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <FadeInOnScroll>
+              <h2 className="text-4xl font-bold mb-8">
+                Property Expertise,
+                <br />
+                Backed by Structure.
+              </h2>
+              <div className="space-y-8">
+                <Card>
+                  <CardHeader>
+                    <h3 className="text-2xl font-bold">Meet The Team</h3>
+                  </CardHeader>
+                  <CardContent>
+                    <Carousel opts={{ loop: true }}>
+                      <CarouselContent>
+                        {teamMembers.map((member) => {
+                          const memberImage = PlaceHolderImages.find(
+                            p => p.id === member.image
+                          );
+                          return (
+                            <CarouselItem key={member.name} className="md:basis-1/2">
+                              <div className="flex items-center gap-4">
+                                <Avatar className="h-20 w-20">
+                                  {memberImage && <AvatarImage src={memberImage.imageUrl} />}
+                                  <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
+                                </Avatar>
+                                <div>
+                                  <p className="font-bold">{member.name}</p>
+                                  <p className="text-sm text-muted-foreground">{member.role}</p>
+                                </div>
+                              </div>
+                            </CarouselItem>
+                          );
+                        })}
+                      </CarouselContent>
+                       <CarouselPrevious className="-left-4"/>
+                       <CarouselNext className="-right-4"/>
+                    </Carousel>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <Carousel opts={{ loop: true }}>
+                    <CarouselContent>
+                      {newsArticles.map((article, i) => (
+                        <CarouselItem key={i}>
+                          <CardHeader>
+                            <h3 className="text-2xl font-bold">{article.title}</h3>
+                          </CardHeader>
+                          <CardContent>
+                            <p className="text-muted-foreground mb-4">{article.description}</p>
+                            <Button variant="link" asChild className="p-0 h-auto text-accent">
+                              <Link href={article.href}>Read More <ArrowRight className="ml-2 h-4 w-4"/></Link>
+                            </Button>
+                          </CardContent>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                     <CarouselPrevious className="top-8 right-16"/>
+                     <CarouselNext className="top-8 right-4"/>
+                  </Carousel>
+                </Card>
+              </div>
+            </FadeInOnScroll>
+
+            <div className="space-y-8">
+               <FadeInOnScroll delay={100}>
+                {awardsImage && (
+                  <Card className="overflow-hidden">
+                    <div className="relative h-64 w-full">
+                       <Image src={awardsImage.imageUrl} alt="Awards" data-ai-hint={awardsImage.imageHint} fill className="object-cover"/>
+                       <div className="absolute inset-0 bg-black/40"/>
+                       <div className="absolute bottom-6 left-6">
+                          <h3 className="text-2xl font-bold text-white">Aether recognised with four awards.</h3>
+                       </div>
+                    </div>
+                  </Card>
+                )}
+               </FadeInOnScroll>
+               <FadeInOnScroll delay={200}>
+                <div className="grid grid-cols-2 gap-8">
+                  {socialLinks.map(link => (
+                    <Link href={link.href} key={link.title}>
+                      <Card className="text-center p-8 hover:bg-muted transition-colors">
+                        <link.icon className="h-10 w-10 mx-auto text-accent mb-4"/>
+                        <h4 className="font-bold text-lg">{link.title}</h4>
+                      </Card>
+                    </Link>
+                  ))}
+                </div>
+               </FadeInOnScroll>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 6: Community Guide Scroller */}
+      <section className="py-16 md:py-24 bg-background">
+        <div className="container max-w-7xl">
+          <FadeInOnScroll>
+             <h2 className="text-4xl font-bold text-center mb-12">Community Guides</h2>
+          </FadeInOnScroll>
+          <Carousel opts={{ align: 'start' }}>
+            <CarouselContent className="-ml-4">
+              {communities.map((community, index) => {
+                const communityImage = PlaceHolderImages.find(p => p.id === community.image);
+                return (
+                  <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                     <FadeInOnScroll delay={index * 100}>
+                      <Link href={community.href}>
+                         <div className="group relative h-[450px] overflow-hidden rounded-lg">
+                           {communityImage && (
+                             <Image
+                               src={communityImage.imageUrl}
+                               alt={community.name}
+                               data-ai-hint={communityImage.imageHint}
+                               fill
+                               className="object-cover transition-transform duration-500 group-hover:scale-110"
+                             />
+                           )}
+                           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                           <h3 className="absolute bottom-6 left-6 text-3xl font-bold text-white">{community.name}</h3>
+                         </div>
+                      </Link>
+                     </FadeInOnScroll>
+                  </CarouselItem>
+                );
+              })}
+            </CarouselContent>
+            <CarouselPrevious className="ml-14" />
+            <CarouselNext className="mr-14" />
+          </Carousel>
+        </div>
+      </section>
+
+       {/* Section 7: Lead Magnet */}
+       <section className="bg-muted py-16 md:py-24">
+        <div className="container max-w-3xl text-center">
+          <FadeInOnScroll>
+            <h2 className="text-3xl font-bold mb-4">Ready to Begin Your Journey?</h2>
+            <p className="text-muted-foreground mb-8 text-lg">
+              Contact one of our expert agents today for a complimentary property valuation and consultation.
+            </p>
+            <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+              <Link href="/sell">List Your Property</Link>
+            </Button>
+          </FadeInOnScroll>
         </div>
       </section>
     </div>

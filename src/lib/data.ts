@@ -1,4 +1,23 @@
-import type { Property, OffPlanProject } from './types';
+
+import {
+  Briefcase,
+  Clock,
+  Mic,
+  Star,
+  TrendingUp,
+  Users,
+  Video,
+} from 'lucide-react';
+import type {
+  Property,
+  OffPlanProject,
+  Service,
+  Stat,
+  TeamMember,
+  NewsArticle,
+  Community,
+  SocialLink,
+} from './types';
 
 export const properties: Property[] = [
   {
@@ -116,3 +135,111 @@ export function getPropertyById(id: string) {
 export function getOffPlanProjectById(id: string) {
   return offPlanProjects.find(p => p.id === id);
 }
+
+export const services: Service[] = [
+  {
+    title: 'Buy',
+    description: 'Find your dream home from our exclusive collection of luxury properties.',
+    href: '/buy',
+    image: 'property-1-ext',
+  },
+  {
+    title: 'Rent',
+    description: 'Discover exceptional properties for long-term and short-term lease.',
+    href: '/rent',
+    image: 'property-3-ext',
+  },
+  {
+    title: 'Sell',
+    description: 'Our experts will help you achieve the best value for your property.',
+    href: '/sell',
+    image: 'hero-sell',
+  },
+  {
+    title: 'Commercial',
+    description: 'Explore prime commercial real estate opportunities.',
+    href: '/commercial',
+    image: 'property-2-ext',
+  },
+  {
+    title: 'Off-Plan',
+    description: 'Invest in the future with our portfolio of off-plan projects.',
+    href: '/off-plan',
+    image: 'offplan-1',
+  },
+  {
+    title: 'Property Management',
+    description: 'Comprehensive management services for your real estate assets.',
+    href: '#',
+    image: 'property-2-int',
+  },
+  {
+    title: 'Holiday Homes',
+    description: 'Luxury vacation rentals for an unforgettable stay.',
+    href: '#',
+    image: 'property-3-int',
+  },
+    {
+    title: 'About Us',
+    description: 'Learn more about our mission and the Aether difference.',
+    href: '/about',
+    image: 'hero-2',
+  },
+];
+
+export const stats: Stat[] = [
+  {
+    value: '300+',
+    label: 'Community Brokers',
+    icon: Briefcase,
+  },
+  {
+    value: '4.9/5',
+    label: 'Google Rating (1,152 Reviews)',
+    icon: Star,
+  },
+  {
+    value: '6,000+',
+    label: 'Property Transactions in 2026',
+    icon: TrendingUp,
+  },
+  {
+    value: '24/7',
+    label: 'We work round the clock',
+    icon: Clock,
+  },
+];
+
+export const teamMembers: TeamMember[] = [
+  { name: 'Isabella Rossi', role: 'Founder & CEO', image: 'agent-1' },
+  { name: 'James Carter', role: 'Head of Sales', image: 'agent-2' },
+  { name: 'Sophia Loren', role: 'Lead Architect Advisor', image: 'agent-1' },
+  { name: 'Marcus Aurelius', role: 'Chief Financial Officer', image: 'agent-2' },
+];
+
+export const newsArticles: NewsArticle[] = [
+    {
+        title: "A Smoother Path to Completion",
+        description: "Discover how Aether's structured approach and dedicated client managers are setting new standards for efficiency and transparency in property transactions.",
+        href: '#'
+    },
+    {
+        title: "The Rise of Branded Residences",
+        description: "We dive deep into the growing trend of branded residences in Dubai and what it means for luxury real estate investors.",
+        href: '#'
+    },
+];
+
+export const communities: Community[] = [
+    { name: "Palm Jumeirah", image: "community-palm", href: "#"},
+    { name: "Dubai Marina", image: "community-marina", href: "#"},
+    { name: "Downtown Dubai", image: "hero-dubai", href: "#"},
+    { name: "Emirates Hills", image: "property-1-ext", href: "#"},
+]
+
+export const socialLinks: SocialLink[] = [
+    { title: "Meet The Team", href: "/about", icon: Users },
+    { title: "Careers", href: "#", icon: Briefcase },
+    { title: "Videos", href: "#", icon: Video },
+    { title: "Podcasts", href: "#", icon: Mic },
+]

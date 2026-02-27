@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Logo } from '@/components/logo';
@@ -16,7 +17,7 @@ export function Footer() {
             © {new Date().getFullYear()} Aether Luxury Properties. All rights reserved.
           </p>
         </div>
-        <Button onClick={openModal} variant="outline">
+        <Button onClick={openModal} variant="outline" className="border-accent text-accent hover:bg-accent hover:text-accent-foreground">
           List Your Property
         </Button>
       </div>

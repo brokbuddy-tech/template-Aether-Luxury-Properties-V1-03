@@ -77,6 +77,30 @@
       "description": "Portrait of a confident male real estate agent",
       "imageUrl": "https://images.unsplash.com/photo-1583195763986-0231686dcd43?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxtYW4lMjBwb3J0cmFpdHxlbnwwfHx8fDE3NzIxNjYzNzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "man portrait"
+    },
+    {
+      "id": "hero-dubai",
+      "description": "Dubai skyline with skyscrapers",
+      "imageUrl": "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkdWJhaSUyMHNreWxpbmV8ZW58MHx8fHwxNzcyNTAyMjMzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dubai skyline"
+    },
+    {
+      "id": "awards-1",
+      "description": "Close up of a golden trophy",
+      "imageUrl": "https://images.unsplash.com/photo-1583324113620-9118b53057e4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhd2FyZCUyMHRyb3BoeXxlbnwwfHx8fDE3NzI1MDI0MTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "award trophy"
+    },
+    {
+      "id": "community-palm",
+      "description": "Aerial view of Palm Jumeirah in Dubai",
+      "imageUrl": "https://images.unsplash.com/photo-1589765838945-a9c43467334b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxwYWxtJTIwanVtZWlyYWh8ZW58MHx8fHwxNzcyNTAyNDg3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "palm jumeirah"
+    },
+    {
+      "id": "community-marina",
+      "description": "Dubai Marina skyline with yachts",
+      "imageUrl": "https://images.unsplash.com/photo-1541439695502-3868a8f7c505?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxkdWJhaSUyMG1hcmluYXxlbnwwfHx8fDE3NzI1MDI1MjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "dubai marina"
     }
   ]
 }
