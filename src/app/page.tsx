@@ -62,6 +62,7 @@ export default function Home() {
 
   const teamImage = PlaceHolderImages.find(p => p.id === 'team-group');
   const awardsImage = PlaceHolderImages.find(p => p.id === 'awards-1');
+  const ctaImage = PlaceHolderImages.find(p => p.id === 'hero-dubai');
 
   const expertiseSlides = [
     {
@@ -551,11 +552,21 @@ export default function Home() {
       </section>
 
        {/* Section 7: Lead Magnet */}
-       <section className="bg-muted py-16 md:py-24">
-        <div className="container text-center">
+       <section className="relative bg-black py-16 md:py-24 overflow-hidden">
+        {ctaImage && (
+            <ParallaxImage
+                src={ctaImage.imageUrl}
+                alt={ctaImage.description}
+                data-ai-hint={ctaImage.imageHint}
+                fill
+                className="object-cover"
+            />
+        )}
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="container relative z-10 text-center">
           <FadeInOnScroll>
-            <h2 className="text-3xl font-bold mb-4">Ready to Begin Your Journey?</h2>
-            <p className="text-muted-foreground mb-8 text-lg">
+            <h2 className="text-3xl font-bold mb-4 text-white">Ready to Begin Your Journey?</h2>
+            <p className="text-white/90 mb-8 text-lg">
               Contact one of our expert agents today for a complimentary property valuation and consultation.
             </p>
             <Button asChild size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground">
@@ -577,4 +588,3 @@ export default function Home() {
 
 
     
-
