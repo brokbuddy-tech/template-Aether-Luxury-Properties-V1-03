@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -271,6 +272,14 @@ export default function Home() {
       {/* Section 3: Service Discovery Grid */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container">
+          <div className="text-center max-w-3xl mx-auto mb-12">
+             <FadeInOnScroll>
+                <h2 className="text-4xl font-bold font-headline">Explore Property in Dubai</h2>
+                <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
+                  <strong>Aether Luxury Properties</strong> helps buyers, sellers, and investors navigate the Dubai real estate market with absolute clarity and confidence. Our teams combine deep local expertise with advanced digital systems and white-glove support, all built to deliver smoother transactions and superior outcomes—every step of the way.
+                </p>
+             </FadeInOnScroll>
+          </div>
           <Carousel
             setApi={setServiceCarouselApi}
             opts={{
