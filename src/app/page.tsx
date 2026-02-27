@@ -56,6 +56,27 @@ export default function Home() {
   const [currency, setCurrency] = useState('AED');
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-2');
   const { openModal: openAiSearchModal } = useAiSearchModal();
+  const [expertiseIndex, setExpertiseIndex] = useState(0);
+
+  const teamImage = PlaceHolderImages.find(p => p.id === 'team-group');
+
+  const expertiseSlides = [
+    {
+      tagline: 'WHY AETHER LUXURY',
+      headline: 'Property Expertise, Backed by Structure',
+      body: 'Our agents have deep expertise in Dubai and the systems to back it up – so your move is informed and smooth.',
+    },
+    {
+      tagline: 'DATA-DRIVEN INSIGHTS',
+      headline: 'Smarter Decisions, Better Outcomes',
+      body: 'We leverage market-leading data and analytics to provide you with a competitive edge, ensuring every decision is backed by real-time intelligence.',
+    },
+    {
+      tagline: 'UNMATCHED SUPPORT',
+      headline: 'A Seamless Journey, From Start to Finish',
+      body: 'Our dedicated client managers and advanced digital platform provide white-glove support, delivering a smoother transaction and a superior outcome.',
+    },
+  ];
 
   const [serviceCarouselApi, setServiceCarouselApi] = useState<CarouselApi>()
   const [scrollProgress, setScrollProgress] = useState(0)
@@ -339,6 +360,56 @@ export default function Home() {
         </div>
       </section>
 
+       {/* Section 5: Professional Expertise Section */}
+       <section className="py-16 md:py-24 bg-background">
+        <div className="container">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-12 lg:gap-24">
+            <div className="w-full md:w-1/2 lg:w-3/5">
+              <FadeInOnScroll>
+                {teamImage && (
+                  <Image
+                    src={teamImage.imageUrl}
+                    alt={teamImage.description}
+                    data-ai-hint={teamImage.imageHint}
+                    width={800}
+                    height={600}
+                    className="rounded-lg object-cover"
+                  />
+                )}
+              </FadeInOnScroll>
+            </div>
+            <div className="w-full md:w-1/2 lg:w-2/5">
+              <div key={expertiseIndex}>
+                <FadeInOnScroll>
+                  <p className="text-xs font-bold uppercase tracking-widest text-accent">
+                    {expertiseSlides[expertiseIndex].tagline}
+                  </p>
+                  <h2 className="mt-2 text-4xl font-extrabold leading-tight font-headline text-primary">
+                    {expertiseSlides[expertiseIndex].headline}
+                  </h2>
+                  <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+                    {expertiseSlides[expertiseIndex].body}
+                  </p>
+                </FadeInOnScroll>
+              </div>
+              <div className="flex gap-3 mt-8">
+                {expertiseSlides.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setExpertiseIndex(index)}
+                    className={cn(
+                      'h-3 w-3 rounded-full transition-colors',
+                      expertiseIndex === index ? 'bg-accent' : 'bg-gray-300 hover:bg-gray-400'
+                    )}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Section 6: Community Guide Scroller */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container">
@@ -395,3 +466,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
