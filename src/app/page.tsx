@@ -503,7 +503,7 @@ export default function Home() {
       <section className="py-16 md:py-24 bg-background">
         <div className="container">
           <FadeInOnScroll>
-            <div className="text-center max-w-[900px] mx-auto mb-12">
+            <div className="text-left max-w-[900px] mb-12">
               <h2 className="text-4xl font-bold text-primary mb-4 font-headline">Explore Communities in Dubai</h2>
               <p className="text-lg text-muted-foreground">
                 Choosing the right community is as fundamental as choosing the property itself. At <strong>Aether Luxury Properties</strong>, our specialized area experts provide you with deep, data-driven insights into localized pricing, market demand, and long-term investment value. We empower you to make confident, informed decisions rather than rushed ones—ensuring your future home or investment perfectly aligns with your lifestyle goals.
@@ -564,7 +564,6 @@ export default function Home() {
     </div>
   );
 }
-
     
 
     
@@ -572,3 +571,6 @@ export default function Home() {
 
 
 
+
+
+    
