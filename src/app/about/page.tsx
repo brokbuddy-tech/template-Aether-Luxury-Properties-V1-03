@@ -36,6 +36,7 @@ export default function AboutPage() {
   const videoPlaceholder = PlaceHolderImages.find(p => p.id === 'property-1-int');
   const teamPortrait = PlaceHolderImages.find(p => p.id === 'team-group');
   const ceoPortrait = PlaceHolderImages.find(p => p.id === 'agent-1'); // Isabella Rossi - Founder & CEO
+  const corporateImpactImage = PlaceHolderImages.find(p => p.id === 'hero-1');
 
   return (
     <div className="flex flex-col">
@@ -203,6 +204,38 @@ export default function AboutPage() {
               </div>
             </FadeInOnScroll>
           </div>
+        </div>
+      </section>
+      
+      {/* 6. Corporate Impact & Scale */}
+      <section 
+        className="relative py-24 bg-cover bg-center bg-fixed"
+        style={{ backgroundImage: corporateImpactImage ? `url(${corporateImpactImage.imageUrl})` : 'none' }}
+      >
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative container flex items-center justify-center">
+          <FadeInOnScroll>
+            <div className="max-w-6xl mx-auto p-12 rounded-lg bg-white/10 backdrop-blur-xl border border-white/20">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center text-white">
+                <div>
+                  <p className="text-5xl font-bold text-copper-gold">AED 120B+</p>
+                  <p className="mt-2 uppercase tracking-widest text-sm">Total Lifetime Transaction Value</p>
+                </div>
+                <div>
+                  <p className="text-5xl font-bold text-copper-gold">300+</p>
+                  <p className="mt-2 uppercase tracking-widest text-sm">Specialized Community Brokers</p>
+                </div>
+                <div>
+                  <p className="text-5xl font-bold text-copper-gold">15+</p>
+                  <p className="mt-2 uppercase tracking-widest text-sm">International Real Estate Awards</p>
+                </div>
+                <div>
+                  <p className="text-5xl font-bold text-copper-gold">24/7</p>
+                  <p className="mt-2 uppercase tracking-widest text-sm">Client Advisory & Support</p>
+                </div>
+              </div>
+            </div>
+          </FadeInOnScroll>
         </div>
       </section>
     </div>
