@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from 'next/link';
@@ -144,37 +145,39 @@ export default function Home() {
                                         <span>$10M+</span>
                                     </div>
                                 </div>
-                                <div className="space-y-2">
-                                    <Label className='text-white'>Bedrooms</Label>
-                                    <Select>
-                                        <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
-                                            <SelectValue placeholder="Any" />
-                                        </SelectTrigger>
-                                        <SelectContent className='border border-white/20 bg-black/50 text-white backdrop-blur-lg'>
-                                            <SelectItem value="any">Any</SelectItem>
-                                            <SelectItem value="1">1+ Beds</SelectItem>
-                                            <SelectItem value="2">2+ Beds</SelectItem>
-                                            <SelectItem value="3">3+ Beds</SelectItem>
-                                            <SelectItem value="4">4+ Beds</SelectItem>
-                                            <SelectItem value="5">5+ Beds</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div className="space-y-2">
-                                    <Label className='text-white'>Bathrooms</Label>
-                                    <Select>
-                                        <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
-                                            <SelectValue placeholder="Any" />
-                                        </SelectTrigger>
-                                        <SelectContent className='border border-white/20 bg-black/50 text-white backdrop-blur-lg'>
-                                            <SelectItem value="any">Any</SelectItem>
-                                            <SelectItem value="1">1+ Baths</SelectItem>
-                                            <SelectItem value="2">2+ Baths</SelectItem>
-                                            <SelectItem value="3">3+ Baths</SelectItem>
-                                            <SelectItem value="4">4+ Baths</SelectItem>
-                                            <SelectItem value="5">5+ Baths</SelectItem>
-                                        </SelectContent>
-                                    </Select>
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div className="space-y-2">
+                                      <Label className='text-white'>Bedrooms</Label>
+                                      <Select>
+                                          <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
+                                              <SelectValue placeholder="Any" />
+                                          </SelectTrigger>
+                                          <SelectContent className='border border-white/20 bg-black/50 text-white backdrop-blur-lg'>
+                                              <SelectItem value="any">Any</SelectItem>
+                                              <SelectItem value="1">1+ Beds</SelectItem>
+                                              <SelectItem value="2">2+ Beds</SelectItem>
+                                              <SelectItem value="3">3+ Beds</SelectItem>
+                                              <SelectItem value="4">4+ Beds</SelectItem>
+                                              <SelectItem value="5">5+ Beds</SelectItem>
+                                          </SelectContent>
+                                      </Select>
+                                  </div>
+                                  <div className="space-y-2">
+                                      <Label className='text-white'>Bathrooms</Label>
+                                      <Select>
+                                          <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
+                                              <SelectValue placeholder="Any" />
+                                          </SelectTrigger>
+                                          <SelectContent className='border border-white/20 bg-black/50 text-white backdrop-blur-lg'>
+                                              <SelectItem value="any">Any</SelectItem>
+                                              <SelectItem value="1">1+ Baths</SelectItem>
+                                              <SelectItem value="2">2+ Baths</SelectItem>
+                                              <SelectItem value="3">3+ Baths</SelectItem>
+                                              <SelectItem value="4">4+ Baths</SelectItem>
+                                              <SelectItem value="5">5+ Baths</SelectItem>
+                                          </SelectContent>
+                                      </Select>
+                                  </div>
                                 </div>
                                 <div className="space-y-2">
                                     <Label className='text-white'>Amenities</Label>
