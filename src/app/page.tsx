@@ -4,10 +4,10 @@ import Image from 'next/image';
 import {
   ArrowRight,
   Briefcase,
-  ChevronDown,
   Clock,
   Mic,
   Search,
+  SlidersHorizontal,
   Star,
   TrendingUp,
   Users,
@@ -42,6 +42,8 @@ import {
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-dubai');
@@ -61,37 +63,49 @@ export default function Home() {
             priority
           />
         )}
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-black/60" />
         <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white p-4">
           <FadeInOnScroll>
-            <h1 className="text-4xl md:text-7xl font-black uppercase tracking-widest">
-              Dubai Real Estate
-              <br />
-              Built Better.
+            <h1 className="text-4xl md:text-7xl font-bold tracking-widest">
+              Dubai Real Estate. Built Better.
             </h1>
+            <p className="mt-6 max-w-3xl text-lg text-white/90 font-light tracking-widest">
+              Buying, selling, renting or investing in Dubai should feel clear, seamless and well handled. At <strong>Aether Luxury Properties</strong>, we’ve built our business to remove friction, raise standards and deliver better outcomes — for clients and brokers alike.
+            </p>
           </FadeInOnScroll>
           <FadeInOnScroll delay={200}>
-            <div className="mt-12 w-full">
-              <div className="p-2 rounded-lg bg-white/10 backdrop-blur-md border border-white/20">
+            <div className="mt-12 w-full max-w-4xl">
+              <div className="p-2 rounded-lg bg-white/10 backdrop-blur-xl border border-white/20">
                 <Tabs defaultValue="buy">
                   <TabsList className="bg-transparent">
-                    <TabsTrigger value="buy" className="text-white data-[state=active]:bg-white/20 data-[state=active]:text-white">BUY</TabsTrigger>
-                    <TabsTrigger value="rent" className="text-white data-[state=active]:bg-white/20 data-[state=active]:text-white">RENT</TabsTrigger>
+                    <TabsTrigger value="buy" className="text-white data-[state=active]:bg-copper-gold data-[state=active]:text-white">BUY</TabsTrigger>
+                    <TabsTrigger value="rent" className="text-white data-[state=active]:bg-copper-gold data-[state=active]:text-white">RENT</TabsTrigger>
                   </TabsList>
                 </Tabs>
-                <div className="mt-2 flex flex-col md:flex-row gap-2">
+                <div className="mt-2 flex flex-col md:flex-row gap-2 items-center">
                   <Input
                     type="text"
-                    placeholder="Enter location, community, or building"
-                    className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus-visible:ring-accent"
+                    placeholder="Search for community, building or location"
+                    className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus-visible:ring-accent flex-grow"
                   />
-                  <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                  <Select>
+                    <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0 w-full md:w-[220px]">
+                      <SelectValue placeholder="Property Type" />
+                    </SelectTrigger>
+                    <SelectContent className='bg-background/80 text-white border-white/20 backdrop-blur-xl'>
+                      <SelectItem value="apartments">Apartments</SelectItem>
+                      <SelectItem value="villas">Villas</SelectItem>
+                      <SelectItem value="penthouses">Penthouses</SelectItem>
+                      <SelectItem value="townhouses">Townhouses</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Button className="bg-accent hover:bg-accent/90 text-accent-foreground w-full md:w-auto">
                     <Search className="mr-2 h-4 w-4" />
                     Search
                   </Button>
-                  <Button variant="ghost" className="text-white hover:bg-white/20 hover:text-white">
-                    Advanced Search
-                    <ChevronDown className="ml-2 h-4 w-4" />
+                  <Button variant="ghost" className="text-white hover:bg-white/20 hover:text-white w-full md:w-auto">
+                    <SlidersHorizontal className="mr-2 h-4 w-4" />
+                    Advanced Filters
                   </Button>
                 </div>
               </div>
