@@ -8,7 +8,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
 import { Button } from '@/components/ui/button';
 import { teamMembers } from '@/lib/data';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { ParallaxImage } from '@/components/parallax-image';
 
 const coreValues = [
@@ -31,6 +31,24 @@ const coreValues = [
     icon: <Handshake className="h-10 w-10 text-primary" />,
     title: 'Always Improving',
     description: 'We are constantly learning and evolving our strategies to serve you better in a dynamic market.',
+  },
+];
+
+const testimonials = [
+  {
+    quote: "Aether's team provided unparalleled service and market insight. They made a complex process feel seamless and secured a fantastic deal for our family home.",
+    author: "The Al Futtaim Family",
+    location: "Palm Jumeirah",
+  },
+  {
+    quote: "As an international investor, I rely on transparency and expertise. Aether delivered on both fronts, guiding me to a high-yield off-plan investment with confidence.",
+    author: "Chen Wei",
+    location: "Investor from Singapore",
+  },
+  {
+    quote: "Selling our villa was an emotional decision, but our agent was a true partner. The marketing was exceptional, and the result exceeded our expectations. Highly recommended.",
+    author: "Mr. & Mrs. Harrison",
+    location: "Emirates Hills",
   },
 ];
 
@@ -156,8 +174,44 @@ export default function AboutPage() {
         </div>
       </section>
       
+      {/* Testimonials Section */}
+      <section className="bg-muted py-16 md:py-24">
+        <div className="container">
+          <FadeInOnScroll>
+            <div className="text-center mb-12">
+              <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary">What Our Clients Say</h2>
+              <p className="text-lg text-muted-foreground mt-4 max-w-2xl mx-auto">
+                Our success is measured by the satisfaction of our clients. Here’s what they have to say about their experience with Aether Luxury Properties.
+              </p>
+            </div>
+          </FadeInOnScroll>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <FadeInOnScroll key={index} delay={index * 100}>
+                <Card className="flex flex-col h-full">
+                  <CardContent className="p-6 flex-grow">
+                    <div className="flex mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
+                      ))}
+                    </div>
+                    <p className="text-muted-foreground italic">"{testimonial.quote}"</p>
+                  </CardContent>
+                  <CardFooter className="p-6 pt-0">
+                    <div>
+                        <p className="font-bold font-headline">{testimonial.author}</p>
+                        <p className="text-sm text-muted-foreground">{testimonial.location}</p>
+                    </div>
+                  </CardFooter>
+                </Card>
+              </FadeInOnScroll>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* 4. Team Members Card Section */}
-      <section id="team" className="bg-muted py-16 md:py-24">
+      <section id="team" className="bg-background py-16 md:py-24">
         <div className="container mx-auto">
           <FadeInOnScroll>
             <div className="text-center mb-12">
@@ -197,7 +251,7 @@ export default function AboutPage() {
       </section>
 
       {/* 5. Message from CEO */}
-      <section className="bg-background py-16 md:py-24">
+      <section className="bg-muted py-16 md:py-24">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
             <FadeInOnScroll>
