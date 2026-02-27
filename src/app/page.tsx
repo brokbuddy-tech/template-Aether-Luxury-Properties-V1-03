@@ -490,7 +490,7 @@ export default function Home() {
 
       {/* As Seen On Section */}
       <section className="py-12 bg-muted pt-0 mt-[10px]">
-        <div className="container">
+        <div className="container flex justify-center">
           <FadeInOnScroll>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center text-muted-foreground/80 grayscale">
               <span className="text-2xl font-headline font-semibold">Arabian Business</span>
@@ -593,5 +593,6 @@ export default function Home() {
 
 
     
+
 
 
