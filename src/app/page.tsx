@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -79,8 +78,10 @@ export default function Home() {
     onScroll()
 
     return () => {
-      serviceCarouselApi.off('scroll', onScroll)
-      serviceCarouselApi.off('reInit', onScroll)
+      if (serviceCarouselApi) {
+        serviceCarouselApi.off('scroll', onScroll)
+        serviceCarouselApi.off('reInit', onScroll)
+      }
     }
   }, [serviceCarouselApi])
 
