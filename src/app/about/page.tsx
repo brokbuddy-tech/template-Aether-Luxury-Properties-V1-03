@@ -323,16 +323,12 @@ export default function AboutPage() {
       </section>
 
       {/* 7. Newsletter Subscription */}
-      <section
-        className="relative h-[450px] w-full bg-cover bg-center bg-fixed"
-        style={{ backgroundImage: newsletterBgImage ? `url(${newsletterBgImage.imageUrl})` : 'none' }}
-      >
-        <div className="absolute inset-0 bg-black/50" />
-        <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white p-4">
+      <section className="bg-background py-16 md:py-24">
+        <div className="container">
           <FadeInOnScroll>
-            <div className="p-12 bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg max-w-4xl">
-              <h2 className="text-base font-thin uppercase tracking-[0.3em] font-headline">STAY AHEAD OF THE MARKET</h2>
-              <p className="mt-4 max-w-2xl mx-auto text-3xl font-headline">
+            <div className="mx-auto max-w-4xl rounded-lg border bg-muted p-12 text-center">
+              <h2 className="text-base font-thin uppercase tracking-[0.3em] font-headline text-muted-foreground">STAY AHEAD OF THE MARKET</h2>
+              <p className="mx-auto mt-4 max-w-2xl text-3xl font-headline text-primary">
                   Subscribe to The Aether Insider for exclusive 2026 market reports, off-plan launches, and luxury lifestyle insights.
               </p>
               <div className="mt-8 flex justify-center">
@@ -340,7 +336,7 @@ export default function AboutPage() {
                       <Input
                           type="email"
                           placeholder="Enter your email address..."
-                          className="h-12 flex-grow bg-black/20 border-white/30 text-white placeholder:text-white/80 focus-visible:ring-accent"
+                          className="h-12 flex-grow"
                       />
                       <Button type="submit" size="lg" className="h-12 bg-copper-gold text-white uppercase tracking-widest hover:bg-white hover:text-black transition-all px-8">
                           Subscribe
