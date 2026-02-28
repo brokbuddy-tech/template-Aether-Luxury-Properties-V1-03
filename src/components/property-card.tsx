@@ -34,7 +34,7 @@ export function PropertyCard({ property }: { property: Property }) {
                   <CarouselContent>
                     {(images.length > 0 ? images : (mainImage ? [mainImage] : [])).map((image, index) => (
                       <CarouselItem key={index}>
-                        <div className="relative h-56 w-full">
+                        <div className="relative aspect-video w-full">
                           {image && (
                             <Image
                               src={image.imageUrl}

@@ -42,8 +42,8 @@ export default function OffPlanDetailPage() {
     <div className="container py-12">
       {/* Gallery */}
       <div className="relative mb-8 group">
-        <div className="grid grid-cols-3 grid-rows-2 gap-2 h-[60vh]">
-          <div className="col-span-2 row-span-2 relative rounded-lg overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-2 h-auto md:h-[60vh]">
+          <div className="col-span-1 md:col-span-2 md:row-span-2 relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
             {galleryImages[0] && <Image src={galleryImages[0].imageUrl} alt={project.projectName} fill className="object-cover" />}
             <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
               <span className="text-white/50 text-3xl font-bold font-headline select-none">
@@ -51,7 +51,7 @@ export default function OffPlanDetailPage() {
               </span>
             </div>
           </div>
-          <div className="relative rounded-lg overflow-hidden">
+          <div className="relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
             {galleryImages[1] && <Image src={galleryImages[1].imageUrl} alt={project.projectName} fill className="object-cover" />}
              <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
               <span className="text-white/50 text-xl font-bold font-headline select-none">
@@ -59,7 +59,7 @@ export default function OffPlanDetailPage() {
               </span>
             </div>
           </div>
-          <div className="relative rounded-lg overflow-hidden">
+          <div className="relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
              {galleryImages[1] && <Image src={galleryImages[1].imageUrl} alt={project.projectName} fill className="object-cover" />}
              <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
               <span className="text-white/50 text-xl font-bold font-headline select-none">
@@ -129,7 +129,7 @@ export default function OffPlanDetailPage() {
                 <h3 className="mt-4 text-xl font-bold uppercase tracking-wider">Register Your Interest</h3>
                 <p className="text-muted-foreground">Get exclusive access to floor plans, pricing, and launch details.</p>
 
-                <div className="mt-6 grid grid-cols-1 gap-2 w-full">
+                <div className="mt-6 hidden md:grid grid-cols-1 gap-2 w-full">
                   <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
                     Request Info
                   </Button>
@@ -155,6 +155,18 @@ export default function OffPlanDetailPage() {
           </div>
         </div>
       )}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-sm p-2 border-t z-10">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-2 gap-2 w-full">
+             <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
+                Request Info
+              </Button>
+              <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold h-auto py-3">
+                <WhatsAppIcon /> WHATSAPP
+              </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

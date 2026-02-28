@@ -165,7 +165,7 @@ export default function SellPage() {
       </section>
 
       <section 
-        className="relative py-16 md:py-24 bg-cover bg-center bg-fixed"
+        className="relative py-16 md:py-24 bg-cover bg-center bg-scroll lg:bg-fixed"
         style={{ backgroundImage: valuationBgImage ? `url(${valuationBgImage.imageUrl})` : 'none' }}
       >
         <div className="absolute inset-0 bg-black/60" />
@@ -188,7 +188,7 @@ export default function SellPage() {
           </div>
           <div>
               <FadeInOnScroll delay={200}>
-                  <Card className="bg-black/50 backdrop-blur-lg border border-white/20 text-white">
+                  <Card className="bg-black/60 md:bg-black/50 backdrop-blur-lg border border-white/20 text-white">
                       <CardHeader>
                           <CardTitle>Get a Free Property Valuation</CardTitle>
                           <CardDescription className="text-white/80">Fill in the details below to get started.</CardDescription>

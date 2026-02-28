@@ -38,7 +38,7 @@ export function Header() {
   );
   
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/30 bg-background/50 backdrop-blur-lg supports-[backdrop-filter]:bg-background/30">
+    <header className="sticky top-0 z-50 w-full border-b border-border/30 bg-background/80 md:bg-background/50 backdrop-blur-lg supports-[backdrop-filter]:bg-background/70 md:supports-[backdrop-filter]:bg-background/30">
       <div className="container flex h-16 items-center justify-between">
         <Logo />
         
@@ -60,7 +60,7 @@ export function Header() {
                 <span className="sr-only">Open menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-background">
+            <SheetContent side="right" className="w-full sm:w-[400px] bg-background">
               <div className="p-4">
                 <div className="flex justify-between items-center mb-8">
                   <Logo />

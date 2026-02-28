@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -153,7 +154,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/60" />
         <div className="relative flex h-full flex-col items-center justify-center text-center text-white p-4">
           <FadeInOnScroll>
-            <h1 className="text-4xl md:text-7xl font-bold tracking-widest">
+            <h1>
               Dubai Real Estate. Built Better.
             </h1>
             <p className="mt-6 max-w-3xl text-lg text-white/90 font-light tracking-widest">
@@ -162,7 +163,7 @@ export default function Home() {
           </FadeInOnScroll>
           <FadeInOnScroll delay={200}>
             <div className="mt-12 w-full max-w-4xl">
-              <div className="p-2 rounded-lg bg-white/10 backdrop-blur-xl border border-white/20">
+              <div className="p-2 rounded-lg bg-white/20 md:bg-white/10 backdrop-blur-xl border border-white/20">
                 <Tabs defaultValue="buy">
                   <TabsList className="bg-transparent">
                     <TabsTrigger value="buy" className="text-white data-[state=active]:bg-copper-gold data-[state=active]:text-white">BUY</TabsTrigger>
@@ -179,7 +180,7 @@ export default function Home() {
                     <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0 w-full md:w-[220px]">
                       <SelectValue placeholder="Property Type" />
                     </SelectTrigger>
-                    <SelectContent className='bg-black/50 text-white border-white/20 backdrop-blur-xl'>
+                    <SelectContent className='bg-black/60 md:bg-black/50 text-white border-white/20 backdrop-blur-xl'>
                       <SelectItem value="apartments">Apartments</SelectItem>
                       <SelectItem value="villas">Villas</SelectItem>
                       <SelectItem value="penthouses">Penthouses</SelectItem>
@@ -201,7 +202,7 @@ export default function Home() {
                             Advanced Filters
                         </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-80 border border-white/20 bg-black/50 text-white backdrop-blur-lg">
+                    <PopoverContent className="w-80 border border-white/20 bg-black/60 md:bg-black/50 text-white backdrop-blur-lg">
                         <div className="grid gap-4">
                             <div className="space-y-2">
                                 <h4 className="font-medium leading-none">Advanced Filters</h4>
@@ -218,7 +219,7 @@ export default function Home() {
                                           <SelectTrigger className="w-[90px] h-7 text-xs bg-white/20 border-0 text-white focus:ring-accent focus:ring-offset-0">
                                               <SelectValue />
                                           </SelectTrigger>
-                                          <SelectContent className='border border-white/20 bg-black/50 text-white backdrop-blur-lg'>
+                                          <SelectContent className='border border-white/20 bg-black/60 md:bg-black/50 text-white backdrop-blur-lg'>
                                               <SelectItem value="AED">AED</SelectItem>
                                               <SelectItem value="USD">USD</SelectItem>
                                               <SelectItem value="EUR">EUR</SelectItem>
@@ -247,7 +248,7 @@ export default function Home() {
                                           <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
                                               <SelectValue placeholder="Any" />
                                           </SelectTrigger>
-                                          <SelectContent className='border border-white/20 bg-black/50 text-white backdrop-blur-lg'>
+                                          <SelectContent className='border border-white/20 bg-black/60 md:bg-black/50 text-white backdrop-blur-lg'>
                                               <SelectItem value="any">Any</SelectItem>
                                               <SelectItem value="1">1+ Beds</SelectItem>
                                               <SelectItem value="2">2+ Beds</SelectItem>
@@ -263,7 +264,7 @@ export default function Home() {
                                           <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
                                               <SelectValue placeholder="Any" />
                                           </SelectTrigger>
-                                          <SelectContent className='border border-white/20 bg-black/50 text-white backdrop-blur-lg'>
+                                          <SelectContent className='border border-white/20 bg-black/60 md:bg-black/50 text-white backdrop-blur-lg'>
                                               <SelectItem value="any">Any</SelectItem>
                                               <SelectItem value="1">1+ Baths</SelectItem>
                                               <SelectItem value="2">2+ Baths</SelectItem>
@@ -280,7 +281,7 @@ export default function Home() {
                                         <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
                                             <SelectValue placeholder="Any" />
                                         </SelectTrigger>
-                                        <SelectContent className='border border-white/20 bg-black/50 text-white backdrop-blur-lg'>
+                                        <SelectContent className='border border-white/20 bg-black/60 md:bg-black/50 text-white backdrop-blur-lg'>
                                             <SelectItem value="any">Any</SelectItem>
                                             <SelectItem value="pool">Swimming Pool</SelectItem>
                                             <SelectItem value="gym">Gym</SelectItem>
@@ -308,7 +309,7 @@ export default function Home() {
         <div className="container">
           <div className="text-left max-w-3xl mb-12 ml-[10px]">
              <FadeInOnScroll>
-                <h2 className="text-4xl font-bold font-headline">Explore Property in Dubai</h2>
+                <h2>Explore Property in Dubai</h2>
                 <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
                   <strong>Aether Luxury Properties</strong> helps buyers, sellers, and investors navigate the Dubai real estate market with absolute clarity and confidence. Our teams combine deep local expertise with advanced digital systems and white-glove support, all built to deliver smoother transactions and superior outcomes—every step of the way.
                 </p>
@@ -552,7 +553,7 @@ export default function Home() {
 
        {/* Section 7: Find Your Next Home CTA */}
       <section
-        className="relative h-[500px] w-full bg-cover bg-center bg-fixed"
+        className="relative h-[500px] w-full bg-cover bg-center bg-scroll lg:bg-fixed"
         style={{
           backgroundImage: ctaImage ? `url(${ctaImage.imageUrl})` : 'none',
         }}

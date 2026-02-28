@@ -14,7 +14,7 @@ export default function OffPlanPage() {
     <div className="flex flex-col">
       {/* Hero Section */}
       <section 
-        className="relative h-[50vh] w-full bg-cover bg-center bg-fixed"
+        className="relative h-[50vh] w-full bg-cover bg-center bg-scroll lg:bg-fixed"
         style={{ backgroundImage: heroImage ? `url(${heroImage.imageUrl})` : 'none' }}
       >
         <div className="absolute inset-0 bg-black/50" />
@@ -39,7 +39,7 @@ export default function OffPlanPage() {
                 <p className="text-sm text-muted-foreground">Showing 1–{offPlanProjects.length} of {offPlanProjects.length} results</p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 {offPlanProjects.map(project => (
                 <OffPlanCard key={project.id} project={project} />
                 ))}

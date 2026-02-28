@@ -114,7 +114,7 @@ export default function AboutPage() {
                   />
                 )}
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                  <PlayCircle className="h-24 w-24 text-white/80 group-hover:text-white group-hover:scale-110 transition-all" />
+                  <PlayCircle className="h-16 w-16 md:h-24 md:w-24 text-white/80 group-hover:text-white group-hover:scale-110 transition-all" />
                 </div>
               </div>
             </FadeInOnScroll>
@@ -136,7 +136,7 @@ export default function AboutPage() {
       {/* 2. How We Work */}
       <section className="bg-muted py-16 md:py-24">
         <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="flex flex-col-reverse lg:flex-row gap-12 items-center">
             <FadeInOnScroll>
               <h2 className="text-4xl md:text-5xl font-bold font-headline text-primary">How We Work</h2>
               <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
@@ -315,13 +315,13 @@ export default function AboutPage() {
       
       {/* 6. Corporate Impact & Scale */}
       <section 
-        className="relative py-24 bg-cover bg-center bg-fixed"
+        className="relative py-24 bg-cover bg-center bg-scroll lg:bg-fixed"
         style={{ backgroundImage: corporateImpactImage ? `url(${corporateImpactImage.imageUrl})` : 'none' }}
       >
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative container flex items-center justify-center">
           <FadeInOnScroll>
-            <div className="max-w-6xl mx-auto p-12 rounded-lg bg-white/10 backdrop-blur-xl border border-white/20">
+            <div className="max-w-6xl mx-auto p-12 rounded-lg bg-white/20 md:bg-white/10 backdrop-blur-xl border border-white/20">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center text-white">
                 <div>
                   <p className="text-5xl font-bold text-copper-gold">AED 120B+</p>
@@ -349,13 +349,13 @@ export default function AboutPage() {
       <section className="bg-background py-16 md:py-24">
         <div className="container">
           <FadeInOnScroll>
-            <div className="mx-auto max-w-4xl rounded-lg border bg-muted p-12 text-center">
+            <div className="mx-auto max-w-4xl rounded-lg border bg-muted p-8 md:p-12 text-center">
               <h2 className="text-base font-thin uppercase tracking-[0.3em] font-headline text-muted-foreground">STAY AHEAD OF THE MARKET</h2>
               <p className="mx-auto mt-4 max-w-2xl text-3xl font-headline text-primary">
                   Subscribe to The Aether Insider for exclusive 2026 market reports, off-plan launches, and luxury lifestyle insights.
               </p>
               <div className="mt-8 flex justify-center">
-                  <form className="flex w-full max-w-lg gap-4">
+                  <form className="flex flex-col sm:flex-row w-full max-w-lg gap-4">
                       <Input
                           type="email"
                           placeholder="Enter your email address..."

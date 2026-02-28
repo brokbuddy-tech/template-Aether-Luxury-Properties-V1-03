@@ -14,7 +14,7 @@ export default function CommercialPage() {
     <div className="flex flex-col">
       {/* Hero Section */}
       <section 
-        className="relative h-[50vh] w-full bg-cover bg-center bg-fixed"
+        className="relative h-[50vh] w-full bg-cover bg-center bg-scroll lg:bg-fixed"
         style={{ backgroundImage: heroImage ? `url(${heroImage.imageUrl})` : 'none' }}
       >
         <div className="absolute inset-0 bg-black/50" />
@@ -39,7 +39,7 @@ export default function CommercialPage() {
                 <p className="text-sm text-muted-foreground">Showing 1-4 of 4 results</p>
             </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {commercialProperties.map(property => (
               <CommercialPropertyCard key={property.id} property={property} />
             ))}

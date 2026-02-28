@@ -12,7 +12,7 @@ export function AiSearchModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>
-      <DialogContent className="bg-black/50 backdrop-blur-lg border-white/20 text-white sm:max-w-lg">
+      <DialogContent className="bg-black/60 md:bg-black/50 backdrop-blur-lg border-white/20 text-white sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="font-headline text-2xl flex items-center gap-2">
             <Sparkles className="h-6 w-6 text-accent" />

@@ -69,7 +69,16 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-  h1, h2, h3, h4, h5, h6 {
+  h1 {
+    @apply font-headline text-[clamp(2.25rem,6vw,4.5rem)] leading-tight tracking-widest;
+  }
+  h2 {
+    @apply font-headline text-[clamp(1.875rem,5vw,3rem)] leading-tight tracking-widest;
+  }
+  h3 {
+    @apply font-headline text-[clamp(1.25rem,4vw,1.875rem)] leading-tight tracking-widest;
+  }
+  h4, h5, h6 {
     @apply font-headline tracking-widest;
   }
 }
