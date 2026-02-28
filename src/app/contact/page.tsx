@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -27,7 +28,7 @@ const contactSchema = z.object({
 type ContactFormValues = z.infer<typeof contactSchema>;
 
 export default function ContactPage() {
-  const heroImage = PlaceHolderImages.find(p => p.id === 'hero-dubai');
+  const heroImage = PlaceHolderImages.find(p => p.id === 'hero-1');
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
