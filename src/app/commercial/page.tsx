@@ -35,12 +35,8 @@ export default function CommercialPage() {
         <CommercialFilterBar />
         
         <div className="container py-12">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-start items-center mb-4">
                 <p className="text-sm text-muted-foreground">Showing 1-4 of 4 results</p>
-                <div className="flex items-center gap-2 text-sm">
-                    <span className="text-muted-foreground">Sort by:</span>
-                    <Link href="#" className="font-semibold text-primary">Newest</Link>
-                </div>
             </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

@@ -1,4 +1,5 @@
 
+
 import { OffPlanCard } from "@/components/off-plan-card";
 import { offPlanProjects } from "@/lib/data";
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -34,12 +35,8 @@ export default function OffPlanPage() {
         <div className="container py-8">
             <OffPlanFilterBar />
             
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-start items-center mb-4">
                 <p className="text-sm text-muted-foreground">Showing 1–{offPlanProjects.length} of {offPlanProjects.length} results</p>
-                <div className="flex items-center gap-2 text-sm">
-                    <span className="text-muted-foreground">Sort by:</span>
-                    <Link href="#" className="font-semibold text-primary">Newest</Link>
-                </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
@@ -53,7 +50,7 @@ export default function OffPlanPage() {
                 <nav aria-label="Pagination">
                 <ul className="inline-flex items-center -space-x-px">
                     <li>
-                    <span className="cursor-pointer px-3 py-2 ml-0 leading-tight text-primary bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700">1</span>
+                    <span className="cursor-pointer px-3 py-2 ml-0 leading-tight text-primary bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">1</span>
                     </li>
                     <li>
                     <span className="cursor-pointer px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">...</span>
