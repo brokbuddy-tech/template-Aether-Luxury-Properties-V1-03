@@ -1,4 +1,5 @@
 
+
 import Image from 'next/image';
 import type { CommercialProperty } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -6,6 +7,7 @@ import { Card } from '@/components/ui/card';
 import { Square, MapPin } from 'lucide-react';
 import { Button } from './ui/button';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
+import Link from 'next/link';
 
 const WhatsAppIcon = () => (
     <svg
@@ -24,65 +26,79 @@ export function CommercialPropertyCard({ property }: { property: CommercialPrope
   const images = property.images.map(imgId => PlaceHolderImages.find(p => p.id === imgId)).filter(Boolean) as (typeof PlaceHolderImages[0])[];
 
   return (
-    <Card className="flex flex-col w-full max-w-[350px] mx-auto border border-gray-200 rounded-lg overflow-hidden shadow-sm bg-white">
-      <div className="relative">
-        <Carousel className="w-full">
-          <CarouselContent>
-            {(images.length > 0 ? images : [PlaceHolderImages.find(p => p.id === property.image)]).map((image, index) => (
-              <CarouselItem key={index}>
-                <div className="relative h-56 w-full">
-                  {image && (
-                    <Image
-                      src={image.imageUrl}
-                      alt={property.title}
-                      data-ai-hint={image.imageHint}
-                      fill
-                      className="object-cover"
-                    />
+     <div className="relative group">
+        <Card className="flex flex-col w-full max-w-[350px] mx-auto border border-gray-200 rounded-lg overflow-hidden shadow-sm bg-white group-hover:shadow-xl transition-shadow duration-300">
+            <Link href={`/commercial/${property.id}`} className="block">
+              <div className="relative">
+                <Carousel className="w-full">
+                  <CarouselContent>
+                    {(images.length > 0 ? images : [PlaceHolderImages.find(p => p.id === property.image)]).map((image, index) => (
+                      <CarouselItem key={index}>
+                        <div className="relative h-56 w-full">
+                          {image && (
+                            <Image
+                              src={image.imageUrl}
+                              alt={property.title}
+                              data-ai-hint={image.imageHint}
+                              fill
+                              className="object-cover"
+                            />
+                          )}
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  {images.length > 1 && (
+                    <>
+                      <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/50 hover:bg-white text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/50 hover:bg-white text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </>
                   )}
+                </Carousel>
+                <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
+                  <span className="text-white/50 text-xl font-bold font-headline select-none">
+                    Aether Luxury Properties
+                  </span>
                 </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          {images.length > 1 && (
-            <>
-              <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/50 hover:bg-white text-primary" />
-              <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/50 hover:bg-white text-primary" />
-            </>
-          )}
-        </Carousel>
-         <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
-          <span className="text-white/50 text-xl font-bold font-headline select-none">
-            Aether Luxury Properties
-          </span>
-        </div>
-      </div>
-      
-      <div className="p-4 flex flex-col flex-grow text-[#111827]">
-        <p className="text-2xl font-extrabold">
-            AED {property.price.toLocaleString()}
-            {property.transactionType === 'RENT' && ' / year'}
-        </p>
-        <h3 className="mt-2 text-sm font-bold tracking-wide text-[#374151] uppercase">
-            {property.title}
-        </h3>
-        <div className="mt-4 space-y-2 text-base text-[#4B5563] flex-grow">
-            <div className="flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-accent flex-shrink-0" />
-                <span className="truncate">{property.address}</span>
+              </div>
+            </Link>
+            
+            <div className="p-4 flex flex-col flex-grow text-[#111827]">
+              <p className="text-2xl font-extrabold">
+                  AED {property.price.toLocaleString()}
+                  {property.transactionType === 'RENT' && ' / year'}
+              </p>
+              <Link href={`/commercial/${property.id}`} className="block">
+                <h3 className="mt-2 text-sm font-bold tracking-wide text-[#374151] uppercase hover:underline">
+                    {property.title}
+                </h3>
+              </Link>
+              <div className="mt-4 space-y-2 text-base text-[#4B5563] flex-grow">
+                  <div className="flex items-center gap-2">
+                      <MapPin className="h-5 w-5 text-accent flex-shrink-0" />
+                      <span className="truncate">{property.address}</span>
+                  </div>
+              </div>
+              <div className="mt-4 pt-4 border-t flex justify-between items-center">
+                  <div className="flex items-center gap-2 text-base text-[#4B5563]">
+                      <Square className="h-5 w-5 text-gray-600 flex-shrink-0" />
+                      <span>{property.area.toLocaleString()} sq ft</span>
+                  </div>
+                    <Button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(`https://wa.me/?text=I'm interested in ${property.title} (ID: ${property.id})`, '_blank');
+                      }}
+                      className="rounded-md bg-accent hover:bg-accent/90 text-accent-foreground transition-all duration-300 flex items-center gap-2 px-4 py-2 h-auto"
+                    >
+                        <WhatsAppIcon />
+                        <span className="uppercase font-bold text-sm">Whatsapp</span>
+                    </Button>
+              </div>
             </div>
-        </div>
-        <div className="mt-4 pt-4 flex justify-between items-center">
-            <div className="flex items-center gap-2 text-base text-[#4B5563]">
-                <Square className="h-5 w-5 text-gray-600 flex-shrink-0" />
-                <span>{property.area.toLocaleString()} sq ft</span>
-            </div>
-             <Button className="rounded-md bg-accent hover:bg-accent/90 text-accent-foreground transition-all duration-300 flex items-center gap-2 px-4 py-2 h-auto">
-                <WhatsAppIcon />
-                <span className="uppercase font-bold text-sm">Whatsapp</span>
-            </Button>
-        </div>
-      </div>
-    </Card>
+        </Card>
+    </div>
   );
 }
+
+    

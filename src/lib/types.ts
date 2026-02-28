@@ -1,4 +1,5 @@
 
+
 import type { LucideIcon } from 'lucide-react';
 
 export type Property = {
@@ -35,6 +36,11 @@ export type CommercialProperty = {
     name: string;
     image: string;
   };
+  grade?: string;
+  views?: string[];
+  condition?: string;
+  parking?: number;
+  amenities?: string[];
 };
 
 export type OffPlanProject = {
@@ -89,3 +95,5 @@ export type SocialLink = {
   href: string;
   icon: LucideIcon;
 };
+
+    

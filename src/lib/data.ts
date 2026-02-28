@@ -1,4 +1,5 @@
 
+
 import {
   Briefcase,
   Clock,
@@ -105,12 +106,17 @@ export const commercialProperties: CommercialProperty[] = [
     address: 'Executive Towers, Business Bay, Dubai',
     area: 5000,
     image: 'commercial-1',
-    images: ['commercial-1', 'commercial-office-int-1'],
+    images: ['commercial-1', 'commercial-office-int-1', 'hero-dubai'],
     description: 'A premium, fully-fitted office space in the heart of Dubai\'s business district. Offering stunning canal views, high-speed elevators, and access to world-class amenities. Perfect for a corporate headquarters.',
     agent: {
       name: 'James Carter',
       image: 'agent-2',
     },
+    grade: 'Grade A+',
+    views: ['Canal View', 'Burj Khalifa View'],
+    condition: 'Fully Fitted',
+    parking: 10,
+    amenities: ['Covered Parking', '24/7 Security', 'High-speed elevators', 'Meeting Rooms', 'Retail in building'],
   },
   {
     id: 'c2',
@@ -121,12 +127,15 @@ export const commercialProperties: CommercialProperty[] = [
     address: 'The Dubai Mall, Downtown Dubai',
     area: 2500,
     image: 'commercial-2',
-    images: ['commercial-2', 'commercial-retail-int-1'],
+    images: ['commercial-2', 'commercial-retail-int-1', 'hero-dubai'],
     description: 'Exceptional retail opportunity with high footfall in the world\'s most visited shopping and entertainment destination. Features a wide glass frontage and modern interiors, ideal for a luxury brand.',
     agent: {
       name: 'Isabella Rossi',
       image: 'agent-1',
     },
+    condition: 'Shell & Core',
+    parking: 5,
+    amenities: ['High Footfall Area', 'Visitor Parking', 'Direct Mall Access'],
   },
   {
     id: 'c3',
@@ -137,12 +146,15 @@ export const commercialProperties: CommercialProperty[] = [
     address: 'Jebel Ali Free Zone (JAFZA), Dubai',
     area: 20000,
     image: 'commercial-3',
-    images: ['commercial-3', 'commercial-warehouse-int-1'],
+    images: ['commercial-3', 'commercial-warehouse-int-1', 'hero-dubai'],
     description: 'A state-of-the-art industrial warehouse with high ceilings, multiple loading bays, and integrated office space. Located in a prime logistics hub with excellent transport links.',
     agent: {
       name: 'James Carter',
       image: 'agent-2',
     },
+    condition: 'Fitted with Racking',
+    parking: 30,
+    amenities: ['Loading Docks', '24/7 Security', 'Office Space Included', 'Easy Highway Access'],
   },
     {
     id: 'c4',
@@ -153,12 +165,16 @@ export const commercialProperties: CommercialProperty[] = [
     address: 'Marina Gate, Dubai Marina',
     area: 1500,
     image: 'commercial-office-int-1',
-    images: ['commercial-office-int-1', 'commercial-1'],
+    images: ['commercial-office-int-1', 'commercial-1', 'hero-dubai'],
     description: 'A vibrant and fully-serviced office space with flexible terms. Includes access to meeting rooms, high-speed internet, and a professional community. Ideal for startups and freelancers.',
     agent: {
       name: 'Isabella Rossi',
       image: 'agent-1',
     },
+    grade: 'Grade A',
+    views: ['Marina View'],
+    condition: 'Fully Furnished',
+    amenities: ['Shared Reception', 'Meeting Rooms', 'High-Speed WiFi', 'Coffee & Tea'],
   },
 ];
 
@@ -203,6 +219,10 @@ export function getPropertyById(id: string) {
 
 export function getOffPlanProjectById(id: string) {
   return offPlanProjects.find(p => p.id === id);
+}
+
+export function getCommercialPropertyById(id: string) {
+  return commercialProperties.find(p => p.id === id);
 }
 
 export const services: Service[] = [
@@ -317,3 +337,5 @@ export const socialLinks: SocialLink[] = [
     { title: "Videos", href: "#", icon: Video },
     { title: "Podcasts", href: "#", icon: Mic },
 ]
+
+    
