@@ -7,6 +7,7 @@ import { PlayCircle, ArrowRight, Star, Award, Users, Handshake } from 'lucide-re
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { teamMembers } from '@/lib/data';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { ParallaxImage } from '@/components/parallax-image';
@@ -58,6 +59,7 @@ export default function AboutPage() {
   const teamPortrait = PlaceHolderImages.find(p => p.id === 'team-group');
   const ceoPortrait = PlaceHolderImages.find(p => p.id === 'agent-1'); // Isabella Rossi - Founder & CEO
   const corporateImpactImage = PlaceHolderImages.find(p => p.id === 'hero-1');
+  const newsletterBgImage = PlaceHolderImages.find(p => p.id === 'newsletter-bg');
 
   return (
     <div className="flex flex-col">
@@ -314,6 +316,36 @@ export default function AboutPage() {
                   <p className="text-5xl font-bold text-copper-gold">24/7</p>
                   <p className="mt-2 uppercase tracking-widest text-sm">Client Advisory & Support</p>
                 </div>
+              </div>
+            </div>
+          </FadeInOnScroll>
+        </div>
+      </section>
+
+      {/* 7. Newsletter Subscription */}
+      <section
+        className="relative h-[450px] w-full bg-cover bg-center bg-fixed"
+        style={{ backgroundImage: newsletterBgImage ? `url(${newsletterBgImage.imageUrl})` : 'none' }}
+      >
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white p-4">
+          <FadeInOnScroll>
+            <div className="p-12 bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg max-w-4xl">
+              <h2 className="text-base font-thin uppercase tracking-[0.3em] font-headline">STAY AHEAD OF THE MARKET</h2>
+              <p className="mt-4 max-w-2xl mx-auto text-3xl font-headline">
+                  Subscribe to The Aether Insider for exclusive 2026 market reports, off-plan launches, and luxury lifestyle insights.
+              </p>
+              <div className="mt-8 flex justify-center">
+                  <form className="flex w-full max-w-lg gap-4">
+                      <Input
+                          type="email"
+                          placeholder="Enter your email address..."
+                          className="h-12 flex-grow bg-black/20 border-white/30 text-white placeholder:text-white/80 focus-visible:ring-accent"
+                      />
+                      <Button type="submit" size="lg" className="h-12 bg-copper-gold text-white uppercase tracking-widest hover:bg-white hover:text-black transition-all px-8">
+                          Subscribe
+                      </Button>
+                  </form>
               </div>
             </div>
           </FadeInOnScroll>
