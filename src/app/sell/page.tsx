@@ -97,6 +97,7 @@ const faqs = [
 export default function SellPage() {
   const { openModal } = useContactModal();
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-sell');
+  const valuationBgImage = PlaceHolderImages.find(p => p.id === 'newsletter-bg');
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -165,27 +166,37 @@ export default function SellPage() {
         </div>
       </section>
 
-      <section className="bg-muted py-16 md:py-24">
-        <div className="container grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <section className="relative py-16 md:py-24">
+        {valuationBgImage && (
+            <ParallaxImage
+                src={valuationBgImage.imageUrl}
+                alt="Dubai skyline background"
+                data-ai-hint={valuationBgImage.imageHint}
+                fill
+                className="object-cover"
+            />
+        )}
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="relative container grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
               <FadeInOnScroll>
-                  <h2 className="text-3xl md:text-4xl font-bold mb-4 font-headline">Ready to Begin Your Selling Journey?</h2>
-                  <p className="text-muted-foreground mb-8 text-lg">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-4 font-headline text-white">Ready to Begin Your Selling Journey?</h2>
+                  <p className="text-white/90 mb-8 text-lg">
                       Receive a complimentary, data-driven valuation of your property from one of our expert agents. Simply fill out the form, and we'll be in touch to provide you with an accurate market assessment and a tailored selling strategy.
                   </p>
-                  <div className="space-y-4 text-muted-foreground">
-                      <p className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-600" /> No-obligation valuation</p>
-                      <p className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-600" /> Expert market insights</p>
-                      <p className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-600" /> Confidential consultation</p>
+                  <div className="space-y-4 text-white/90">
+                      <p className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-400" /> No-obligation valuation</p>
+                      <p className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-400" /> Expert market insights</p>
+                      <p className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-400" /> Confidential consultation</p>
                   </div>
-                   <Button onClick={openModal} size="lg" variant="outline" className="mt-8 border-primary text-primary hover:bg-primary hover:text-primary-foreground">
+                   <Button onClick={openModal} size="lg" variant="outline" className="mt-8 border-white text-white hover:bg-white hover:text-black">
                       Or, Contact an Agent Directly
                     </Button>
               </FadeInOnScroll>
           </div>
           <div>
               <FadeInOnScroll delay={200}>
-                  <Card>
+                  <Card className="bg-background/80 backdrop-blur-md">
                       <CardHeader>
                           <CardTitle>Get a Free Property Valuation</CardTitle>
                           <CardDescription>Fill in the details below to get started.</CardDescription>
