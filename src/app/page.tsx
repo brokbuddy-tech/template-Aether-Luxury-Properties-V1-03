@@ -365,14 +365,14 @@ export default function Home() {
       </section>
 
       {/* Section 4: Data-Driven Performance Bar */}
-      <section className="py-12 bg-muted">
+      <section className="py-8 bg-muted">
         <div className="container">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div className="grid grid-cols-4 gap-4 text-center items-start">
             {stats.map((stat) => (
               <FadeInOnScroll key={stat.label}>
-                <stat.icon className="h-10 w-10 mx-auto mb-2 text-primary" />
-                <p className="text-4xl font-bold text-primary">{stat.value}</p>
-                <p className="text-sm uppercase tracking-wider text-muted-foreground">{stat.label}</p>
+                <stat.icon className="h-6 w-6 md:h-8 md:w-8 mx-auto mb-2 text-primary" />
+                <p className="text-xl md:text-3xl font-bold text-primary">{stat.value}</p>
+                <p className="text-[10px] leading-tight md:text-xs uppercase tracking-wider text-muted-foreground">{stat.label}</p>
               </FadeInOnScroll>
             ))}
           </div>
@@ -589,6 +589,8 @@ export default function Home() {
 
 
 
+
+    
 
     
 
