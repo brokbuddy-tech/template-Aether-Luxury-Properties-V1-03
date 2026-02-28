@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -218,48 +217,50 @@ export default function CommercialPropertyDetailPage({ params }: { params: { id:
         </div>
 
         <div className="lg:col-span-1">
-          <Card className="rounded-xl bg-muted p-6">
-            <div className="flex flex-col items-center text-center">
-              <Avatar className="h-32 w-32">
-                {agentImage && <AvatarImage src={agentImage.imageUrl} alt={property.agent.name} />}
-                <AvatarFallback>{property.agent.name.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <h3 className="mt-4 text-xl font-bold uppercase tracking-wider">{property.agent.name}</h3>
-              <p className="text-muted-foreground">Luxury Property Specialist</p>
+          <div className="sticky top-24">
+            <Card className="rounded-xl bg-muted p-6">
+              <div className="flex flex-col items-center text-center">
+                <Avatar className="h-32 w-32">
+                  {agentImage && <AvatarImage src={agentImage.imageUrl} alt={property.agent.name} />}
+                  <AvatarFallback>{property.agent.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <h3 className="mt-4 text-xl font-bold uppercase tracking-wider">{property.agent.name}</h3>
+                <p className="text-muted-foreground">Luxury Property Specialist</p>
 
-              <div className="mt-6 grid grid-cols-2 gap-2 w-full">
-                <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
-                  <Phone /> PHONE
-                </Button>
-                <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
-                  <WhatsAppIcon /> WHATSAPP
-                </Button>
-              </div>
-
-              <Separator className="my-6" />
-
-              <div className="w-full">
-                <p className="text-sm font-bold text-muted-foreground mb-3 uppercase">Share this property</p>
-                <div className="flex justify-center gap-2">
-                  <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                      <Link2 />
+                <div className="mt-6 grid grid-cols-2 gap-2 w-full">
+                  <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
+                    <Phone /> PHONE
                   </Button>
-                  <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                      <WhatsAppIcon />
-                  </Button>
-                  <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                      <Facebook />
-                  </Button>
-                  <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                      <Twitter />
-                  </Button>
-                  <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                      <Linkedin />
+                  <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
+                    <WhatsAppIcon /> WHATSAPP
                   </Button>
                 </div>
+
+                <Separator className="my-6" />
+
+                <div className="w-full">
+                  <p className="text-sm font-bold text-muted-foreground mb-3 uppercase">Share this property</p>
+                  <div className="flex justify-center gap-2">
+                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                        <Link2 />
+                    </Button>
+                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                        <WhatsAppIcon />
+                    </Button>
+                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                        <Facebook />
+                    </Button>
+                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                        <Twitter />
+                    </Button>
+                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                        <Linkedin />
+                    </Button>
+                  </div>
+                </div>
               </div>
-            </div>
-          </Card>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
