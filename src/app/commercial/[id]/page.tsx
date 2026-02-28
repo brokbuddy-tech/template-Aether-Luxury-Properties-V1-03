@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { getCommercialPropertyById } from "@/lib/data";
-import { notFound } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
@@ -113,8 +113,9 @@ const WhatsAppIcon = () => (
 );
 
 
-export default function CommercialPropertyDetailPage({ params }: { params: { id: string } }) {
-  const property = getCommercialPropertyById(params.id);
+export default function CommercialPropertyDetailPage() {
+  const params = useParams();
+  const property = getCommercialPropertyById(params.id as string);
 
   if (!property) {
     notFound();
@@ -214,8 +215,6 @@ export default function CommercialPropertyDetailPage({ params }: { params: { id:
             <p className="text-muted-foreground mt-2">{property.address}, Dubai</p>
           </div>
 
-          <Separator />
-          
           {property.dldPermitNo && qrCodeImage && (
             <div className="py-8">
                 <div className="p-6 rounded-lg bg-muted/50 flex items-center gap-6">
@@ -237,6 +236,8 @@ export default function CommercialPropertyDetailPage({ params }: { params: { id:
             </div>
           )}
 
+          <Separator />
+          
           <MortgageCalculator price={property.price} />
 
         </div>
