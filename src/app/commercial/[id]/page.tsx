@@ -126,40 +126,41 @@ export default function CommercialPropertyDetailPage({ params }: { params: { id:
 
   return (
     <div className="container py-12">
+      {/* Gallery */}
+      <div className="relative mb-8 group">
+        <div className="grid grid-cols-3 grid-rows-2 gap-2 h-[60vh]">
+          <div className="col-span-2 row-span-2 relative rounded-lg overflow-hidden">
+            {galleryImages[0] && <Image src={galleryImages[0].imageUrl} alt={property.title} fill className="object-cover" />}
+            <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
+              <span className="text-white/50 text-3xl font-bold font-headline select-none">
+                Aether Luxury Properties
+              </span>
+            </div>
+          </div>
+          <div className="relative rounded-lg overflow-hidden">
+            {galleryImages[1] && <Image src={galleryImages[1].imageUrl} alt={property.title} fill className="object-cover" />}
+             <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
+              <span className="text-white/50 text-xl font-bold font-headline select-none">
+                Aether Luxury Properties
+              </span>
+            </div>
+          </div>
+          <div className="relative rounded-lg overflow-hidden">
+            {galleryImages[2] && <Image src={galleryImages[2].imageUrl} alt={property.title} fill className="object-cover" />}
+             <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
+              <span className="text-white/50 text-xl font-bold font-headline select-none">
+                Aether Luxury Properties
+              </span>
+            </div>
+          </div>
+        </div>
+        <Button variant="secondary" className="absolute bottom-4 right-4">
+          View All Photos
+        </Button>
+      </div>
+      
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2">
-          {/* Gallery */}
-          <div className="relative mb-8 group">
-            <div className="grid grid-cols-3 grid-rows-2 gap-2 h-[60vh]">
-              <div className="col-span-2 row-span-2 relative rounded-lg overflow-hidden">
-                {galleryImages[0] && <Image src={galleryImages[0].imageUrl} alt={property.title} fill className="object-cover" />}
-                <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
-                  <span className="text-white/50 text-3xl font-bold font-headline select-none">
-                    Aether Luxury Properties
-                  </span>
-                </div>
-              </div>
-              <div className="relative rounded-lg overflow-hidden">
-                {galleryImages[1] && <Image src={galleryImages[1].imageUrl} alt={property.title} fill className="object-cover" />}
-                 <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
-                  <span className="text-white/50 text-xl font-bold font-headline select-none">
-                    Aether Luxury Properties
-                  </span>
-                </div>
-              </div>
-              <div className="relative rounded-lg overflow-hidden">
-                {galleryImages[2] && <Image src={galleryImages[2].imageUrl} alt={property.title} fill className="object-cover" />}
-                 <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
-                  <span className="text-white/50 text-xl font-bold font-headline select-none">
-                    Aether Luxury Properties
-                  </span>
-                </div>
-              </div>
-            </div>
-            <Button variant="secondary" className="absolute bottom-4 right-4">
-              View All Photos
-            </Button>
-          </div>
 
           <div className="mb-8">
             <p className="text-4xl font-extrabold text-primary">AED {property.price.toLocaleString()}</p>
@@ -217,57 +218,50 @@ export default function CommercialPropertyDetailPage({ params }: { params: { id:
         </div>
 
         <div className="lg:col-span-1">
-          <div className="sticky top-24">
-            <Card className="rounded-xl bg-muted p-6">
-              <div className="flex flex-col items-center text-center">
-                <Avatar className="h-32 w-32">
-                  {agentImage && <AvatarImage src={agentImage.imageUrl} alt={property.agent.name} />}
-                  <AvatarFallback>{property.agent.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-                <h3 className="mt-4 text-xl font-bold uppercase tracking-wider">{property.agent.name}</h3>
-                <p className="text-muted-foreground">Luxury Property Specialist</p>
+          <Card className="rounded-xl bg-muted p-6">
+            <div className="flex flex-col items-center text-center">
+              <Avatar className="h-32 w-32">
+                {agentImage && <AvatarImage src={agentImage.imageUrl} alt={property.agent.name} />}
+                <AvatarFallback>{property.agent.name.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <h3 className="mt-4 text-xl font-bold uppercase tracking-wider">{property.agent.name}</h3>
+              <p className="text-muted-foreground">Luxury Property Specialist</p>
 
-                <div className="mt-6 grid grid-cols-2 gap-2 w-full">
-                  <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
-                    <Phone /> PHONE
+              <div className="mt-6 grid grid-cols-2 gap-2 w-full">
+                <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
+                  <Phone /> PHONE
+                </Button>
+                <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
+                  <WhatsAppIcon /> WHATSAPP
+                </Button>
+              </div>
+
+              <Separator className="my-6" />
+
+              <div className="w-full">
+                <p className="text-sm font-bold text-muted-foreground mb-3 uppercase">Share this property</p>
+                <div className="flex justify-center gap-2">
+                  <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                      <Link2 />
                   </Button>
-                  <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
-                    <WhatsAppIcon /> WHATSAPP
+                  <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                      <WhatsAppIcon />
                   </Button>
-                </div>
-
-                <Separator className="my-6" />
-
-                <div className="w-full">
-                  <p className="text-sm font-bold text-muted-foreground mb-3 uppercase">Share this property</p>
-                  <div className="flex justify-center gap-2">
-                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                        <Link2 />
-                    </Button>
-                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                        <WhatsAppIcon />
-                    </Button>
-                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                        <Facebook />
-                    </Button>
-                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                        <Twitter />
-                    </Button>
-                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                        <Linkedin />
-                    </Button>
-                  </div>
+                  <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                      <Facebook />
+                  </Button>
+                  <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                      <Twitter />
+                  </Button>
+                  <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                      <Linkedin />
+                  </Button>
                 </div>
               </div>
-            </Card>
-          </div>
+            </div>
+          </Card>
         </div>
       </div>
     </div>
   );
 }
-
-
-    
-
-    
