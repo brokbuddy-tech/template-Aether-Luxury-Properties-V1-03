@@ -190,35 +190,35 @@ export default function SellPage() {
           </div>
           <div>
               <FadeInOnScroll delay={200}>
-                  <Card className="bg-background/80 backdrop-blur-md">
+                  <Card className="bg-black/50 backdrop-blur-lg border border-white/20 text-white">
                       <CardHeader>
                           <CardTitle>Get a Free Property Valuation</CardTitle>
-                          <CardDescription>Fill in the details below to get started.</CardDescription>
+                          <CardDescription className="text-white/80">Fill in the details below to get started.</CardDescription>
                       </CardHeader>
                       <CardContent>
                           <Form {...form}>
                               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                                   <FormField control={form.control} name="name" render={({ field }) => (
-                                      <FormItem><FormLabel>Full Name</FormLabel><FormControl><Input placeholder="John Doe" {...field} /></FormControl><FormMessage /></FormItem>
+                                      <FormItem><FormLabel>Full Name</FormLabel><FormControl><Input placeholder="John Doe" {...field} className="bg-black/20 border-white/30 placeholder:text-gray-400 focus-visible:ring-accent" /></FormControl><FormMessage /></FormItem>
                                   )} />
                                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <FormField control={form.control} name="email" render={({ field }) => (
-                                        <FormItem><FormLabel>Email</FormLabel><FormControl><Input type="email" placeholder="john.doe@example.com" {...field} /></FormControl><FormMessage /></FormItem>
+                                        <FormItem><FormLabel>Email</FormLabel><FormControl><Input type="email" placeholder="john.doe@example.com" {...field} className="bg-black/20 border-white/30 placeholder:text-gray-400 focus-visible:ring-accent" /></FormControl><FormMessage /></FormItem>
                                     )} />
                                     <FormField control={form.control} name="phone" render={({ field }) => (
-                                        <FormItem><FormLabel>Phone</FormLabel><FormControl><Input type="tel" placeholder="+971..." {...field} /></FormControl><FormMessage /></FormItem>
+                                        <FormItem><FormLabel>Phone</FormLabel><FormControl><Input type="tel" placeholder="+971..." {...field} className="bg-black/20 border-white/30 placeholder:text-gray-400 focus-visible:ring-accent" /></FormControl><FormMessage /></FormItem>
                                     )} />
                                   </div>
                                   <FormField control={form.control} name="propertyAddress" render={({ field }) => (
-                                      <FormItem><FormLabel>Property Address</FormLabel><FormControl><Input placeholder="e.g., Apt 101, Downtown Views, Dubai" {...field} /></FormControl><FormMessage /></FormItem>
+                                      <FormItem><FormLabel>Property Address</FormLabel><FormControl><Input placeholder="e.g., Apt 101, Downtown Views, Dubai" {...field} className="bg-black/20 border-white/30 placeholder:text-gray-400 focus-visible:ring-accent" /></FormControl><FormMessage /></FormItem>
                                   )} />
                                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <FormField control={form.control} name="propertyType" render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Property Type</FormLabel>
                                             <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                                <FormControl><SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger></FormControl>
-                                                <SelectContent>
+                                                <FormControl><SelectTrigger className="bg-black/20 border-white/30 data-[placeholder]:text-gray-400 focus-visible:ring-accent"><SelectValue placeholder="Select type" /></SelectTrigger></FormControl>
+                                                <SelectContent className="bg-black/50 text-white border-white/20 backdrop-blur-xl">
                                                     {['villa', 'apartment', 'townhouse', 'penthouse', 'land'].map(type => (
                                                         <SelectItem key={type} value={type} className="capitalize">{type}</SelectItem>
                                                     ))}
@@ -230,8 +230,8 @@ export default function SellPage() {
                                      <FormField control={form.control} name="bedrooms" render={({ field }) => (
                                       <FormItem><FormLabel>Bedrooms</FormLabel>
                                        <Select onValueChange={(value) => field.onChange(Number(value))} defaultValue={String(field.value)}>
-                                          <FormControl><SelectTrigger><SelectValue placeholder="Select bedrooms" /></SelectTrigger></FormControl>
-                                          <SelectContent>
+                                          <FormControl><SelectTrigger className="bg-black/20 border-white/30 data-[placeholder]:text-gray-400 focus-visible:ring-accent"><SelectValue placeholder="Select bedrooms" /></SelectTrigger></FormControl>
+                                          <SelectContent className="bg-black/50 text-white border-white/20 backdrop-blur-xl">
                                             {[0, 1, 2, 3, 4, 5, 6].map(num => (
                                               <SelectItem key={num} value={String(num)}>{num === 0 ? 'Studio' : `${num} Bedroom${num > 1 ? 's' : ''}`}</SelectItem>
                                             ))}
