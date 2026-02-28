@@ -1,5 +1,5 @@
 
-import Image from 'next/image';
+
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
 import { CommercialFilterBar } from '@/components/commercial-filter-bar';
@@ -13,17 +13,10 @@ export default function CommercialPage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative h-[50vh] w-full overflow-hidden">
-        {heroImage && (
-          <Image
-            src={heroImage.imageUrl}
-            alt={heroImage.description}
-            data-ai-hint={heroImage.imageHint}
-            fill
-            className="object-cover"
-            priority
-          />
-        )}
+      <section 
+        className="relative h-[50vh] w-full bg-cover bg-center bg-fixed"
+        style={{ backgroundImage: heroImage ? `url(${heroImage.imageUrl})` : 'none' }}
+      >
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative flex h-full flex-col items-center justify-center text-center text-white p-4">
           <FadeInOnScroll>
