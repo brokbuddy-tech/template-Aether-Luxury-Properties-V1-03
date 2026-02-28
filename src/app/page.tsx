@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -50,7 +49,6 @@ import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { useAiSearchModal } from '@/hooks/use-ai-search-modal';
 import { Progress } from '@/components/ui/progress';
-import { useContactModal } from '@/hooks/use-contact-modal';
 
 
 export default function Home() {
@@ -58,7 +56,6 @@ export default function Home() {
   const [currency, setCurrency] = useState('AED');
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-2');
   const { openModal: openAiSearchModal } = useAiSearchModal();
-  const { openModal } = useContactModal();
   const [expertiseIndex, setExpertiseIndex] = useState(0);
   const [newsIndex, setNewsIndex] = useState(0);
 
@@ -573,8 +570,8 @@ export default function Home() {
               <Button asChild size="lg" variant="outline" className="font-headline border-white border-2 bg-transparent text-white hover:bg-white hover:text-black transition-all duration-300 px-8 py-3 h-auto">
                 <Link href="/buy">SEARCH PROPERTIES</Link>
               </Button>
-              <Button onClick={openModal} size="lg" variant="outline" className="font-headline border-white border-2 bg-transparent text-white hover:bg-white hover:text-black transition-all duration-300 px-8 py-3 h-auto">
-                CONTACT US
+              <Button asChild size="lg" variant="outline" className="font-headline border-white border-2 bg-transparent text-white hover:bg-white hover:text-black transition-all duration-300 px-8 py-3 h-auto">
+                <Link href="/contact">CONTACT US</Link>
               </Button>
             </div>
           </FadeInOnScroll>
@@ -594,7 +591,4 @@ export default function Home() {
 
     
 
-
-
-
-
+    

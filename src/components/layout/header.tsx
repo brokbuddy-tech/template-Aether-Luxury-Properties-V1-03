@@ -9,7 +9,6 @@ import { Menu, X } from 'lucide-react';
 import { Logo } from '@/components/logo';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { useContactModal } from '@/hooks/use-contact-modal';
 import { cn } from '@/lib/utils';
 
 const navLinks = [
@@ -23,7 +22,6 @@ const navLinks = [
 
 export function Header() {
   const pathname = usePathname();
-  const { openModal } = useContactModal();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const NavLink = ({ href, label }: { href: string; label: string }) => (
@@ -51,8 +49,8 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button onClick={openModal} className="hidden sm:flex bg-accent hover:bg-accent/90 text-accent-foreground">
-            CONTACT US
+          <Button asChild className="hidden sm:flex bg-accent hover:bg-accent/90 text-accent-foreground">
+            <Link href="/contact">CONTACT US</Link>
           </Button>
 
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -77,8 +75,8 @@ export function Header() {
                   {navLinks.map((link) => (
                     <NavLink key={link.href} {...link} />
                   ))}
-                  <Button onClick={() => { openModal(); setIsMobileMenuOpen(false); }} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                    CONTACT US
+                  <Button asChild className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Link href="/contact">CONTACT US</Link>
                   </Button>
                 </nav>
               </div>

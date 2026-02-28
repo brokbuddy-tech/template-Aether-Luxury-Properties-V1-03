@@ -5,10 +5,10 @@ import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import Link from 'next/link';
 
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Button } from '@/components/ui/button';
-import { useContactModal } from '@/hooks/use-contact-modal';
 import { ParallaxImage } from '@/components/parallax-image';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -94,7 +94,6 @@ const faqs = [
 ];
 
 export default function SellPage() {
-  const { openModal } = useContactModal();
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-sell');
   const valuationBgImage = PlaceHolderImages.find(p => p.id === 'hero-dubai');
   const { toast } = useToast();
@@ -182,8 +181,8 @@ export default function SellPage() {
                       <p className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-400" /> Expert market insights</p>
                       <p className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-400" /> Confidential consultation</p>
                   </div>
-                   <Button onClick={openModal} size="lg" className="mt-8 border border-white/30 bg-black/20 backdrop-blur-sm text-white hover:bg-white/10">
-                      Or, Contact an Agent Directly
+                   <Button asChild size="lg" className="mt-8 border border-white/30 bg-black/20 backdrop-blur-sm text-white hover:bg-white/10">
+                      <Link href="/contact">Or, Contact an Agent Directly</Link>
                     </Button>
               </FadeInOnScroll>
           </div>
@@ -310,3 +309,5 @@ export default function SellPage() {
     </div>
   );
 }
+
+    

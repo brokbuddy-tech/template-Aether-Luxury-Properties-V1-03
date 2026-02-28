@@ -7,7 +7,6 @@ import { Instagram, Facebook, Youtube, Linkedin, Twitter, ArrowUp, MapPin } from
 
 import { Logo } from '@/components/logo';
 import { Button } from '@/components/ui/button';
-import { useContactModal } from '@/hooks/use-contact-modal';
 
 const footerLinkColumns = [
   {
@@ -37,7 +36,7 @@ const footerLinkColumns = [
       { label: 'Meet The Team', href: '#' },
       { label: 'Careers', href: '#' },
       { label: 'Apply Now', href: '#' },
-      { label: 'Contact', href: '#', isContact: true },
+      { label: 'Contact', href: '/contact' },
     ],
   },
   {
@@ -54,7 +53,6 @@ const footerLinkColumns = [
 
 
 export function Footer() {
-  const { openModal } = useContactModal();
   const [isBackToTopVisible, setIsBackToTopVisible] = useState(false);
 
   const toggleBackToTopVisibility = () => {
@@ -110,15 +108,7 @@ export function Footer() {
                                             <span>{link.label}</span>
                                         </>
                                     );
-                                    if (link.isContact) {
-                                        return (
-                                            <li key={link.label}>
-                                                <button onClick={openModal} className="flex items-center gap-3 text-base text-muted-foreground hover:text-primary transition-colors text-left w-full">
-                                                    {content}
-                                                </button>
-                                            </li>
-                                        );
-                                    }
+                                    
                                     return (
                                         <li key={link.label}>
                                             <Link href={link.href} target={link.icon ? '_blank' : '_self'} rel={link.icon ? 'noopener noreferrer' : ''} className="flex items-center gap-3 text-base text-muted-foreground hover:text-primary transition-colors">
