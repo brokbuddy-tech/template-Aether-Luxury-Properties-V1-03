@@ -26,9 +26,10 @@ export function FilterBar() {
   const { openModal: openAiSearchModal } = useAiSearchModal();
 
   return (
-    <div className="mb-8 -mx-4 sm:mx-0">
-      <div className="p-4 rounded-none sm:rounded-lg border-y sm:border bg-background shadow-lg">
+    <div className="mb-8">
+      <div className="p-4 rounded-lg border bg-background shadow-lg">
         <div className="flex flex-col gap-4">
+          
           {/* First Row */}
           <div className="flex flex-wrap gap-4 items-center">
             {/* AI Search Button */}
@@ -101,77 +102,42 @@ export function FilterBar() {
           {/* Second Row */}
           <div className="flex flex-col sm:flex-row gap-4 items-center">
             <div className="flex flex-wrap sm:flex-nowrap gap-4 items-center">
-                {/* Bedrooms */}
-                <div className="flex-auto min-w-[150px]">
-                    <Label className="sr-only">Bedrooms</Label>
-                    <Select>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Bedrooms" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="any">Any</SelectItem>
-                            <SelectItem value="1">1+ Beds</SelectItem>
-                            <SelectItem value="2">2+ Beds</SelectItem>
-                            <SelectItem value="3">3+ Beds</SelectItem>
-                            <SelectItem value="4">4+ Beds</SelectItem>
-                            <SelectItem value="5">5+ Beds</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-                {/* Bathrooms */}
-                 <div className="flex-auto min-w-[150px]">
-                    <Label className="sr-only">Bathrooms</Label>
-                    <Select>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Bathrooms" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="any">Any</SelectItem>
-                            <SelectItem value="1">1+ Baths</SelectItem>
-                            <SelectItem value="2">2+ Baths</SelectItem>
-                            <SelectItem value="3">3+ Baths</SelectItem>
-                            <SelectItem value="4">4+ Baths</SelectItem>
-                            <SelectItem value="5">5+ Baths</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-
                 {/* Size Range */}
-                <div className="flex-auto min-w-[120px]">
-                    <Label className="sr-only">Min Sq. Ft.</Label>
-                    <Input placeholder="Min Sq. Ft." type="number" />
+                <div className="flex-auto min-w-[180px]">
+                <Label className="sr-only">Min Sq. Ft.</Label>
+                <Input placeholder="Min Sq. Ft." type="number" />
                 </div>
-                <div className="flex-auto min-w-[120px]">
-                    <Label className="sr-only">Max Sq. Ft.</Label>
-                    <Input placeholder="Max Sq. Ft." type="number" />
+                <div className="flex-auto min-w-[180px]">
+                <Label className="sr-only">Max Sq. Ft.</Label>
+                <Input placeholder="Max Sq. Ft." type="number" />
                 </div>
 
                 <Separator orientation="vertical" className="h-10 hidden md:flex" />
 
                 {/* Amenities */}
                 <Popover>
-                    <PopoverTrigger asChild>
-                        <Button variant="outline" className="flex-auto">
-                            <Plus className="mr-2 h-4 w-4"/>
-                            AMENITIES
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-80">
-                        <div className="grid gap-4">
-                            <div className="space-y-2">
-                                <h4 className="font-medium leading-none">Amenities</h4>
-                                <p className="text-sm text-muted-foreground">Select desired features.</p>
-                            </div>
-                            <div className="grid grid-cols-2 gap-4">
-                                {amenitiesList.map((amenity) => (
-                                    <div key={amenity.id} className="flex items-center space-x-2">
-                                        <Checkbox id={amenity.id} />
-                                        <Label htmlFor={amenity.id} className="font-normal cursor-pointer">{amenity.label}</Label>
-                                    </div>
-                                ))}
-                            </div>
+                <PopoverTrigger asChild>
+                    <Button variant="outline" className="flex-auto">
+                        <Plus className="mr-2 h-4 w-4"/>
+                        AMENITIES
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80">
+                    <div className="grid gap-4">
+                        <div className="space-y-2">
+                            <h4 className="font-medium leading-none">Amenities</h4>
+                            <p className="text-sm text-muted-foreground">Select desired features.</p>
                         </div>
-                    </PopoverContent>
+                        <div className="grid grid-cols-2 gap-4">
+                            {amenitiesList.map((amenity) => (
+                                <div key={amenity.id} className="flex items-center space-x-2">
+                                    <Checkbox id={amenity.id} />
+                                    <Label htmlFor={amenity.id} className="font-normal cursor-pointer">{amenity.label}</Label>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </PopoverContent>
                 </Popover>
             </div>
 
