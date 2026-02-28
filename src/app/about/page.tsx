@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { teamMembers } from '@/lib/data';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { ParallaxImage } from '@/components/parallax-image';
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 
 const coreValues = [
   {
@@ -50,6 +51,16 @@ const testimonials = [
     quote: "Selling our villa was an emotional decision, but our agent was a true partner. The marketing was exceptional, and the result exceeded our expectations. Highly recommended.",
     author: "Mr. & Mrs. Harrison",
     location: "Emirates Hills",
+  },
+  {
+    quote: "The attention to detail and personalized service we received was second to none. Aether Properties truly understands the luxury market.",
+    author: "Fatima Al-Marzooqi",
+    location: "Downtown Dubai",
+  },
+  {
+    quote: "Aether's data-driven approach gave us the confidence to make a major investment. Their analysis was spot-on, and the returns have been excellent.",
+    author: "David Chen",
+    location: "Business Bay",
   },
 ];
 
@@ -187,28 +198,40 @@ export default function AboutPage() {
               </p>
             </div>
           </FadeInOnScroll>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <FadeInOnScroll key={index} delay={index * 100}>
-                <Card className="flex flex-col h-full">
-                  <CardContent className="p-6 flex-grow">
-                    <div className="flex mb-4">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
-                      ))}
-                    </div>
-                    <p className="text-muted-foreground italic">"{testimonial.quote}"</p>
-                  </CardContent>
-                  <CardFooter className="p-6 pt-0">
-                    <div>
-                        <p className="font-bold font-headline">{testimonial.author}</p>
-                        <p className="text-sm text-muted-foreground">{testimonial.location}</p>
-                    </div>
-                  </CardFooter>
-                </Card>
-              </FadeInOnScroll>
-            ))}
-          </div>
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full max-w-6xl mx-auto"
+          >
+            <CarouselContent className="-ml-4">
+              {testimonials.map((testimonial, index) => (
+                <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                  <div className="h-full p-1">
+                    <Card className="flex flex-col h-full">
+                      <CardContent className="p-6 flex-grow">
+                        <div className="flex mb-4">
+                          {[...Array(5)].map((_, i) => (
+                            <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
+                          ))}
+                        </div>
+                        <p className="text-muted-foreground italic">"{testimonial.quote}"</p>
+                      </CardContent>
+                      <CardFooter className="p-6 pt-0">
+                        <div>
+                            <p className="font-bold font-headline">{testimonial.author}</p>
+                            <p className="text-sm text-muted-foreground">{testimonial.location}</p>
+                        </div>
+                      </CardFooter>
+                    </Card>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
         </div>
       </section>
 
