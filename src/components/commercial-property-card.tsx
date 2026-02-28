@@ -1,4 +1,5 @@
 
+"use client";
 
 import Image from 'next/image';
 import type { CommercialProperty } from '@/lib/types';
@@ -100,5 +101,4 @@ export function CommercialPropertyCard({ property }: { property: CommercialPrope
     </div>
   );
 }
-
     
