@@ -129,7 +129,10 @@ export default function CommercialPropertyDetailPage() {
 
   const getCommunity = (address: string) => {
     const parts = address.split(', ');
-    return parts.length > 1 ? parts[1] : null;
+    if (parts.length > 2) {
+      return parts[parts.length - 2];
+    }
+    return parts.length > 1 ? parts[0] : null;
   }
 
   const relatedProperties = commercialProperties.filter(p => {

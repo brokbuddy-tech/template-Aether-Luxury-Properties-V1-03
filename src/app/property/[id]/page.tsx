@@ -128,7 +128,10 @@ export default function PropertyDetailPage() {
 
   const getCommunity = (address: string) => {
     const parts = address.split(', ');
-    return parts.length > 1 ? parts[1] : null;
+    if (parts.length > 2) {
+      return parts[parts.length - 2];
+    }
+    return parts.length > 1 ? parts[0] : null;
   }
 
   const relatedProperties = properties.filter(p => {
@@ -228,7 +231,7 @@ export default function PropertyDetailPage() {
 
           {property.dldPermitNo && qrCodeImage && (
             <div className="py-8">
-                <div className="p-8 rounded-lg bg-muted flex items-center gap-8">
+                <div className="p-8 rounded-lg bg-muted/50 flex items-center gap-8">
                     <Image
                         src={qrCodeImage.imageUrl.replace('data=Example', `data=${property.dldPermitNo}`)}
                         alt="DLD Permit QR Code"
