@@ -20,17 +20,17 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 const workPrinciples = [
   {
-    icon: <Target className="h-10 w-10 text-primary" />,
+    icon: <Target className="h-8 w-8 text-primary" />,
     title: 'Precision Marketing',
     description: 'We use data-driven strategies to target the right buyers for your property, ensuring maximum exposure and optimal pricing.',
   },
   {
-    icon: <Handshake className="h-10 w-10 text-primary" />,
+    icon: <Handshake className="h-8 w-8 text-primary" />,
     title: 'Expert Negotiation',
     description: 'Our seasoned agents are masters of negotiation, dedicated to securing the best possible terms and price for your sale.',
   },
   {
-    icon: <Award className="h-10 w-10 text-primary" />,
+    icon: <Award className="h-8 w-8 text-primary" />,
     title: 'Unrivaled Service',
     description: 'From staging to closing, we provide a seamless, white-glove experience, handling every detail with professionalism and care.',
   },
@@ -150,13 +150,13 @@ export default function SellPage() {
           <FadeInOnScroll>
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Our Commitment to You</h2>
           </FadeInOnScroll>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="grid grid-cols-3 gap-8">
             {workPrinciples.map((principle, index) => (
               <FadeInOnScroll key={principle.title} delay={index * 100}>
                 <div className="text-center">
                   <div className="flex justify-center mb-4">{principle.icon}</div>
-                  <h3 className="text-2xl font-bold font-headline mb-2">{principle.title}</h3>
-                  <p className="text-muted-foreground">{principle.description}</p>
+                  <h3 className="text-xl font-bold font-headline mb-2">{principle.title}</h3>
+                  <p className="text-muted-foreground text-sm">{principle.description}</p>
                 </div>
               </FadeInOnScroll>
             ))}
@@ -309,5 +309,3 @@ export default function SellPage() {
     </div>
   );
 }
-
-    
