@@ -1,120 +1,267 @@
+"use client";
 
+import { useState, useEffect } from 'react';
 import { getPropertyById } from "@/lib/data";
-import { notFound } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { Badge } from "@/components/ui/badge";
-import { BedDouble, Bath, Square, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { FadeInOnScroll } from "@/components/fade-in-on-scroll";
+import { Slider } from "@/components/ui/slider";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { 
+  BedDouble, 
+  Bath, 
+  Square,
+  CheckCircle,
+  MapPin, 
+  Phone, 
+  Link2,
+  Facebook,
+  Twitter,
+  Linkedin,
+} from "lucide-react";
+import Link from 'next/link';
 
-export default function PropertyDetailPage({ params }: { params: { id: string } }) {
-  const property = getPropertyById(params.id);
+function MortgageCalculator({ price }: { price: number }) {
+  const [purchasePrice, setPurchasePrice] = useState(price);
+  const [downPaymentPercent, setDownPaymentPercent] = useState(20);
+  const [loanPeriod, setLoanPeriod] = useState(25);
+  const [interestRate, setInterestRate] = useState(4.5);
+  const [monthlyPayment, setMonthlyPayment] = useState(0);
+
+  useEffect(() => {
+    const principal = purchasePrice * (1 - downPaymentPercent / 100);
+    const monthlyInterestRate = interestRate / 100 / 12;
+    const numberOfPayments = loanPeriod * 12;
+
+    if (monthlyInterestRate > 0) {
+      const M = principal * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments)) / (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
+      setMonthlyPayment(M);
+    } else if (numberOfPayments > 0) {
+      setMonthlyPayment(principal / numberOfPayments);
+    } else {
+      setMonthlyPayment(0);
+    }
+  }, [purchasePrice, downPaymentPercent, loanPeriod, interestRate]);
+
+  const downPaymentValue = purchasePrice * (downPaymentPercent / 100);
+
+  return (
+    <Card className="bg-muted/50 mt-12">
+        <CardHeader>
+            <CardTitle className="font-thin tracking-[0.2em]">EXPLORE YOUR MORTGAGE POSSIBILITIES</CardTitle>
+        </CardHeader>
+        <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="md:col-span-2 space-y-8">
+                    <div>
+                        <div className="flex justify-between items-center mb-2">
+                            <Label htmlFor="purchasePrice">Purchase Price (AED)</Label>
+                            <span className="font-bold">{purchasePrice.toLocaleString()}</span>
+                        </div>
+                        <Slider id="purchasePrice" value={[purchasePrice]} onValueChange={(v) => setPurchasePrice(v[0])} min={price * 0.5} max={price * 1.5} step={10000} />
+                    </div>
+                    <div>
+                        <div className="flex justify-between items-center mb-2">
+                            <Label htmlFor="downPayment">Down Payment ({downPaymentPercent}%)</Label>
+                            <span className="font-bold">{downPaymentValue.toLocaleString()}</span>
+                        </div>
+                        <Slider id="downPayment" value={[downPaymentPercent]} onValueChange={(v) => setDownPaymentPercent(v[0])} min={10} max={80} step={1} />
+                    </div>
+                    <div>
+                        <div className="flex justify-between items-center mb-2">
+                            <Label htmlFor="loanPeriod">Loan Period (Years)</Label>
+                            <span className="font-bold">{loanPeriod}</span>
+                        </div>
+                        <Slider id="loanPeriod" value={[loanPeriod]} onValueChange={(v) => setLoanPeriod(v[0])} min={5} max={30} step={1} />
+                    </div>
+                     <div>
+                        <div className="flex justify-between items-center mb-2">
+                            <Label htmlFor="interestRate">Interest Rate (%)</Label>
+                            <span className="font-bold">{interestRate.toFixed(2)}</span>
+                        </div>
+                        <Slider id="interestRate" value={[interestRate]} onValueChange={(v) => setInterestRate(v[0])} min={1} max={10} step={0.01} />
+                    </div>
+                </div>
+                <div className="flex items-center justify-center bg-background rounded-lg p-6">
+                    <div className="text-center">
+                        <p className="text-muted-foreground">Monthly Payment</p>
+                        <p className="text-4xl font-bold text-primary mt-2">AED {monthlyPayment.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}</p>
+                    </div>
+                </div>
+            </div>
+        </CardContent>
+    </Card>
+  );
+}
+
+const WhatsAppIcon = () => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+    >
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 4.315 1.919 6.066l-1.425 5.215 5.233-1.383z" />
+    </svg>
+);
+
+
+export default function PropertyDetailPage() {
+  const params = useParams();
+  const property = getPropertyById(params.id as string);
 
   if (!property) {
     notFound();
   }
 
   const agentImage = PlaceHolderImages.find(p => p.id === property.agent.image);
+  const galleryImages = property.images.map(id => PlaceHolderImages.find(p => p.id === id)).filter(Boolean) as typeof PlaceHolderImages[0][];
+  const mapImage = PlaceHolderImages.find(p => p.id === 'map-location');
 
   return (
     <div className="container py-12">
-      <FadeInOnScroll threshold={0.01}>
-        <Carousel className="w-full mb-8">
-          <CarouselContent>
-            {property.images.map((imgId, index) => {
-              const image = PlaceHolderImages.find(p => p.id === imgId);
-              return (
-                <CarouselItem key={index}>
-                  <div className="relative h-[60vh] w-full rounded-lg overflow-hidden">
-                    {image && (
-                      <Image
-                        src={image.imageUrl}
-                        alt={`${property.title} - image ${index + 1}`}
-                        data-ai-hint={image.imageHint}
-                        fill
-                        className="object-cover"
-                      />
-                    )}
-                  </div>
-                </CarouselItem>
-              );
-            })}
-          </CarouselContent>
-          <CarouselPrevious className="left-4" />
-          <CarouselNext className="right-4" />
-        </Carousel>
-      </FadeInOnScroll>
-
+      {/* Gallery */}
+      <div className="relative mb-8 group">
+        <div className="grid grid-cols-3 grid-rows-2 gap-2 h-[60vh]">
+          <div className="col-span-2 row-span-2 relative rounded-lg overflow-hidden">
+            {galleryImages[0] && <Image src={galleryImages[0].imageUrl} alt={property.title} fill className="object-cover" />}
+            <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
+              <span className="text-white/50 text-3xl font-bold font-headline select-none">
+                Aether Luxury Properties
+              </span>
+            </div>
+          </div>
+          <div className="relative rounded-lg overflow-hidden">
+            {galleryImages[1] && <Image src={galleryImages[1].imageUrl} alt={property.title} fill className="object-cover" />}
+             <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
+              <span className="text-white/50 text-xl font-bold font-headline select-none">
+                Aether Luxury Properties
+              </span>
+            </div>
+          </div>
+          <div className="relative rounded-lg overflow-hidden">
+            {galleryImages[2] && <Image src={galleryImages[2].imageUrl} alt={property.title} fill className="object-cover" />}
+             <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
+              <span className="text-white/50 text-xl font-bold font-headline select-none">
+                Aether Luxury Properties
+              </span>
+            </div>
+          </div>
+        </div>
+        <Button variant="secondary" className="absolute bottom-4 right-4">
+          View All Photos
+        </Button>
+      </div>
+      
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2">
-          <FadeInOnScroll>
-            <Badge variant={property.type === 'BUY' ? 'default' : 'secondary'}>FOR {property.type}</Badge>
-            <h1 className="font-headline text-4xl font-bold mt-2">{property.title}</h1>
-            <p className="text-lg text-muted-foreground mt-1">{property.address}</p>
-            
-            <div className="flex flex-wrap gap-x-6 gap-y-2 text-lg my-6 border-y py-4">
-                <div className="flex items-center gap-2 font-semibold">
-                  <BedDouble className="h-5 w-5 text-primary" />
-                  <span>{property.bedrooms} Bedrooms</span>
-                </div>
-                <div className="flex items-center gap-2 font-semibold">
-                  <Bath className="h-5 w-5 text-primary" />
-                  <span>{property.bathrooms} Bathrooms</span>
-                </div>
-                <div className="flex items-center gap-2 font-semibold">
-                  <Square className="h-5 w-5 text-primary" />
-                  <span>{property.area.toLocaleString()} sqft</span>
-                </div>
-            </div>
-          </FadeInOnScroll>
+
+          <div className="mb-8">
+            <p className="text-4xl font-extrabold text-primary">AED {property.price.toLocaleString()}{property.type === 'RENT' ? ' / year' : ''}</p>
+            <p className="text-muted-foreground text-sm">Property ID-{property.id}</p>
+            <h1 className="text-2xl font-bold font-headline mt-2">{property.title}</h1>
+            <p className="text-lg text-muted-foreground">{property.address}</p>
+          </div>
+
+          <Separator />
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 py-8">
+            <div className="flex items-center gap-3"><BedDouble className="h-8 w-8 text-accent" /><div className=''><p className="font-bold">{property.bedrooms} Beds</p></div></div>
+            <div className="flex items-center gap-3"><Bath className="h-8 w-8 text-accent" /><div className=''><p className="font-bold">{property.bathrooms} Baths</p></div></div>
+            <div className="flex items-center gap-3"><Square className="h-8 w-8 text-accent" /><div className=''><p className="font-bold">{property.area.toLocaleString()} sqft</p></div></div>
+          </div>
           
-          <FadeInOnScroll delay={100}>
-            <div className="prose max-w-none text-foreground">
-              <h2 className="font-headline text-2xl font-bold">Property Description</h2>
-              <p>{property.description}</p>
-            </div>
-          </FadeInOnScroll>
+          <Separator />
+
+          <div className="py-8">
+            <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-4">Property Description</h2>
+            <p className="text-muted-foreground leading-relaxed">{property.description}</p>
+          </div>
           
-          <FadeInOnScroll delay={200}>
-            <div className="mt-8">
-              <h2 className="font-headline text-2xl font-bold mb-4">Key Features</h2>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
-                {property.keyFeatures.map(feature => (
-                  <li key={feature} className="flex items-center gap-2">
-                    <CheckCircle className="h-5 w-5 text-green-600" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </FadeInOnScroll>
+          {property.keyFeatures && property.keyFeatures.length > 0 && (
+             <>
+              <Separator />
+              <div className="py-8">
+                <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-4">Key Features</h2>
+                <ul className="grid grid-cols-2 md:grid-cols-3 gap-4 text-muted-foreground">
+                  {property.keyFeatures.map(feature => <li key={feature} className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-green-500" /> {feature}</li>)}
+                </ul>
+              </div>
+            </>
+          )}
+
+          <div className="py-8">
+            <h2 className="text-xl font-bold font-headline mb-4">LOCATION</h2>
+             {mapImage && (
+                <div className="relative h-[400px] w-full rounded-lg overflow-hidden border">
+                <Image
+                  src={mapImage.imageUrl}
+                  alt={mapImage.description}
+                  data-ai-hint={mapImage.imageHint}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              )}
+            <p className="text-muted-foreground mt-2">{property.address}</p>
+          </div>
+
+          <Separator />
+          
+          <MortgageCalculator price={property.price} />
 
         </div>
+
         <div className="lg:col-span-1">
-          <FadeInOnScroll delay={300}>
-            <div className="sticky top-24 p-6 rounded-lg border bg-card shadow-sm">
-              <p className="text-sm text-muted-foreground">Starting from</p>
-              <p className="font-headline text-4xl font-bold text-primary">${property.price.toLocaleString()}</p>
-              
-              <div className="mt-8 border-t pt-6">
-                  <h3 className="font-semibold mb-4">Contact Agent</h3>
-                  <div className="flex items-center gap-4">
-                    <Avatar className="h-16 w-16">
-                      {agentImage && <AvatarImage src={agentImage.imageUrl} alt={property.agent.name} />}
-                      <AvatarFallback>{property.agent.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="font-bold">{property.agent.name}</p>
-                      <p className="text-sm text-muted-foreground">Luxury Property Specialist</p>
-                    </div>
+          <div className="sticky top-24">
+            <Card className="rounded-xl bg-muted p-6">
+              <div className="flex flex-col items-center text-center">
+                <Avatar className="h-32 w-32">
+                  {agentImage && <AvatarImage src={agentImage.imageUrl} alt={property.agent.name} />}
+                  <AvatarFallback>{property.agent.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <h3 className="mt-4 text-xl font-bold uppercase tracking-wider">{property.agent.name}</h3>
+                <p className="text-muted-foreground">Luxury Property Specialist</p>
+
+                <div className="mt-6 grid grid-cols-2 gap-2 w-full">
+                  <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
+                    <Phone /> PHONE
+                  </Button>
+                  <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
+                    <WhatsAppIcon /> WHATSAPP
+                  </Button>
+                </div>
+
+                <Separator className="my-6" />
+
+                <div className="w-full">
+                  <p className="text-sm font-bold text-muted-foreground mb-3 uppercase">Share this property</p>
+                  <div className="flex justify-center gap-2">
+                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                        <Link2 />
+                    </Button>
+                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                        <WhatsAppIcon />
+                    </Button>
+                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                        <Facebook />
+                    </Button>
+                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                        <Twitter />
+                    </Button>
+                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                        <Linkedin />
+                    </Button>
                   </div>
-                  <Button className="w-full mt-6 bg-accent hover:bg-accent/90 text-accent-foreground">Request Information</Button>
+                </div>
               </div>
-            </div>
-          </FadeInOnScroll>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
