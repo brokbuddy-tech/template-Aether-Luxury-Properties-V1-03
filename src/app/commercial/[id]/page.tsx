@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import Link from 'next/link';
 import { CommercialPropertyCard } from '@/components/commercial-property-card';
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 
 function MortgageCalculator({ price }: { price: number }) {
   const [purchasePrice, setPurchasePrice] = useState(price);
@@ -146,7 +147,8 @@ export default function CommercialPropertyDetailPage() {
     <div className="container py-12">
       {/* Gallery */}
       <div className="relative mb-8 group">
-        <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-2 h-auto md:h-[60vh]">
+        {/* Desktop Grid View */}
+        <div className="hidden md:grid md:grid-cols-3 md:grid-rows-2 gap-2 h-auto md:h-[60vh]">
           <div className="col-span-1 md:col-span-2 md:row-span-2 relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
             {galleryImages[0] && <Image src={galleryImages[0].imageUrl} alt={property.title} fill className="object-cover" />}
             <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
@@ -172,7 +174,42 @@ export default function CommercialPropertyDetailPage() {
             </div>
           </div>
         </div>
-        <Button variant="secondary" className="absolute bottom-4 right-4">
+        
+        {/* Mobile Carousel View */}
+        <div className="md:hidden">
+            <Carousel className="w-full">
+                <CarouselContent>
+                    {galleryImages.map((image, index) => (
+                        <CarouselItem key={index}>
+                            <div className="relative aspect-video w-full rounded-lg overflow-hidden">
+                                {image && (
+                                    <Image
+                                    src={image.imageUrl}
+                                    alt={`${property.title} - image ${index + 1}`}
+                                    data-ai-hint={image.imageHint}
+                                    fill
+                                    className="object-cover"
+                                    />
+                                )}
+                                 <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
+                                    <span className="text-white/50 text-xl font-bold font-headline select-none">
+                                        Aether Luxury Properties
+                                    </span>
+                                </div>
+                            </div>
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
+                {galleryImages.length > 1 && (
+                    <>
+                        <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/50 hover:bg-white text-primary" />
+                        <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/50 hover:bg-white text-primary" />
+                    </>
+                )}
+            </Carousel>
+        </div>
+
+        <Button variant="secondary" className="absolute bottom-4 right-4 z-10">
           View All Photos
         </Button>
       </div>
