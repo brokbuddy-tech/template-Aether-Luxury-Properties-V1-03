@@ -129,13 +129,36 @@ export default function CommercialPropertyDetailPage({ params }: { params: { id:
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2">
           {/* Gallery */}
-          <div className="grid grid-cols-2 grid-rows-2 gap-2 h-[60vh] mb-8">
+          <div className="relative mb-8 group">
+            <div className="grid grid-cols-3 grid-rows-2 gap-2 h-[60vh]">
               <div className="col-span-2 row-span-2 relative rounded-lg overflow-hidden">
                 {galleryImages[0] && <Image src={galleryImages[0].imageUrl} alt={property.title} fill className="object-cover" />}
+                <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
+                  <span className="text-white/50 text-3xl font-bold font-headline select-none">
+                    Aether Luxury Properties
+                  </span>
+                </div>
               </div>
-              <div className="col-start-1 row-start-1 hidden"></div>
-              {galleryImages[1] && <div className="relative rounded-lg overflow-hidden"><Image src={galleryImages[1].imageUrl} alt={property.title} fill className="object-cover" /></div>}
-              {galleryImages[2] && <div className="relative rounded-lg overflow-hidden"><Image src={galleryImages[2].imageUrl} alt={property.title} fill className="object-cover" /></div>}
+              <div className="relative rounded-lg overflow-hidden">
+                {galleryImages[1] && <Image src={galleryImages[1].imageUrl} alt={property.title} fill className="object-cover" />}
+                 <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
+                  <span className="text-white/50 text-xl font-bold font-headline select-none">
+                    Aether Luxury Properties
+                  </span>
+                </div>
+              </div>
+              <div className="relative rounded-lg overflow-hidden">
+                {galleryImages[2] && <Image src={galleryImages[2].imageUrl} alt={property.title} fill className="object-cover" />}
+                 <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
+                  <span className="text-white/50 text-xl font-bold font-headline select-none">
+                    Aether Luxury Properties
+                  </span>
+                </div>
+              </div>
+            </div>
+            <Button variant="secondary" className="absolute bottom-4 right-4">
+              View All Photos
+            </Button>
           </div>
 
           <div className="mb-8">
