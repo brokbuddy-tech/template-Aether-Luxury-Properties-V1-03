@@ -166,16 +166,10 @@ export default function SellPage() {
         </div>
       </section>
 
-      <section className="relative py-16 md:py-24">
-        {valuationBgImage && (
-            <ParallaxImage
-                src={valuationBgImage.imageUrl}
-                alt="Dubai skyline background"
-                data-ai-hint={valuationBgImage.imageHint}
-                fill
-                className="object-cover"
-            />
-        )}
+      <section 
+        className="relative py-16 md:py-24 bg-cover bg-center bg-fixed"
+        style={{ backgroundImage: valuationBgImage ? `url(${valuationBgImage.imageUrl})` : 'none' }}
+      >
         <div className="absolute inset-0 bg-black/60" />
         <div className="relative container grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
