@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Award, Handshake, Target, CheckCircle, Loader2 } from 'lucide-react';
@@ -183,7 +182,7 @@ export default function SellPage() {
                       <p className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-400" /> Expert market insights</p>
                       <p className="flex items-center gap-3"><CheckCircle className="h-5 w-5 text-green-400" /> Confidential consultation</p>
                   </div>
-                   <Button onClick={openModal} size="lg" variant="outline" className="mt-8 border-white text-white hover:bg-white hover:text-black">
+                   <Button onClick={openModal} size="lg" className="mt-8 border border-white/30 bg-black/20 backdrop-blur-sm text-white hover:bg-white/10">
                       Or, Contact an Agent Directly
                     </Button>
               </FadeInOnScroll>
