@@ -8,7 +8,7 @@ import { CommercialPropertyCard } from '@/components/commercial-property-card';
 import Link from 'next/link';
 
 export default function CommercialPage() {
-  const heroImage = PlaceHolderImages.find(p => p.id === 'commercial-hero');
+  const heroImage = PlaceHolderImages.find(p => p.id === 'commercial-1');
 
   return (
     <div className="flex flex-col">
