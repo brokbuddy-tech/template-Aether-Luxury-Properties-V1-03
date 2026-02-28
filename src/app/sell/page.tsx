@@ -97,7 +97,7 @@ const faqs = [
 export default function SellPage() {
   const { openModal } = useContactModal();
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-sell');
-  const valuationBgImage = PlaceHolderImages.find(p => p.id === 'newsletter-bg');
+  const valuationBgImage = PlaceHolderImages.find(p => p.id === 'hero-dubai');
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
