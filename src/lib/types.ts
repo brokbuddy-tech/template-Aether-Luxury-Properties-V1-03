@@ -19,6 +19,7 @@ export type Property = {
     name: string;
     image: string;
   };
+  dldPermitNo?: string;
 };
 
 export type CommercialProperty = {

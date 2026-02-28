@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -122,6 +123,7 @@ export default function PropertyDetailPage() {
   const agentImage = PlaceHolderImages.find(p => p.id === property.agent.image);
   const galleryImages = property.images.map(id => PlaceHolderImages.find(p => p.id === id)).filter(Boolean) as typeof PlaceHolderImages[0][];
   const mapImage = PlaceHolderImages.find(p => p.id === 'map-location');
+  const qrCodeImage = PlaceHolderImages.find(p => p.id === 'qr-code');
 
   return (
     <div className="container py-12">
@@ -211,6 +213,27 @@ export default function PropertyDetailPage() {
             <p className="text-muted-foreground mt-2">{property.address}</p>
           </div>
 
+          {property.dldPermitNo && qrCodeImage && (
+            <div className="py-8">
+                <div className="p-8 rounded-lg bg-muted flex items-center gap-8">
+                    <Image
+                        src={qrCodeImage.imageUrl.replace('data=Example', `data=${property.dldPermitNo}`)}
+                        alt="DLD Permit QR Code"
+                        width={120}
+                        height={120}
+                        className='rounded-md'
+                    />
+                    <div>
+                        <p className="text-xl font-bold">DLD Permit No:</p>
+                        <p className="text-2xl text-muted-foreground mt-1">{property.dldPermitNo}</p>
+                        <p className="text-sm text-muted-foreground mt-4 italic">
+                            This property listing has been reviewed and verified by Dubai Land Department
+                        </p>
+                    </div>
+                </div>
+            </div>
+          )}
+
           <Separator />
           
           <MortgageCalculator price={property.price} />
@@ -267,3 +290,4 @@ export default function PropertyDetailPage() {
     </div>
   );
 }
+

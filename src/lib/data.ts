@@ -39,6 +39,7 @@ export const properties: Property[] = [
       name: 'Isabella Rossi',
       image: 'agent-1',
     },
+    dldPermitNo: '65397098276',
   },
   {
     id: '2',
@@ -57,6 +58,7 @@ export const properties: Property[] = [
       name: 'James Carter',
       image: 'agent-2',
     },
+    dldPermitNo: '65123456789',
   },
   {
     id: '3',
@@ -75,6 +77,7 @@ export const properties: Property[] = [
       name: 'Isabella Rossi',
       image: 'agent-1',
     },
+    dldPermitNo: '65987654321',
   },
   {
     id: '4',
@@ -93,6 +96,7 @@ export const properties: Property[] = [
       name: 'James Carter',
       image: 'agent-2',
     },
+    dldPermitNo: '65456789123',
   },
 ];
 
