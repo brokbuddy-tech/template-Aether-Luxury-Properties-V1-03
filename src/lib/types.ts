@@ -20,6 +20,23 @@ export type Property = {
   };
 };
 
+export type CommercialProperty = {
+  id: string;
+  transactionType: 'BUY' | 'RENT';
+  propertyType: 'Office' | 'Retail' | 'Warehouse';
+  title: string;
+  price: number;
+  address: string;
+  area: number;
+  image: string;
+  images: string[];
+  description: string;
+  agent: {
+    name: string;
+    image: string;
+  };
+};
+
 export type OffPlanProject = {
   id: string;
   projectName: string;

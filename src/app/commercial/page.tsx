@@ -1,11 +1,75 @@
+
+import Image from 'next/image';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
+import { CommercialFilterBar } from '@/components/commercial-filter-bar';
+import { commercialProperties } from '@/lib/data';
+import { CommercialPropertyCard } from '@/components/commercial-property-card';
+import Link from 'next/link';
+
 export default function CommercialPage() {
+  const heroImage = PlaceHolderImages.find(p => p.id === 'commercial-hero');
+
   return (
-    <div className="container py-12">
-      <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
-        <h1 className="text-4xl font-bold mb-4">Commercial Properties</h1>
-        <p className="text-lg text-muted-foreground">
-          This section is currently under development. Please check back soon for our exclusive commercial listings.
-        </p>
+    <div className="flex flex-col">
+      {/* Hero Section */}
+      <section className="relative h-[50vh] w-full overflow-hidden">
+        {heroImage && (
+          <Image
+            src={heroImage.imageUrl}
+            alt={heroImage.description}
+            data-ai-hint={heroImage.imageHint}
+            fill
+            className="object-cover"
+            priority
+          />
+        )}
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative flex h-full flex-col items-center justify-center text-center text-white p-4">
+          <FadeInOnScroll>
+            <h1 className="text-4xl md:text-6xl font-bold tracking-widest font-headline">
+              Commercial Properties
+            </h1>
+            <p className="mt-6 max-w-3xl text-lg text-white/90">
+              Focusing on high-yield business assets in Dubai's premier commercial districts.
+            </p>
+          </FadeInOnScroll>
+        </div>
+      </section>
+
+      {/* Main Content */}
+      <div className="bg-white">
+        <CommercialFilterBar />
+        
+        <div className="container py-12">
+            <div className="flex justify-between items-center mb-4">
+                <p className="text-sm text-muted-foreground">Showing 1-4 of 4 results</p>
+                <div className="flex items-center gap-2 text-sm">
+                    <span className="text-muted-foreground">Sort by:</span>
+                    <Link href="#" className="font-semibold text-primary">Newest</Link>
+                </div>
+            </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {commercialProperties.map(property => (
+              <CommercialPropertyCard key={property.id} property={property} />
+            ))}
+          </div>
+
+          {/* Pagination */}
+          <div className="flex justify-center mt-12">
+            <nav aria-label="Pagination">
+              <ul className="inline-flex items-center -space-x-px">
+                <li>
+                  <span className="cursor-pointer px-3 py-2 ml-0 leading-tight text-primary bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">1</span>
+                </li>
+                 <li>
+                  <span className="cursor-pointer px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">...</span>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
       </div>
     </div>
   );

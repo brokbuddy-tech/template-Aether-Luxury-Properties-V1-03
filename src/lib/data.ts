@@ -17,6 +17,7 @@ import type {
   NewsArticle,
   Community,
   SocialLink,
+  CommercialProperty,
 } from './types';
 
 export const properties: Property[] = [
@@ -93,6 +94,74 @@ export const properties: Property[] = [
     },
   },
 ];
+
+export const commercialProperties: CommercialProperty[] = [
+  {
+    id: 'c1',
+    transactionType: 'BUY',
+    propertyType: 'Office',
+    title: 'Grade A Office Space in Business Bay',
+    price: 15000000,
+    address: 'Executive Towers, Business Bay, Dubai',
+    area: 5000,
+    image: 'commercial-1',
+    images: ['commercial-1', 'commercial-office-int-1'],
+    description: 'A premium, fully-fitted office space in the heart of Dubai\'s business district. Offering stunning canal views, high-speed elevators, and access to world-class amenities. Perfect for a corporate headquarters.',
+    agent: {
+      name: 'James Carter',
+      image: 'agent-2',
+    },
+  },
+  {
+    id: 'c2',
+    transactionType: 'RENT',
+    propertyType: 'Retail',
+    title: 'Prime Retail Unit in Dubai Mall',
+    price: 850000,
+    address: 'The Dubai Mall, Downtown Dubai',
+    area: 2500,
+    image: 'commercial-2',
+    images: ['commercial-2', 'commercial-retail-int-1'],
+    description: 'Exceptional retail opportunity with high footfall in the world\'s most visited shopping and entertainment destination. Features a wide glass frontage and modern interiors, ideal for a luxury brand.',
+    agent: {
+      name: 'Isabella Rossi',
+      image: 'agent-1',
+    },
+  },
+  {
+    id: 'c3',
+    transactionType: 'BUY',
+    propertyType: 'Warehouse',
+    title: 'Large Industrial Warehouse in JAFZA',
+    price: 25000000,
+    address: 'Jebel Ali Free Zone (JAFZA), Dubai',
+    area: 20000,
+    image: 'commercial-3',
+    images: ['commercial-3', 'commercial-warehouse-int-1'],
+    description: 'A state-of-the-art industrial warehouse with high ceilings, multiple loading bays, and integrated office space. Located in a prime logistics hub with excellent transport links.',
+    agent: {
+      name: 'James Carter',
+      image: 'agent-2',
+    },
+  },
+    {
+    id: 'c4',
+    transactionType: 'RENT',
+    propertyType: 'Office',
+    title: 'Modern Co-working Space in Dubai Marina',
+    price: 25000,
+    address: 'Marina Gate, Dubai Marina',
+    area: 1500,
+    image: 'commercial-office-int-1',
+    images: ['commercial-office-int-1', 'commercial-1'],
+    description: 'A vibrant and fully-serviced office space with flexible terms. Includes access to meeting rooms, high-speed internet, and a professional community. Ideal for startups and freelancers.',
+    agent: {
+      name: 'Isabella Rossi',
+      image: 'agent-1',
+    },
+  },
+];
+
 
 export const offPlanProjects: OffPlanProject[] = [
   {
