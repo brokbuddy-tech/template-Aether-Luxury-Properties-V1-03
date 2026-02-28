@@ -114,7 +114,7 @@ export function CommercialFilterBar() {
 
           {/* Second Row */}
           <div className="flex flex-col sm:flex-row gap-4 items-center">
-            <div className="flex flex-wrap gap-4 items-center">
+            <div className="flex flex-wrap sm:flex-nowrap gap-4 items-center">
                 {/* Size Range */}
                 <div className="flex-auto min-w-[180px]">
                 <Label className="sr-only">Min Sq. Ft.</Label>
@@ -154,7 +154,7 @@ export function CommercialFilterBar() {
                 </Popover>
             </div>
 
-            <Button className="w-full sm:flex-1 bg-[#005555] hover:bg-[#003333] text-white transition-colors duration-300">
+            <Button className="w-full sm:flex-1 bg-accent hover:bg-accent/90 text-accent-foreground transition-colors duration-300">
               Find
             </Button>
           </div>
