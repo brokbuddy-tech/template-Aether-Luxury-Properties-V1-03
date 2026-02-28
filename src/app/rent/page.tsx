@@ -6,8 +6,15 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
 import { ParallaxImage } from '@/components/parallax-image';
 
-export default function RentPage() {
-  const rentProperties = properties.filter(p => p.type === 'RENT');
+export default function RentPage({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) {
+  const community = searchParams?.community as string | undefined;
+
+  let rentProperties = properties.filter(p => p.type === 'RENT');
+
+  if (community) {
+    rentProperties = rentProperties.filter(p => p.address.toLowerCase().includes(community.toLowerCase()));
+  }
+
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-2');
 
   return (
@@ -27,7 +34,7 @@ export default function RentPage() {
             <div className="relative flex h-full flex-col items-center justify-center text-center text-white p-4">
             <FadeInOnScroll>
                 <h1 className="text-4xl md:text-6xl font-bold tracking-widest font-headline">
-                Properties for Rent
+                {community ? `Properties for Rent in ${community}` : 'Properties for Rent'}
                 </h1>
                 <p className="mt-6 max-w-3xl text-lg text-white/90">
                 Explore our curated selection of luxury rentals for your next home in Dubai.
@@ -44,6 +51,11 @@ export default function RentPage() {
                     <PropertyCard key={property.id} property={property} />
                     ))}
                 </div>
+                 {rentProperties.length === 0 && (
+                  <div className="text-center py-16">
+                    <p className="text-lg text-muted-foreground">No properties for rent found in this community.</p>
+                  </div>
+                )}
                 {/* Pagination */}
                 <div className="flex justify-center mt-12">
                     <nav aria-label="Pagination">

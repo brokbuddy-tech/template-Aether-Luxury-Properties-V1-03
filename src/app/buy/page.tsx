@@ -6,8 +6,15 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
 import { ParallaxImage } from '@/components/parallax-image';
 
-export default function BuyPage() {
-  const buyProperties = properties.filter(p => p.type === 'BUY');
+export default function BuyPage({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) {
+  const community = searchParams?.community as string | undefined;
+
+  let buyProperties = properties.filter(p => p.type === 'BUY');
+
+  if (community) {
+    buyProperties = buyProperties.filter(p => p.address.toLowerCase().includes(community.toLowerCase()));
+  }
+  
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-1');
 
   return (
@@ -27,7 +34,7 @@ export default function BuyPage() {
             <div className="relative flex h-full flex-col items-center justify-center text-center text-white p-4">
             <FadeInOnScroll>
                 <h1 className="text-4xl md:text-6xl font-bold tracking-widest font-headline">
-                Properties for Sale
+                {community ? `${community} Properties` : 'Properties for Sale'}
                 </h1>
                 <p className="mt-6 max-w-3xl text-lg text-white/90">
                 Discover your dream home from our exclusive collection of luxury properties in Dubai.
@@ -44,6 +51,11 @@ export default function BuyPage() {
                     <PropertyCard key={property.id} property={property} />
                     ))}
                 </div>
+                {buyProperties.length === 0 && (
+                  <div className="text-center py-16">
+                    <p className="text-lg text-muted-foreground">No properties found in this community.</p>
+                  </div>
+                )}
                 {/* Pagination */}
                 <div className="flex justify-center mt-12">
                     <nav aria-label="Pagination">

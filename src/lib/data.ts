@@ -62,17 +62,17 @@ export const properties: Property[] = [
   },
   {
     id: '3',
-    type: 'RENT',
-    title: 'Serene Villa in Palm Jumeirah',
-    price: 300000,
-    address: 'Villa 45, Frond G, Palm Jumeirah, Dubai',
+    type: 'BUY',
+    title: 'Serene Villa in Emirates Hills',
+    price: 4200000,
+    address: 'Villa 77, Emirates Hills, Dubai',
     bedrooms: 4,
     bathrooms: 4,
     area: 3100,
     image: 'property-3-ext',
     images: ['property-3-ext', 'property-3-int', 'property-1-int'],
-    description: 'Wake up to the sound of waves in this stunning beachfront home in Palm Jumeirah. Offering direct beach access, a spacious deck for entertaining, and a light-filled interior, this property is the perfect luxury rental.',
-    keyFeatures: ['Direct Beach Access', 'Oceanfront Deck', 'Sunset Views', 'Gourmet Kitchen', 'Fully Furnished'],
+    description: 'Wake up to lush green views in this stunning villa in Emirates Hills. Offering a private garden, a spacious deck for entertaining, and a light-filled interior, this property is the perfect luxury home.',
+    keyFeatures: ['Private Garden', 'Golf Course Views', 'Spacious Deck', 'Gourmet Kitchen', 'Fully Furnished'],
     agent: {
       name: 'Isabella Rossi',
       image: 'agent-1',
@@ -101,16 +101,16 @@ export const properties: Property[] = [
   {
     id: '5',
     type: 'BUY',
-    title: 'Spacious Penthouse in Dubai Marina',
+    title: 'Spacious Penthouse in Downtown Dubai',
     price: 12500000,
-    address: 'Princess Tower, Dubai Marina, Dubai',
+    address: 'Burj Khalifa Boulevard, Downtown Dubai, Dubai',
     bedrooms: 4,
     bathrooms: 5,
     area: 4500,
     image: 'hero-dubai',
     images: ['hero-dubai', 'property-2-int', 'property-1-int'],
-    description: 'A magnificent penthouse in the iconic Princess Tower, offering 360-degree views of Dubai Marina and Palm Jumeirah. This is the pinnacle of luxury apartment living.',
-    keyFeatures: ['360 Views', 'Private Elevator', 'Rooftop Jacuzzi', 'Cinema Room'],
+    description: 'A magnificent penthouse with direct views of the Burj Khalifa. This is the pinnacle of luxury apartment living in Downtown Dubai.',
+    keyFeatures: ['360 Views', 'Private Elevator', 'Rooftop Jacuzzi', 'Cinema Room', 'Burj Khalifa View'],
     agent: {
       name: 'Isabella Rossi',
       image: 'agent-1',
@@ -367,10 +367,10 @@ export const newsArticles: NewsArticle[] = [
 ];
 
 export const communities: Community[] = [
-    { name: "Palm Jumeirah", image: "community-palm", href: "#", description: "Iconic man-made island known for its luxurious villas and high-end hotels."},
-    { name: "Dubai Marina", image: "community-marina", href: "#", description: "A vibrant waterfront community with skyscrapers, restaurants, and entertainment."},
-    { name: "Downtown Dubai", image: "hero-dubai", href: "#", description: "Home to the Burj Khalifa and The Dubai Mall, the heart of the city's buzz."},
-    { name: "Emirates Hills", image: "property-1-ext", href: "#", description: "An exclusive gated community with sprawling villas and lush green golf courses."},
+    { name: "Palm Jumeirah", image: "community-palm", href: "/buy?community=Palm%20Jumeirah", description: "Iconic man-made island known for its luxurious villas and high-end hotels."},
+    { name: "Dubai Marina", image: "community-marina", href: "/buy?community=Dubai%20Marina", description: "A vibrant waterfront community with skyscrapers, restaurants, and entertainment."},
+    { name: "Downtown Dubai", image: "hero-dubai", href: "/buy?community=Downtown%20Dubai", description: "Home to the Burj Khalifa and The Dubai Mall, the heart of the city's buzz."},
+    { name: "Emirates Hills", image: "property-1-ext", href: "/buy?community=Emirates%20Hills", description: "An exclusive gated community with sprawling villas and lush green golf courses."},
 ]
 
 export const socialLinks: SocialLink[] = [
