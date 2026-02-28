@@ -215,10 +215,10 @@ export default function CommercialPropertyDetailPage() {
         <div className="lg:col-span-2">
 
           <div className="mb-8">
-            <p className="text-4xl font-extrabold text-primary">AED {property.price.toLocaleString()}</p>
+            <p className="text-3xl md:text-4xl font-extrabold text-primary">AED {property.price.toLocaleString()}</p>
             <p className="text-muted-foreground text-sm">DLD-{property.id}</p>
-            <h1 className="text-2xl font-bold font-headline mt-2">{property.title}</h1>
-            <p className="text-lg text-muted-foreground">{property.address}</p>
+            <h1 className="text-xl md:text-2xl font-bold font-headline mt-2">{property.title}</h1>
+            <p className="text-base md:text-lg text-muted-foreground">{property.address}</p>
           </div>
 
           <Separator />

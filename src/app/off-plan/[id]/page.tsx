@@ -111,7 +111,7 @@ export default function OffPlanDetailPage() {
         <div className="lg:col-span-2">
             <div className="mb-8">
               <p className="text-sm font-semibold text-primary">OFF-PLAN PROJECT</p>
-              <h1 className="font-headline text-4xl font-bold mt-1">{project.projectName}</h1>
+              <h1 className="font-headline text-3xl md:text-4xl font-bold mt-1">{project.projectName}</h1>
             </div>
 
             <Separator />
