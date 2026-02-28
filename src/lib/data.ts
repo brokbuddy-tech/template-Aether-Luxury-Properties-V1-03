@@ -99,6 +99,7 @@ export const properties: Property[] = [
 export const commercialProperties: CommercialProperty[] = [
   {
     id: 'c1',
+    dldPermitNo: '71650396968',
     transactionType: 'BUY',
     propertyType: 'Office',
     title: 'Grade A Office Space in Business Bay',
@@ -120,6 +121,7 @@ export const commercialProperties: CommercialProperty[] = [
   },
   {
     id: 'c2',
+    dldPermitNo: '71234567890',
     transactionType: 'RENT',
     propertyType: 'Retail',
     title: 'Prime Retail Unit in Dubai Mall',
@@ -139,6 +141,7 @@ export const commercialProperties: CommercialProperty[] = [
   },
   {
     id: 'c3',
+    dldPermitNo: '71098765432',
     transactionType: 'BUY',
     propertyType: 'Warehouse',
     title: 'Large Industrial Warehouse in JAFZA',
@@ -158,6 +161,7 @@ export const commercialProperties: CommercialProperty[] = [
   },
     {
     id: 'c4',
+    dldPermitNo: '71555666777',
     transactionType: 'RENT',
     propertyType: 'Office',
     title: 'Modern Co-working Space in Dubai Marina',

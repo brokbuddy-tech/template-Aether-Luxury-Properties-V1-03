@@ -41,6 +41,7 @@ export type CommercialProperty = {
   condition?: string;
   parking?: number;
   amenities?: string[];
+  dldPermitNo?: string;
 };
 
 export type OffPlanProject = {

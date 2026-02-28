@@ -141,26 +141,32 @@
     {
       "id": "commercial-2",
       "description": "Facade of a luxury retail store",
-      "imageUrl": "https://images.unsplash.com/photo-1526743851649-2282229bac05?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxsdXh1cnklMjBzdG9yZXxlbnwwfHx8fDE3NzIyNjk4Mjd8MA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1526743851649-2282229bac05?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxsdXh1cnklMjBzdG9yZXxlbnwwfHx8fDE3NzIyNjk4Mjd8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "luxury store"
     },
     {
       "id": "commercial-retail-int-1",
       "description": "Interior of a high-end fashion boutique",
-      "imageUrl": "https://images.unsplash.com/photo-1619536094309-ad21bdc924a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzdG9yZSUyMGludGVyaW9yfGVufDB8fHx8MTc3MjI2OTgyN3ww&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1619536094309-ad21bdc924a8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzdG9yZSUyMGludGVyaW9yfGVufDB8fHx8MTc3MjI2OTgyN3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "store interior"
     },
     {
       "id": "commercial-3",
       "description": "Exterior of a large, modern warehouse",
-      "imageUrl": "https://images.unsplash.com/photo-1652878856788-6dc9e56c9235?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjB3YXJlaG91c2V8ZW58MHx8fHwxNzcyMjY5ODI3fDA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1652878856788-6dc9e56c9235?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjB3YXJlaG91c2V8ZW58MHx8fHwxNzcyMjY5ODI3fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "modern warehouse"
     },
     {
       "id": "commercial-warehouse-int-1",
       "description": "Bright and clean interior of a distribution warehouse",
-      "imageUrl": "https://images.unsplash.com/photo-1652047567284-66229598070d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d2FyZWhvdXNlJTIwaW50ZXJpb3J8ZW58MHx8fHwxNzcyMjY2MjY0fDA&ixlib-rb-4.1.0&q=80&w=1080",
+      "imageUrl": "https://images.unsplash.com/photo-1652047567284-66229598070d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d2FyZWhvdXNlJTIwaW50ZXJpb3J8ZW58MHx8fHwxNzcyMjY2MjY0fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "warehouse interior"
+    },
+    {
+      "id": "qr-code",
+      "description": "QR code for DLD permit verification",
+      "imageUrl": "https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=Example",
+      "imageHint": "qr code"
     }
   ]
 }
