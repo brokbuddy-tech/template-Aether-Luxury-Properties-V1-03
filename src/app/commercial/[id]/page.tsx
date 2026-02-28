@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { getCommercialPropertyById } from "@/lib/data";
+import { getCommercialPropertyById, commercialProperties } from "@/lib/data";
 import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
@@ -25,6 +25,7 @@ import {
   Linkedin,
 } from "lucide-react";
 import Link from 'next/link';
+import { CommercialPropertyCard } from '@/components/commercial-property-card';
 
 function MortgageCalculator({ price }: { price: number }) {
   const [purchasePrice, setPurchasePrice] = useState(price);
@@ -124,6 +125,18 @@ export default function CommercialPropertyDetailPage() {
   const galleryImages = property.images.map(id => PlaceHolderImages.find(p => p.id === id)).filter(Boolean) as typeof PlaceHolderImages[0][];
   const mapImage = PlaceHolderImages.find(p => p.id === 'map-location');
   const qrCodeImage = PlaceHolderImages.find(p => p.id === 'qr-code');
+
+  const getCommunity = (address: string) => {
+    const parts = address.split(', ');
+    return parts.length > 1 ? parts[1] : null;
+  }
+
+  const relatedProperties = commercialProperties.filter(p => {
+    if (p.id === property.id) return false;
+    const pCommunity = getCommunity(p.address);
+    const currentCommunity = getCommunity(property.address);
+    return pCommunity && currentCommunity && pCommunity === currentCommunity;
+  }).slice(0, 3);
 
   return (
     <div className="container py-12">
@@ -288,6 +301,19 @@ export default function CommercialPropertyDetailPage() {
           </div>
         </div>
       </div>
+      {relatedProperties.length > 0 && (
+        <div className="mt-24">
+          <Separator />
+          <div className="py-16">
+            <h2 className="text-3xl font-bold font-headline mb-8">Other Properties in {getCommunity(property.address)}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {relatedProperties.map(p => (
+                <CommercialPropertyCard key={p.id} property={p} />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

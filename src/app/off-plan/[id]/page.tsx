@@ -1,7 +1,7 @@
 
 "use client";
 
-import { getOffPlanProjectById } from "@/lib/data";
+import { getOffPlanProjectById, offPlanProjects } from "@/lib/data";
 import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { Card } from "@/components/ui/card";
 import { Calendar, Building } from "lucide-react";
 import Link from 'next/link';
+import { OffPlanCard } from "@/components/off-plan-card";
 
 const WhatsAppIcon = () => (
     <svg
@@ -34,6 +35,8 @@ export default function OffPlanDetailPage() {
   }
 
   const galleryImages = project.images.map(id => PlaceHolderImages.find(p => p.id === id)).filter(Boolean) as typeof PlaceHolderImages[0][];
+
+  const relatedProjects = offPlanProjects.filter(p => p.id !== project.id).slice(0, 3);
 
   return (
     <div className="container py-12">
@@ -139,6 +142,19 @@ export default function OffPlanDetailPage() {
           </div>
         </div>
       </div>
+      {relatedProjects.length > 0 && (
+        <div className="mt-24">
+          <Separator />
+          <div className="py-16">
+            <h2 className="text-3xl font-bold font-headline mb-8">Other Off-Plan Projects</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {relatedProjects.map(p => (
+                <OffPlanCard key={p.id} project={p} />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
