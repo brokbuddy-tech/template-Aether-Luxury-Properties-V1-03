@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -26,7 +27,7 @@ export function CommercialFilterBar() {
   const { openModal: openAiSearchModal } = useAiSearchModal();
 
   return (
-    <div className="sticky top-[64px] z-30 mb-8 -mx-4 sm:mx-0">
+    <div className="mb-8 -mx-4 sm:mx-0">
       <div className="p-4 rounded-none sm:rounded-lg border-y sm:border bg-background shadow-lg">
         <div className="flex flex-col gap-4">
           
