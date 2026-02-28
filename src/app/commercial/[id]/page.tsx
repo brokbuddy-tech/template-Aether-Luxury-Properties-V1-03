@@ -20,9 +20,10 @@ import {
   Eye, 
   MapPin, 
   Phone, 
-  Mail,
-  Share2,
-  QrCode
+  Link2,
+  Facebook,
+  Twitter,
+  Linkedin,
 } from "lucide-react";
 import Link from 'next/link';
 
@@ -98,6 +99,19 @@ function MortgageCalculator({ price }: { price: number }) {
     </Card>
   );
 }
+
+const WhatsAppIcon = () => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+    >
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 4.315 1.919 6.066l-1.425 5.215 5.233-1.383z" />
+    </svg>
+);
+
 
 export default function CommercialPropertyDetailPage({ params }: { params: { id: string } }) {
   const property = getCommercialPropertyById(params.id);
@@ -181,38 +195,47 @@ export default function CommercialPropertyDetailPage({ params }: { params: { id:
 
         <div className="lg:col-span-1">
           <div className="sticky top-24">
-            <Card>
-                <CardHeader className="bg-muted">
-                    <div className="flex items-center gap-4">
-                        <Avatar className="h-20 w-20 border-4 border-background">
-                            {agentImage && <AvatarImage src={agentImage.imageUrl} alt={property.agent.name} />}
-                            <AvatarFallback>{property.agent.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                            <p className="font-bold text-xl">{property.agent.name}</p>
-                            <p className="text-sm text-muted-foreground">Luxury Property Specialist</p>
-                        </div>
-                    </div>
-                </CardHeader>
-                <CardContent className="p-6 space-y-4">
-                    <Button className="w-full">
-                        <Phone className="mr-2" /> Call Agent
+            <Card className="rounded-xl bg-muted p-6">
+              <div className="flex flex-col items-center text-center">
+                <Avatar className="h-32 w-32">
+                  {agentImage && <AvatarImage src={agentImage.imageUrl} alt={property.agent.name} />}
+                  <AvatarFallback>{property.agent.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <h3 className="mt-4 text-xl font-bold uppercase tracking-wider">{property.agent.name}</h3>
+                <p className="text-muted-foreground">Luxury Property Specialist</p>
+
+                <div className="mt-6 grid grid-cols-2 gap-2 w-full">
+                  <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
+                    <Phone /> PHONE
+                  </Button>
+                  <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
+                    <WhatsAppIcon /> WHATSAPP
+                  </Button>
+                </div>
+
+                <Separator className="my-6" />
+
+                <div className="w-full">
+                  <p className="text-sm font-bold text-muted-foreground mb-3 uppercase">Share this property</p>
+                  <div className="flex justify-center gap-2">
+                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                        <Link2 />
                     </Button>
-                     <Button variant="outline" className="w-full">
-                        <Mail className="mr-2" /> Send Inquiry
+                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                        <WhatsAppIcon />
                     </Button>
-                    <Separator />
-                    <div className="flex justify-between items-center">
-                        <p className="text-sm">Share this property:</p>
-                        <div className="flex gap-2">
-                            <Button variant="ghost" size="icon"><Share2 /></Button>
-                        </div>
-                    </div>
-                    <div className="flex flex-col items-center p-4 border rounded-lg mt-4">
-                      <QrCode className="h-24 w-24 text-muted-foreground" />
-                      <p className="text-xs text-muted-foreground mt-2 text-center">Scan to verify DLD Permit</p>
-                    </div>
-                </CardContent>
+                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                        <Facebook />
+                    </Button>
+                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                        <Twitter />
+                    </Button>
+                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                        <Linkedin />
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </Card>
           </div>
         </div>
@@ -221,5 +244,7 @@ export default function CommercialPropertyDetailPage({ params }: { params: { id:
   );
 }
 
+
+    
 
     
