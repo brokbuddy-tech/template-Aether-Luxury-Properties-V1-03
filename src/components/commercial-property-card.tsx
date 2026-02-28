@@ -71,12 +71,12 @@ export function CommercialPropertyCard({ property }: { property: CommercialPrope
                 <MapPin className="h-5 w-5 text-green-600 flex-shrink-0" />
                 <span className="truncate">{property.address}</span>
             </div>
-            <div className="flex items-center gap-2">
+        </div>
+        <div className="mt-4 pt-4 flex justify-between items-center">
+            <div className="flex items-center gap-2 text-base text-[#4B5563]">
                 <Square className="h-5 w-5 text-gray-600 flex-shrink-0" />
                 <span>{property.area.toLocaleString()} sq ft</span>
             </div>
-        </div>
-        <div className="mt-4 pt-4 flex justify-end">
              <Button className="rounded-md bg-accent hover:bg-accent/90 text-accent-foreground transition-all duration-300 flex items-center gap-2 px-4 py-2 h-auto">
                 <WhatsAppIcon />
                 <span className="uppercase font-bold text-sm">Whatsapp</span>
