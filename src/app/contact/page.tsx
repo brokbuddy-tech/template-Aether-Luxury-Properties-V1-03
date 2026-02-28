@@ -121,7 +121,6 @@ export default function ContactPage() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Send us a Message</CardTitle>
-                    <CardDescription>Fill out the form and we'll respond as soon as possible.</CardDescription>
                   </CardHeader>
                   <CardContent>
                      <Form {...form}>
