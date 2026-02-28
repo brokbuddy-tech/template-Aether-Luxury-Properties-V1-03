@@ -2,12 +2,13 @@
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Search, Plus } from "lucide-react";
+import { Plus, Sparkles } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
+import { useAiSearchModal } from "@/hooks/use-ai-search-modal";
 
 const amenitiesList = [
   { id: 'covered-parking', label: 'Covered Parking' },
@@ -22,18 +23,23 @@ const amenitiesList = [
 
 
 export function CommercialFilterBar() {
+  const { openModal: openAiSearchModal } = useAiSearchModal();
+
   return (
     <div className="sticky top-[64px] z-30 mb-8 -mx-4 sm:mx-0">
       <div className="p-4 rounded-none sm:rounded-lg border-y sm:border bg-background shadow-lg">
         <div className="flex flex-wrap gap-4 items-center">
           
-          {/* Keyword Search */}
+          {/* AI Search Button */}
           <div className="flex-auto lg:flex-1">
-            <Label className="sr-only">Keyword Search</Label>
-            <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input placeholder="City, community or building" className="pl-10" />
-            </div>
+            <Button
+              variant="outline"
+              className="w-full justify-start text-muted-foreground font-normal"
+              onClick={openAiSearchModal}
+            >
+              <Sparkles className="mr-2 h-4 w-4 text-accent" />
+              AI Search: Describe your ideal property...
+            </Button>
           </div>
           
           <Separator orientation="vertical" className="h-10 hidden lg:flex" />
