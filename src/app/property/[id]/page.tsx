@@ -304,7 +304,7 @@ export default function PropertyDetailPage() {
         <div className="mt-24">
           <Separator />
           <div className="py-16">
-            <h2 className="text-3xl font-bold font-headline mb-8">Other Properties in {getCommunity(property.address)}</h2>
+            <h2 className="text-3xl font-bold font-headline mb-8 text-center">Other Properties in {getCommunity(property.address)}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {relatedProperties.map(p => (
                 <PropertyCard key={p.id} property={p} />

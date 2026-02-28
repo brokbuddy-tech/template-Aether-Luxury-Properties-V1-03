@@ -146,7 +146,7 @@ export default function OffPlanDetailPage() {
         <div className="mt-24">
           <Separator />
           <div className="py-16">
-            <h2 className="text-3xl font-bold font-headline mb-8">Other Off-Plan Projects</h2>
+            <h2 className="text-3xl font-bold font-headline mb-8 text-center">Other Off-Plan Projects</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {relatedProjects.map(p => (
                 <OffPlanCard key={p.id} project={p} />
