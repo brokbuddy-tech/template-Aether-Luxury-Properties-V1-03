@@ -10,8 +10,8 @@ import { Input } from "@/components/ui/input";
 
 export function CommercialFilterBar() {
   return (
-    <div className="sticky top-[64px] z-30 mb-8 -mx-4 sm:mx-0">
-      <div className="p-6 rounded-none sm:rounded-lg border-y sm:border bg-background/80 backdrop-blur-lg shadow-lg">
+    <div className="mb-8 -mx-4 sm:mx-0">
+      <div className="p-6 rounded-none sm:rounded-lg border-y sm:border bg-background shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6 items-end">
           
           <div className="space-y-2 lg:col-span-2">
