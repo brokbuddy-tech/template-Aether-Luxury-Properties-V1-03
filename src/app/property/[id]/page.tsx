@@ -23,10 +23,12 @@ import {
   Facebook,
   Twitter,
   Linkedin,
+  Info,
 } from "lucide-react";
 import Link from 'next/link';
 import { PropertyCard } from '@/components/property-card';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 function MortgageCalculator({ price }: { price: number }) {
   const [purchasePrice, setPurchasePrice] = useState(price);
@@ -142,38 +144,32 @@ export default function PropertyDetailPage() {
     return pCommunity && currentCommunity && pCommunity === currentCommunity;
   }).slice(0, 4);
 
+  const upfrontCosts = {
+    securityDeposit: property.price * 0.05,
+    agencyFee: 5000,
+    agencyFeeVat: 5000 * 0.05,
+    ejariFee: 220,
+    ejariFeeVat: 220 * 0.05,
+    dewaDeposit: 2130, // Assuming apartment
+    chillerDeposit: 2000,
+    moveInPermit: 0,
+  };
+    
+  const totalCost = 
+    property.price +
+    upfrontCosts.securityDeposit +
+    upfrontCosts.agencyFee +
+    upfrontCosts.agencyFeeVat +
+    upfrontCosts.ejariFee +
+    upfrontCosts.ejariFeeVat +
+    upfrontCosts.dewaDeposit +
+    upfrontCosts.chillerDeposit +
+    upfrontCosts.moveInPermit;
+
   return (
     <div className="container py-12">
       {/* Gallery */}
       <div className="relative mb-8 group">
-        {/* Desktop Grid View */}
-        <div className="hidden md:grid md:grid-cols-3 md:grid-rows-2 gap-2 h-auto md:h-[60vh]">
-          <div className="col-span-1 md:col-span-2 md:row-span-2 relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
-            {galleryImages[0] && <Image src={galleryImages[0].imageUrl} alt={property.title} fill className="object-cover" />}
-            <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
-              <span className="text-white/50 text-3xl font-bold font-headline select-none">
-                Aether Luxury Properties
-              </span>
-            </div>
-          </div>
-          <div className="relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
-            {galleryImages[1] && <Image src={galleryImages[1].imageUrl} alt={property.title} fill className="object-cover" />}
-             <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
-              <span className="text-white/50 text-xl font-bold font-headline select-none">
-                Aether Luxury Properties
-              </span>
-            </div>
-          </div>
-          <div className="relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
-            {galleryImages[2] && <Image src={galleryImages[2].imageUrl} alt={property.title} fill className="object-cover" />}
-             <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
-              <span className="text-white/50 text-xl font-bold font-headline select-none">
-                Aether Luxury Properties
-              </span>
-            </div>
-          </div>
-        </div>
-
         {/* Mobile Carousel View */}
         <div className="md:hidden">
             <Carousel className="w-full">
@@ -207,11 +203,85 @@ export default function PropertyDetailPage() {
                 )}
             </Carousel>
         </div>
-
+        {/* Desktop Grid View */}
+        <div className="hidden md:grid md:grid-cols-3 md:grid-rows-2 gap-2 h-auto md:h-[60vh]">
+          <div className="col-span-1 md:col-span-2 md:row-span-2 relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
+            {galleryImages[0] && <Image src={galleryImages[0].imageUrl} alt={property.title} fill className="object-cover" />}
+            <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
+              <span className="text-white/50 text-3xl font-bold font-headline select-none">
+                Aether Luxury Properties
+              </span>
+            </div>
+          </div>
+          <div className="relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
+            {galleryImages[1] && <Image src={galleryImages[1].imageUrl} alt={property.title} fill className="object-cover" />}
+             <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
+              <span className="text-white/50 text-xl font-bold font-headline select-none">
+                Aether Luxury Properties
+              </span>
+            </div>
+          </div>
+          <div className="relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
+            {galleryImages[2] && <Image src={galleryImages[2].imageUrl} alt={property.title} fill className="object-cover" />}
+             <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
+              <span className="text-white/50 text-xl font-bold font-headline select-none">
+                Aether Luxury Properties
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2">
+            {property.type === 'RENT' && (
+                <Accordion type="single" collapsible className="w-full bg-muted/50 rounded-lg mb-8">
+                    <AccordionItem value="item-1" className="border-0">
+                        <AccordionTrigger className="px-4 py-3 text-base font-semibold hover:no-underline">
+                            <div className="flex items-center gap-3">
+                                <Info className="h-5 w-5 text-muted-foreground" />
+                                Show upfront costs
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="px-4 pb-4">
+                            <div className="space-y-2 text-sm">
+                                <div className="flex justify-between items-center">
+                                    <p>Rental Price (Yearly)</p>
+                                    <p className="font-semibold">AED {property.price.toLocaleString()}</p>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <p>Security Deposit</p>
+                                    <p className="font-semibold">AED {upfrontCosts.securityDeposit.toLocaleString()}</p>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <p>Agency Fee</p>
+                                    <p className="font-semibold">AED {upfrontCosts.agencyFee.toLocaleString()} <span className="text-xs text-muted-foreground">+ 5% VAT</span></p>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <p>Ejari Fee</p>
+                                    <p className="font-semibold">AED {upfrontCosts.ejariFee.toLocaleString()} <span className="text-xs text-muted-foreground">+ 5% VAT</span></p>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <p>DEWA Deposit</p>
+                                    <p className="font-semibold">AED {upfrontCosts.dewaDeposit.toLocaleString()}</p>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <p>Empower/Chiller Deposit</p>
+                                    <p className="font-semibold">AED {upfrontCosts.chillerDeposit.toLocaleString()}</p>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <p>Move-in Permit</p>
+                                    <p className="font-semibold">AED {upfrontCosts.moveInPermit.toLocaleString()}</p>
+                                </div>
+                            </div>
+                            <Separator className="my-4" />
+                            <div className="text-center">
+                                <p className="text-lg font-bold">TOTAL: AED {totalCost.toLocaleString('en-US', {maximumFractionDigits: 0})}</p>
+                            </div>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
+            )}
 
           <div className="mb-8">
             <p className="text-3xl md:text-4xl font-extrabold text-primary">AED {property.price.toLocaleString()}{property.type === 'RENT' ? ' / year' : ''}</p>
@@ -286,8 +356,7 @@ export default function PropertyDetailPage() {
 
           <Separator />
           
-          <MortgageCalculator price={property.price} />
-
+          {property.type === 'BUY' && <MortgageCalculator price={property.price} />}
         </div>
 
         <div className="lg:col-span-1">
