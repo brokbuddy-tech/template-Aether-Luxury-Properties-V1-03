@@ -68,7 +68,7 @@ export function CommercialPropertyCard({ property }: { property: CommercialPrope
         </h3>
         <div className="mt-4 space-y-2 text-base text-[#4B5563] flex-grow">
             <div className="flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-green-600 flex-shrink-0" />
+                <MapPin className="h-5 w-5 text-accent flex-shrink-0" />
                 <span className="truncate">{property.address}</span>
             </div>
         </div>
