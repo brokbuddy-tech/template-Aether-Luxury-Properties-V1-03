@@ -78,7 +78,7 @@ export default function ContactPage() {
 
       <section className="py-16 md:py-24 bg-background">
         <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             <div className="lg:col-span-1">
               <FadeInOnScroll>
                 <h2 className="text-3xl font-bold font-headline text-primary">Get In Touch</h2>
@@ -116,7 +116,7 @@ export default function ContactPage() {
                 </div>
               </FadeInOnScroll>
             </div>
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-1">
               <FadeInOnScroll delay={200}>
                 <Card>
                   <CardHeader>
