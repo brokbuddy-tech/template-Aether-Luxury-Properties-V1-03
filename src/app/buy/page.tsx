@@ -8,7 +8,7 @@ import { ParallaxImage } from '@/components/parallax-image';
 
 export default function BuyPage() {
   const buyProperties = properties.filter(p => p.type === 'BUY');
-  const heroImage = PlaceHolderImages.find(p => p.id === 'hero-dubai');
+  const heroImage = PlaceHolderImages.find(p => p.id === 'hero-1');
 
   return (
     <div className="flex flex-col">
