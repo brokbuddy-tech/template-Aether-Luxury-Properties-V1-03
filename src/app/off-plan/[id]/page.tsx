@@ -105,9 +105,6 @@ export default function OffPlanDetailPage() {
             </Carousel>
         </div>
 
-        <Button variant="secondary" className="absolute bottom-4 right-4 z-10">
-          View All Photos
-        </Button>
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
