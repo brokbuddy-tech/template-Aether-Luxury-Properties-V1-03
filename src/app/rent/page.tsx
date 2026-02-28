@@ -14,6 +14,19 @@ export default function RentPage() {
           <PropertyCard key={property.id} property={property} />
         ))}
       </div>
+      {/* Pagination */}
+      <div className="flex justify-center mt-12">
+        <nav aria-label="Pagination">
+          <ul className="inline-flex items-center -space-x-px">
+            <li>
+              <span className="cursor-pointer px-3 py-2 ml-0 leading-tight text-primary bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700">1</span>
+            </li>
+              <li>
+              <span className="cursor-pointer px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700">...</span>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </div>
   );
 }
