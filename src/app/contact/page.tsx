@@ -1,10 +1,10 @@
-
 "use client";
 
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import Image from 'next/image';
 import { Loader2, Mail, MapPin, Phone } from 'lucide-react';
 
 import { ParallaxImage } from '@/components/parallax-image';
@@ -29,6 +29,7 @@ type ContactFormValues = z.infer<typeof contactSchema>;
 
 export default function ContactPage() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-1');
+  const mapImage = PlaceHolderImages.find(p => p.id === 'map-location');
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -154,6 +155,27 @@ export default function ContactPage() {
               </FadeInOnScroll>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="bg-muted">
+        <div className="container py-16 md:py-24">
+          <FadeInOnScroll>
+            <h2 className="text-3xl font-bold font-headline text-primary text-center mb-12">
+              Find Us Here
+            </h2>
+            <div className="relative h-[60vh] w-full rounded-lg overflow-hidden border">
+              {mapImage && (
+                <Image
+                  src={mapImage.imageUrl}
+                  alt={mapImage.description}
+                  data-ai-hint={mapImage.imageHint}
+                  fill
+                  className="object-cover"
+                />
+              )}
+            </div>
+          </FadeInOnScroll>
         </div>
       </section>
     </div>

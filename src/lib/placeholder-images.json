@@ -113,6 +113,12 @@
       "description": "Dubai skyline at dawn",
       "imageUrl": "https://images.unsplash.com/photo-1528823793796-a99b45b174a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxkdWJhaSUyMGRhd258ZW58MHx8fHwxNzcyNjA1OTQxfDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "dubai dawn"
+    },
+    {
+      "id": "map-location",
+      "description": "City map view from above",
+      "imageUrl": "https://images.unsplash.com/photo-1594398934208-a53b5a6c4786?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtYXAlMjBjaXR5fGVufDB8fHx8MTc3MjE3ODcwMXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "map city"
     }
   ]
 }
