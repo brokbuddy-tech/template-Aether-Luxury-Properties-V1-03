@@ -119,7 +119,7 @@ export default function ContactPage() {
             <div className="lg:col-span-1">
               <FadeInOnScroll delay={200}>
                 <Card>
-                  <CardHeader>
+                  <CardHeader className="text-center">
                     <CardTitle>Send us a Message</CardTitle>
                   </CardHeader>
                   <CardContent>
