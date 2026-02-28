@@ -169,7 +169,7 @@ export function Footer() {
         {isBackToTopVisible && (
             <Button
                 onClick={scrollToTop}
-                className="fixed bottom-5 right-5 h-12 w-12 rounded-full bg-accent text-accent-foreground shadow-lg hover:bg-accent/90 transition-opacity duration-300"
+                className="fixed bottom-5 right-5 h-12 w-12 rounded-full border border-border/30 bg-background/30 text-primary backdrop-blur-lg shadow-lg hover:bg-background/50 transition-opacity duration-300"
                 size="icon"
                 aria-label="Back to top"
             >
