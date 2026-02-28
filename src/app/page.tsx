@@ -370,8 +370,8 @@ export default function Home() {
           <div className="grid grid-cols-4 gap-4 text-center items-start">
             {stats.map((stat) => (
               <FadeInOnScroll key={stat.label}>
-                <stat.icon className="h-6 w-6 md:h-8 md:w-8 mx-auto mb-2 text-primary" />
-                <p className="text-xl md:text-3xl font-bold text-primary">{stat.value}</p>
+                <stat.icon className="h-6 w-6 mx-auto mb-1 text-primary" />
+                <p className="text-lg md:text-xl font-bold text-primary">{stat.value}</p>
                 <p className="text-[10px] leading-tight md:text-xs uppercase tracking-wider text-muted-foreground">{stat.label}</p>
               </FadeInOnScroll>
             ))}
@@ -487,14 +487,14 @@ export default function Home() {
       </section>
 
       {/* As Seen On Section */}
-      <section className="py-12 bg-muted pt-0 mt-[10px]">
+      <section className="py-8 bg-muted">
         <div className="container flex justify-center">
           <FadeInOnScroll>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center text-muted-foreground/80 grayscale">
-              <span className="text-2xl font-headline font-semibold">Arabian Business</span>
-              <span className="text-3xl font-headline font-bold tracking-wider">INSIDER</span>
-              <span className="text-2xl font-headline font-bold">GULF NEWS</span>
-              <span className="text-2xl font-headline font-bold">The National</span>
+            <div className="grid grid-cols-4 gap-4 items-center justify-items-center text-muted-foreground/80 grayscale">
+              <span className="text-center text-sm sm:text-lg font-headline font-semibold">Arabian Business</span>
+              <span className="text-center text-base sm:text-xl font-headline font-bold tracking-wider">INSIDER</span>
+              <span className="text-center text-sm sm:text-lg font-headline font-bold">GULF NEWS</span>
+              <span className="text-center text-sm sm:text-lg font-headline font-bold">The National</span>
             </div>
           </FadeInOnScroll>
         </div>
