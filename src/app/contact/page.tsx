@@ -10,6 +10,7 @@ import { Loader2, Mail, MapPin, Phone } from 'lucide-react';
 import { ParallaxImage } from '@/components/parallax-image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
+import { LocationMap } from '@/components/shared/location-map';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -32,7 +33,6 @@ type ContactFormValues = z.infer<typeof contactSchema>;
 
 export default function ContactPage() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-1');
-  const mapImage = PlaceHolderImages.find(p => p.id === 'map-location');
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
@@ -207,17 +207,10 @@ export default function ContactPage() {
             <h2 className="text-3xl font-bold font-headline text-primary text-center mb-12">
               Find Us Here
             </h2>
-            <div className="relative h-[60vh] w-full rounded-lg overflow-hidden border">
-              {mapImage && (
-                <Image
-                  src={mapImage.imageUrl}
-                  alt={mapImage.description}
-                  data-ai-hint={mapImage.imageHint}
-                  fill
-                  className="object-cover"
-                />
-              )}
-            </div>
+            <LocationMap
+              addressLabel={agencyAddress}
+              locationLabel={agencyName}
+            />
           </FadeInOnScroll>
         </div>
       </section>

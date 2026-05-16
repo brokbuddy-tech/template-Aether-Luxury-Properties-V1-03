@@ -8,6 +8,8 @@ export type Property = {
   title: string;
   price: number;
   address: string;
+  latitude?: number | null;
+  longitude?: number | null;
   bedrooms: number;
   bathrooms: number;
   area: number;
@@ -29,6 +31,8 @@ export type CommercialProperty = {
   title: string;
   price: number;
   address: string;
+  latitude?: number | null;
+  longitude?: number | null;
   area: number;
   image: string;
   images: string[];
@@ -50,6 +54,8 @@ export type OffPlanProject = {
   projectName: string;
   developer: string;
   handover: string;
+  latitude?: number | null;
+  longitude?: number | null;
   image: string;
   images: string[];
   description: string;

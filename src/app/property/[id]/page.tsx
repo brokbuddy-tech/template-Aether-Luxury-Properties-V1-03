@@ -28,6 +28,7 @@ import Link from 'next/link';
 import { PropertyCard } from '@/components/property-card';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { LocationMap } from '@/components/shared/location-map';
 import { getProperties, getPropertyById as getLivePropertyById } from '@/lib/api';
 import { resolveTemplateGallery, resolveTemplateImage } from '@/lib/media';
 import { toAetherProperty } from '@/lib/live-mappers';
@@ -198,7 +199,6 @@ export default function PropertyDetailPage() {
     'hero-1',
     property.title,
   );
-  const mapImage = PlaceHolderImages.find(p => p.id === 'map-location');
   const qrCodeImage = PlaceHolderImages.find(p => p.id === 'qr-code');
 
   const upfrontCosts = {
@@ -374,17 +374,12 @@ export default function PropertyDetailPage() {
 
           <div className="py-8">
             <h2 className="text-xl font-bold font-headline mb-4">LOCATION</h2>
-             {mapImage && (
-                <div className="relative h-[400px] w-full rounded-lg overflow-hidden border">
-                <Image
-                  src={mapImage.imageUrl}
-                  alt={mapImage.description}
-                  data-ai-hint={mapImage.imageHint}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              )}
+            <LocationMap
+              latitude={property.latitude}
+              longitude={property.longitude}
+              addressLabel={property.address}
+              locationLabel={getCommunityFromAddress(property.address) || property.address}
+            />
             <p className="text-muted-foreground mt-2">{property.address}</p>
           </div>
 

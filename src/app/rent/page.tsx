@@ -7,8 +7,11 @@ import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
 import { ParallaxImage } from '@/components/parallax-image';
 import { toAetherProperty } from '@/lib/live-mappers';
 
-export default async function RentPage({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) {
-  const community = searchParams?.community as string | undefined;
+type PageSearchParams = Promise<{ [key: string]: string | string[] | undefined } | undefined>;
+
+export default async function RentPage({ searchParams }: { searchParams?: PageSearchParams }) {
+  const resolvedSearchParams = await searchParams;
+  const community = resolvedSearchParams?.community as string | undefined;
 
   const liveResponse = await getProperties({ transactionType: 'RENT', limit: 48 });
   let rentProperties = liveResponse.properties.map(toAetherProperty);

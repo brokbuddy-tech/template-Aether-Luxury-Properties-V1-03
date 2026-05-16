@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { CommercialPropertyCard } from '@/components/commercial-property-card';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
+import { LocationMap } from '@/components/shared/location-map';
 import { getProperties, getPropertyById as getLivePropertyById } from '@/lib/api';
 import { isLikelyCommercialProperty, toAetherCommercialProperty } from '@/lib/live-mappers';
 import { resolveTemplateGallery, resolveTemplateImage } from '@/lib/media';
@@ -191,7 +192,6 @@ export default function CommercialPropertyDetailPage() {
     'commercial-1',
     property.title,
   );
-  const mapImage = PlaceHolderImages.find(p => p.id === 'map-location');
   const qrCodeImage = PlaceHolderImages.find(p => p.id === 'qr-code');
 
   return (
@@ -297,17 +297,12 @@ export default function CommercialPropertyDetailPage() {
 
           <div className="py-8">
             <h2 className="text-xl font-bold font-headline mb-4">LOCATION</h2>
-             {mapImage && (
-                <div className="relative h-[400px] w-full rounded-lg overflow-hidden border">
-                <Image
-                  src={mapImage.imageUrl}
-                  alt={mapImage.description}
-                  data-ai-hint={mapImage.imageHint}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              )}
+            <LocationMap
+              latitude={property.latitude}
+              longitude={property.longitude}
+              addressLabel={property.address}
+              locationLabel={getCommunityFromAddress(property.address) || property.address}
+            />
             <p className="text-muted-foreground mt-2">{property.address}</p>
           </div>
 
