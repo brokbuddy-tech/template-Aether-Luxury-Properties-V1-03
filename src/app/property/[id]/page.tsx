@@ -298,7 +298,7 @@ export default function PropertyDetailPage() {
 
           <div className="py-8">
             <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-4">Property Description</h2>
-            <p className="text-muted-foreground leading-relaxed">{property.description}</p>
+            <p className="text-muted-foreground leading-relaxed whitespace-pre-line">{property.description}</p>
           </div>
           
           {property.keyFeatures && property.keyFeatures.length > 0 && (

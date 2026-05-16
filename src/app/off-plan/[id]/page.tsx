@@ -112,7 +112,7 @@ export default function OffPlanDetailPage() {
 
             <div className="py-8">
               <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-4">Project Overview</h2>
-              <p className="text-muted-foreground leading-relaxed">{project.description}</p>
+              <p className="text-muted-foreground leading-relaxed whitespace-pre-line">{project.description}</p>
             </div>
 
             <Separator />
