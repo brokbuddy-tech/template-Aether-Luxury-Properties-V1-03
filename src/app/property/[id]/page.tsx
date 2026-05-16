@@ -25,8 +25,8 @@ import {
   Info,
 } from "lucide-react";
 import Link from 'next/link';
+import { ListingHeroGallery } from '@/components/listing-hero-gallery';
 import { PropertyCard } from '@/components/property-card';
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { LocationMap } from '@/components/shared/location-map';
 import { getProperties, getPropertyById as getLivePropertyById } from '@/lib/api';
@@ -226,66 +226,7 @@ export default function PropertyDetailPage() {
   return (
     <div className="container py-12">
       {/* Gallery */}
-      <div className="relative mb-8 group">
-        {/* Mobile Carousel View */}
-        <div className="md:hidden">
-            <Carousel className="w-full">
-                <CarouselContent>
-                    {galleryImages.map((image, index) => (
-                        <CarouselItem key={index}>
-                            <div className="relative aspect-video w-full rounded-lg overflow-hidden">
-                                <Image
-                                  src={image.src}
-                                  alt={image.alt}
-                                  data-ai-hint={image.hint}
-                                  fill
-                                  className="object-cover"
-                                />
-                                 <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
-                                    <span className="text-white/50 text-xl font-bold font-headline select-none">
-                                        Aether Luxury Properties
-                                    </span>
-                                </div>
-                            </div>
-                        </CarouselItem>
-                    ))}
-                </CarouselContent>
-                {galleryImages.length > 1 && (
-                    <>
-                        <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/50 hover:bg-white text-primary" />
-                        <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/50 hover:bg-white text-primary" />
-                    </>
-                )}
-            </Carousel>
-        </div>
-        {/* Desktop Grid View */}
-        <div className="hidden md:grid md:grid-cols-3 md:grid-rows-2 gap-2 h-auto md:h-[60vh]">
-          <div className="col-span-1 md:col-span-2 md:row-span-2 relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
-            {galleryImages[0] && <Image src={galleryImages[0].src} alt={galleryImages[0].alt} data-ai-hint={galleryImages[0].hint} fill className="object-cover" />}
-            <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
-              <span className="text-white/50 text-3xl font-bold font-headline select-none">
-                Aether Luxury Properties
-              </span>
-            </div>
-          </div>
-          <div className="relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
-            {galleryImages[1] && <Image src={galleryImages[1].src} alt={galleryImages[1].alt} data-ai-hint={galleryImages[1].hint} fill className="object-cover" />}
-             <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
-              <span className="text-white/50 text-xl font-bold font-headline select-none">
-                Aether Luxury Properties
-              </span>
-            </div>
-          </div>
-          <div className="relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
-            {galleryImages[2] && <Image src={galleryImages[2].src} alt={galleryImages[2].alt} data-ai-hint={galleryImages[2].hint} fill className="object-cover" />}
-             <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
-              <span className="text-white/50 text-xl font-bold font-headline select-none">
-                Aether Luxury Properties
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ListingHeroGallery images={galleryImages} title={property.title} />
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2">
