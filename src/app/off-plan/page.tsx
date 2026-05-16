@@ -1,13 +1,15 @@
 
 
 import { OffPlanCard } from "@/components/off-plan-card";
-import { offPlanProjects } from "@/lib/data";
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
 import { OffPlanFilterBar } from '@/components/off-plan-filter-bar';
-import Link from 'next/link';
+import { getProperties } from '@/lib/api';
+import { toAetherOffPlanProject } from '@/lib/live-mappers';
 
-export default function OffPlanPage() {
+export default async function OffPlanPage() {
+  const liveResponse = await getProperties({ readiness: 'OFFPLAN', limit: 48 });
+  const offPlanProjects = liveResponse.properties.map(toAetherOffPlanProject);
   const heroImage = PlaceHolderImages.find(p => p.id === 'offplan-1');
 
   return (
@@ -44,6 +46,12 @@ export default function OffPlanPage() {
                 <OffPlanCard key={project.id} project={project} />
                 ))}
             </div>
+
+            {offPlanProjects.length === 0 && (
+              <div className="py-16 text-center text-muted-foreground">
+                No live off-plan projects are available right now.
+              </div>
+            )}
 
             {/* Pagination */}
             <div className="flex justify-center mt-12">

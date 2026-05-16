@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -16,6 +16,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { getSiteConfig, submitOrgInquiry } from '@/lib/api';
+import { getAgencyDisplayName, getAgencyEmail, getAgencyPhone } from '@/lib/live-mappers';
+import type { SiteConfig } from '@/lib/live-types';
 
 const contactSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -32,23 +35,64 @@ export default function ContactPage() {
   const mapImage = PlaceHolderImages.find(p => p.id === 'map-location');
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
   });
 
+  useEffect(() => {
+    let active = true;
+
+    async function loadSiteConfig() {
+      try {
+        const nextSiteConfig = await getSiteConfig();
+        if (active) {
+          setSiteConfig(nextSiteConfig);
+        }
+      } catch {
+        if (active) {
+          setSiteConfig(null);
+        }
+      }
+    }
+
+    void loadSiteConfig();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
   const onSubmit: SubmitHandler<ContactFormValues> = async (data) => {
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    console.log(data);
-    setIsSubmitting(false);
-    toast({
-        title: "Message Sent!",
-        description: "Thank you for reaching out. We will get back to you shortly.",
-    });
-    form.reset();
+    try {
+      await submitOrgInquiry({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        message: `Subject: ${data.subject}\n\n${data.message}`,
+      });
+      toast({
+          title: "Message Sent!",
+          description: "Thank you for reaching out. We will get back to you shortly.",
+      });
+      form.reset();
+    } catch (error) {
+      toast({
+        title: 'Unable to send message',
+        description: error instanceof Error ? error.message : 'Please try again in a moment.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  const agencyName = getAgencyDisplayName(siteConfig);
+  const agencyAddress = siteConfig?.profile?.officeAddress || '7th, 8th & 20th Floor, Control Tower, Motor City, Dubai, UAE.';
+  const agencyPhone = getAgencyPhone(siteConfig) || '+971 4 876 2333';
+  const agencyEmail = getAgencyEmail(siteConfig) || 'info@aether-properties.com';
 
   return (
     <div>
@@ -70,7 +114,7 @@ export default function ContactPage() {
               Contact Us
             </h1>
             <p className="mt-6 max-w-3xl text-lg text-white/90">
-              We're here to help. Reach out to us for any inquiries or to start your property journey.
+              We're here to help. Reach out to {agencyName} for any inquiries or to start your property journey.
             </p>
           </FadeInOnScroll>
         </div>
@@ -92,7 +136,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg">Our Office</h3>
-                      <p className="text-muted-foreground">7th, 8th & 20th Floor, Control Tower, Motor City, Dubai, UAE.</p>
+                      <p className="text-muted-foreground">{agencyAddress}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
@@ -101,7 +145,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg">Phone</h3>
-                      <p className="text-muted-foreground">+971 4 876 2333</p>
+                      <p className="text-muted-foreground">{agencyPhone}</p>
                     </div>
                   </div>
                    <div className="flex items-start gap-4">
@@ -110,7 +154,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg">Email</h3>
-                      <p className="text-muted-foreground">info@aether-properties.com</p>
+                      <p className="text-muted-foreground">{agencyEmail}</p>
                     </div>
                   </div>
                 </div>

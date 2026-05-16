@@ -2,7 +2,6 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { getPropertyById, properties } from "@/lib/data";
 import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
@@ -29,6 +28,10 @@ import Link from 'next/link';
 import { PropertyCard } from '@/components/property-card';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { getProperties, getPropertyById as getLivePropertyById } from '@/lib/api';
+import { resolveTemplateGallery, resolveTemplateImage } from '@/lib/media';
+import { toAetherProperty } from '@/lib/live-mappers';
+import type { Property } from '@/lib/types';
 
 function MortgageCalculator({ price }: { price: number }) {
   const [purchasePrice, setPurchasePrice] = useState(price);
@@ -115,34 +118,88 @@ const WhatsAppIcon = () => (
     </svg>
 );
 
+function getCommunityFromAddress(address: string) {
+  const parts = address.split(', ');
+  if (parts.length > 2) {
+    return parts[parts.length - 2];
+  }
+  return parts.length > 1 ? parts[0] : null;
+}
+
 
 export default function PropertyDetailPage() {
   const params = useParams();
-  const property = getPropertyById(params.id as string);
+  const [property, setProperty] = useState<Property | null>(null);
+  const [relatedProperties, setRelatedProperties] = useState<Property[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  if (!property) {
+  useEffect(() => {
+    let active = true;
+
+    async function loadProperty() {
+      try {
+        const liveProperty = await getLivePropertyById(params.id as string);
+        if (!active) return;
+
+        if (liveProperty) {
+          const mappedProperty = toAetherProperty(liveProperty);
+          setProperty(mappedProperty);
+
+          const relatedResponse = await getProperties({
+            transactionType: liveProperty.transactionType === 'Rent' ? 'RENT' : 'SALE',
+            limit: 48,
+          });
+          if (!active) return;
+
+          const currentCommunity = getCommunityFromAddress(mappedProperty.address);
+          const nextRelatedProperties = relatedResponse.properties
+            .map(toAetherProperty)
+            .filter((candidate) => candidate.id !== mappedProperty.id)
+            .filter((candidate) => {
+              if (!currentCommunity) return true;
+              return getCommunityFromAddress(candidate.address) === currentCommunity;
+            })
+            .slice(0, 4);
+
+          setRelatedProperties(nextRelatedProperties);
+        } else {
+          setProperty(null);
+          setRelatedProperties([]);
+        }
+      } catch {
+        if (!active) return;
+        setProperty(null);
+        setRelatedProperties([]);
+      } finally {
+        if (active) {
+          setIsLoaded(true);
+        }
+      }
+    }
+
+    void loadProperty();
+
+    return () => {
+      active = false;
+    };
+  }, [params.id]);
+
+  if (!property && isLoaded) {
     notFound();
   }
 
-  const agentImage = PlaceHolderImages.find(p => p.id === property.agent.image);
-  const galleryImages = property.images.map(id => PlaceHolderImages.find(p => p.id === id)).filter(Boolean) as typeof PlaceHolderImages[0][];
-  const mapImage = PlaceHolderImages.find(p => p.id === 'map-location');
-  const qrCodeImage = PlaceHolderImages.find(p => p.id === 'qr-code');
-
-  const getCommunity = (address: string) => {
-    const parts = address.split(', ');
-    if (parts.length > 2) {
-      return parts[parts.length - 2];
-    }
-    return parts.length > 1 ? parts[0] : null;
+  if (!property) {
+    return <div className="container py-24 text-center text-muted-foreground">Loading property...</div>;
   }
 
-  const relatedProperties = properties.filter(p => {
-    if (p.id === property.id) return false;
-    const pCommunity = getCommunity(p.address);
-    const currentCommunity = getCommunity(property.address);
-    return pCommunity && currentCommunity && pCommunity === currentCommunity;
-  }).slice(0, 4);
+  const agentImage = resolveTemplateImage(property.agent.image, 'agent-1', property.agent.name);
+  const galleryImages = resolveTemplateGallery(
+    property.images.length > 0 ? property.images : [property.image],
+    'hero-1',
+    property.title,
+  );
+  const mapImage = PlaceHolderImages.find(p => p.id === 'map-location');
+  const qrCodeImage = PlaceHolderImages.find(p => p.id === 'qr-code');
 
   const upfrontCosts = {
     securityDeposit: property.price * 0.05,
@@ -177,15 +234,13 @@ export default function PropertyDetailPage() {
                     {galleryImages.map((image, index) => (
                         <CarouselItem key={index}>
                             <div className="relative aspect-video w-full rounded-lg overflow-hidden">
-                                {image && (
-                                    <Image
-                                    src={image.imageUrl}
-                                    alt={`${property.title} - image ${index + 1}`}
-                                    data-ai-hint={image.imageHint}
-                                    fill
-                                    className="object-cover"
-                                    />
-                                )}
+                                <Image
+                                  src={image.src}
+                                  alt={image.alt}
+                                  data-ai-hint={image.hint}
+                                  fill
+                                  className="object-cover"
+                                />
                                  <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
                                     <span className="text-white/50 text-xl font-bold font-headline select-none">
                                         Aether Luxury Properties
@@ -206,7 +261,7 @@ export default function PropertyDetailPage() {
         {/* Desktop Grid View */}
         <div className="hidden md:grid md:grid-cols-3 md:grid-rows-2 gap-2 h-auto md:h-[60vh]">
           <div className="col-span-1 md:col-span-2 md:row-span-2 relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
-            {galleryImages[0] && <Image src={galleryImages[0].imageUrl} alt={property.title} fill className="object-cover" />}
+            {galleryImages[0] && <Image src={galleryImages[0].src} alt={galleryImages[0].alt} data-ai-hint={galleryImages[0].hint} fill className="object-cover" />}
             <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
               <span className="text-white/50 text-3xl font-bold font-headline select-none">
                 Aether Luxury Properties
@@ -214,7 +269,7 @@ export default function PropertyDetailPage() {
             </div>
           </div>
           <div className="relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
-            {galleryImages[1] && <Image src={galleryImages[1].imageUrl} alt={property.title} fill className="object-cover" />}
+            {galleryImages[1] && <Image src={galleryImages[1].src} alt={galleryImages[1].alt} data-ai-hint={galleryImages[1].hint} fill className="object-cover" />}
              <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
               <span className="text-white/50 text-xl font-bold font-headline select-none">
                 Aether Luxury Properties
@@ -222,7 +277,7 @@ export default function PropertyDetailPage() {
             </div>
           </div>
           <div className="relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
-            {galleryImages[2] && <Image src={galleryImages[2].imageUrl} alt={property.title} fill className="object-cover" />}
+            {galleryImages[2] && <Image src={galleryImages[2].src} alt={galleryImages[2].alt} data-ai-hint={galleryImages[2].hint} fill className="object-cover" />}
              <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
               <span className="text-white/50 text-xl font-bold font-headline select-none">
                 Aether Luxury Properties
@@ -364,7 +419,7 @@ export default function PropertyDetailPage() {
             <Card className="rounded-xl bg-muted p-6">
               <div className="flex flex-col items-center text-center">
                 <Avatar className="h-32 w-32">
-                  {agentImage && <AvatarImage src={agentImage.imageUrl} alt={property.agent.name} />}
+                  {agentImage && <AvatarImage src={agentImage.src} alt={property.agent.name} />}
                   <AvatarFallback>{property.agent.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <h3 className="mt-4 text-xl font-bold uppercase tracking-wider">{property.agent.name}</h3>
@@ -410,7 +465,7 @@ export default function PropertyDetailPage() {
         <div className="mt-24">
           <Separator />
           <div className="py-16">
-            <h2 className="text-3xl font-bold font-headline mb-8 text-center">Other Properties in {getCommunity(property.address)}</h2>
+            <h2 className="text-3xl font-bold font-headline mb-8 text-center">Other Properties in {getCommunityFromAddress(property.address)}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {relatedProperties.map(p => (
                 <PropertyCard key={p.id} property={p} />

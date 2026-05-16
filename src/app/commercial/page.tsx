@@ -3,11 +3,15 @@
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
 import { CommercialFilterBar } from '@/components/commercial-filter-bar';
-import { commercialProperties } from '@/lib/data';
 import { CommercialPropertyCard } from '@/components/commercial-property-card';
-import Link from 'next/link';
+import { getProperties } from '@/lib/api';
+import { isLikelyCommercialProperty, toAetherCommercialProperty } from '@/lib/live-mappers';
 
-export default function CommercialPage() {
+export default async function CommercialPage() {
+  const liveResponse = await getProperties({ limit: 48 });
+  const commercialProperties = liveResponse.properties
+    .filter(isLikelyCommercialProperty)
+    .map(toAetherCommercialProperty);
   const heroImage = PlaceHolderImages.find(p => p.id === 'commercial-1');
 
   return (
@@ -36,7 +40,7 @@ export default function CommercialPage() {
         
         <div className="container py-12">
             <div className="flex justify-start items-center mb-4">
-                <p className="text-sm text-muted-foreground">Showing 1-4 of 4 results</p>
+                <p className="text-sm text-muted-foreground">Showing 1-{commercialProperties.length} of {commercialProperties.length} results</p>
             </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -44,6 +48,12 @@ export default function CommercialPage() {
               <CommercialPropertyCard key={property.id} property={property} />
             ))}
           </div>
+
+          {commercialProperties.length === 0 && (
+            <div className="py-16 text-center text-muted-foreground">
+              No live commercial listings are available right now.
+            </div>
+          )}
 
           {/* Pagination */}
           <div className="flex justify-center mt-12">

@@ -1,18 +1,22 @@
 
 import { PropertyCard } from "@/components/property-card";
-import { properties } from "@/lib/data";
+import { getProperties } from "@/lib/api";
 import { FilterBar } from "@/components/filter-bar";
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
 import { ParallaxImage } from '@/components/parallax-image';
+import { toAetherProperty } from '@/lib/live-mappers';
 
-export default function RentPage({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) {
+export default async function RentPage({ searchParams }: { searchParams?: { [key: string]: string | string[] | undefined } }) {
   const community = searchParams?.community as string | undefined;
 
-  let rentProperties = properties.filter(p => p.type === 'RENT');
+  const liveResponse = await getProperties({ transactionType: 'RENT', limit: 48 });
+  let rentProperties = liveResponse.properties.map(toAetherProperty);
 
   if (community) {
-    rentProperties = rentProperties.filter(p => p.address.toLowerCase().includes(community.toLowerCase()));
+    rentProperties = rentProperties.filter((property) =>
+      property.address.toLowerCase().includes(community.toLowerCase()),
+    );
   }
 
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-2');

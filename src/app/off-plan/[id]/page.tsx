@@ -1,18 +1,19 @@
-
 "use client";
 
-import { getOffPlanProjectById, offPlanProjects } from "@/lib/data";
+import { useEffect, useState } from 'react';
 import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Card } from "@/components/ui/card";
 import { Calendar, Building } from "lucide-react";
-import Link from 'next/link';
 import { OffPlanCard } from "@/components/off-plan-card";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
+import { getProperties, getPropertyById as getLivePropertyById } from '@/lib/api';
+import { toAetherOffPlanProject } from '@/lib/live-mappers';
+import { resolveTemplateGallery } from '@/lib/media';
+import type { OffPlanProject } from '@/lib/types';
 
 const WhatsAppIcon = () => (
     <svg
@@ -29,24 +30,73 @@ const WhatsAppIcon = () => (
 
 export default function OffPlanDetailPage() {
   const params = useParams();
-  const project = getOffPlanProjectById(params.id as string);
+  const [project, setProject] = useState<OffPlanProject | null>(null);
+  const [relatedProjects, setRelatedProjects] = useState<OffPlanProject[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  if (!project) {
+  useEffect(() => {
+    let active = true;
+
+    async function loadProject() {
+      try {
+        const liveProperty = await getLivePropertyById(params.id as string);
+        if (!active) return;
+
+        if (liveProperty?.status === 'Off-plan') {
+          const mappedProject = toAetherOffPlanProject(liveProperty);
+          setProject(mappedProject);
+
+          const relatedResponse = await getProperties({ readiness: 'OFFPLAN', limit: 48 });
+          if (!active) return;
+
+          const nextRelatedProjects = relatedResponse.properties
+            .map(toAetherOffPlanProject)
+            .filter((candidate) => candidate.id !== mappedProject.id)
+            .slice(0, 3);
+
+          setRelatedProjects(nextRelatedProjects);
+        } else {
+          setProject(null);
+          setRelatedProjects([]);
+        }
+      } catch {
+        if (!active) return;
+        setProject(null);
+        setRelatedProjects([]);
+      } finally {
+        if (active) {
+          setIsLoaded(true);
+        }
+      }
+    }
+
+    void loadProject();
+
+    return () => {
+      active = false;
+    };
+  }, [params.id]);
+
+  if (!project && isLoaded) {
     notFound();
   }
 
-  const galleryImages = project.images.map(id => PlaceHolderImages.find(p => p.id === id)).filter(Boolean) as typeof PlaceHolderImages[0][];
+  if (!project) {
+    return <div className="container py-24 text-center text-muted-foreground">Loading project...</div>;
+  }
 
-  const relatedProjects = offPlanProjects.filter(p => p.id !== project.id).slice(0, 3);
+  const galleryImages = resolveTemplateGallery(
+    project.images.length > 0 ? project.images : [project.image],
+    'offplan-1',
+    project.projectName,
+  );
 
   return (
     <div className="container py-12">
-      {/* Gallery */}
       <div className="relative mb-8 group">
-        {/* Desktop Grid View */}
         <div className="hidden md:grid md:grid-cols-3 md:grid-rows-2 gap-2 h-auto md:h-[60vh]">
           <div className="col-span-1 md:col-span-2 md:row-span-2 relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
-            {galleryImages[0] && <Image src={galleryImages[0].imageUrl} alt={project.projectName} fill className="object-cover" />}
+            {galleryImages[0] && <Image src={galleryImages[0].src} alt={galleryImages[0].alt} data-ai-hint={galleryImages[0].hint} fill className="object-cover" />}
             <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
               <span className="text-white/50 text-3xl font-bold font-headline select-none">
                 Aether Luxury Properties
@@ -54,7 +104,7 @@ export default function OffPlanDetailPage() {
             </div>
           </div>
           <div className="relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
-            {galleryImages[1] && <Image src={galleryImages[1].imageUrl} alt={project.projectName} fill className="object-cover" />}
+            {galleryImages[1] && <Image src={galleryImages[1].src} alt={galleryImages[1].alt} data-ai-hint={galleryImages[1].hint} fill className="object-cover" />}
              <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
               <span className="text-white/50 text-xl font-bold font-headline select-none">
                 Aether Luxury Properties
@@ -62,7 +112,7 @@ export default function OffPlanDetailPage() {
             </div>
           </div>
           <div className="relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
-            {galleryImages[2] && <Image src={galleryImages[2].imageUrl} alt={project.projectName} fill className="object-cover" />}
+            {galleryImages[2] && <Image src={galleryImages[2].src} alt={galleryImages[2].alt} data-ai-hint={galleryImages[2].hint} fill className="object-cover" />}
              <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
               <span className="text-white/50 text-xl font-bold font-headline select-none">
                 Aether Luxury Properties
@@ -71,22 +121,19 @@ export default function OffPlanDetailPage() {
           </div>
         </div>
 
-        {/* Mobile Carousel View */}
         <div className="md:hidden">
             <Carousel className="w-full">
                 <CarouselContent>
                     {galleryImages.map((image, index) => (
                         <CarouselItem key={index}>
                             <div className="relative aspect-video w-full rounded-lg overflow-hidden">
-                                {image && (
-                                    <Image
-                                    src={image.imageUrl}
-                                    alt={`${project.projectName} - image ${index + 1}`}
-                                    data-ai-hint={image.imageHint}
-                                    fill
-                                    className="object-cover"
-                                    />
-                                )}
+                                <Image
+                                  src={image.src}
+                                  alt={image.alt}
+                                  data-ai-hint={image.hint}
+                                  fill
+                                  className="object-cover"
+                                />
                                  <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
                                     <span className="text-white/50 text-xl font-bold font-headline select-none">
                                         Aether Luxury Properties
@@ -106,7 +153,7 @@ export default function OffPlanDetailPage() {
         </div>
 
       </div>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2">
             <div className="mb-8">
@@ -115,10 +162,10 @@ export default function OffPlanDetailPage() {
             </div>
 
             <Separator />
-            
+
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 py-8">
-              <div className="flex items-center gap-3"><Building className="h-8 w-8 text-accent" /><div className=''><p className="font-bold">Developer</p><p>{project.developer}</p></div></div>
-              <div className="flex items-center gap-3"><Calendar className="h-8 w-8 text-accent" /><div className=''><p className="font-bold">Handover</p><p>{project.handover}</p></div></div>
+              <div className="flex items-center gap-3"><Building className="h-8 w-8 text-accent" /><div><p className="font-bold">Developer</p><p>{project.developer}</p></div></div>
+              <div className="flex items-center gap-3"><Calendar className="h-8 w-8 text-accent" /><div><p className="font-bold">Handover</p><p>{project.handover}</p></div></div>
             </div>
 
             <Separator />
@@ -127,29 +174,33 @@ export default function OffPlanDetailPage() {
               <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-4">Project Overview</h2>
               <p className="text-muted-foreground leading-relaxed">{project.description}</p>
             </div>
-            
+
             <Separator />
 
             <div className="py-8">
                 <h2 className="text-xl font-bold font-headline mb-4">PAYMENT PLAN</h2>
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                        <TableHead className="w-[50%]">Milestone</TableHead>
-                        <TableHead className="text-right">Percentage</TableHead>
-                        <TableHead className="text-right">Amount (AED)</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {project.paymentPlan.map((item, index) => (
-                        <TableRow key={index}>
-                            <TableCell className="font-medium">{item.milestone}</TableCell>
-                            <TableCell className="text-right">{item.percentage}%</TableCell>
-                            <TableCell className="text-right">AED {item.amount.toLocaleString()}</TableCell>
-                        </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                {project.paymentPlan.length > 0 ? (
+                  <Table>
+                      <TableHeader>
+                          <TableRow>
+                          <TableHead className="w-[50%]">Milestone</TableHead>
+                          <TableHead className="text-right">Percentage</TableHead>
+                          <TableHead className="text-right">Amount (AED)</TableHead>
+                          </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                          {project.paymentPlan.map((item, index) => (
+                          <TableRow key={index}>
+                              <TableCell className="font-medium">{item.milestone}</TableCell>
+                              <TableCell className="text-right">{item.percentage}%</TableCell>
+                              <TableCell className="text-right">AED {item.amount.toLocaleString()}</TableCell>
+                          </TableRow>
+                          ))}
+                      </TableBody>
+                  </Table>
+                ) : (
+                  <p className="text-muted-foreground">Detailed payment plan available on request.</p>
+                )}
             </div>
         </div>
 
@@ -182,8 +233,8 @@ export default function OffPlanDetailPage() {
           <div className="py-16">
             <h2 className="text-3xl font-bold font-headline mb-8 text-center">Other Off-Plan Projects</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {relatedProjects.map(p => (
-                <OffPlanCard key={p.id} project={p} />
+              {relatedProjects.map((candidate) => (
+                <OffPlanCard key={candidate.id} project={candidate} />
               ))}
             </div>
           </div>

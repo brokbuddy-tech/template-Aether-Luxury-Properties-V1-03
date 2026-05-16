@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PlayCircle, ArrowRight, Star, Award, Users, Handshake } from 'lucide-react';
@@ -8,10 +9,11 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { teamMembers } from '@/lib/data';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { ParallaxImage } from '@/components/parallax-image';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
+import { getAgents } from '@/lib/api';
+import { resolveTemplateImage } from '@/lib/media';
 
 const coreValues = [
   {
@@ -64,7 +66,49 @@ const testimonials = [
   },
 ];
 
+type LeadershipMember = {
+  name: string;
+  role: string;
+  imageUrl: string;
+  imageHint?: string;
+};
+
 export default function AboutPage() {
+  const [leadershipMembers, setLeadershipMembers] = useState<LeadershipMember[]>([]);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadLeadershipMembers() {
+      try {
+        const response = await getAgents();
+        if (!active) return;
+
+        const nextMembers = response.agents.slice(0, 4).map((agent) => {
+          const avatar = resolveTemplateImage(agent.avatarUrl || agent.avatar, 'agent-1', agent.name);
+          return {
+            name: agent.name,
+            role: agent.title || 'Property Consultant',
+            imageUrl: avatar?.src || '',
+            imageHint: avatar?.hint,
+          } satisfies LeadershipMember;
+        });
+
+        setLeadershipMembers(nextMembers);
+      } catch {
+        if (active) {
+          setLeadershipMembers([]);
+        }
+      }
+    }
+
+    void loadLeadershipMembers();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
   const aboutHeroImage = PlaceHolderImages.find(p => p.id === 'hero-dubai');
   const videoPlaceholder = PlaceHolderImages.find(p => p.id === 'property-1-int');
   const teamPortrait = PlaceHolderImages.find(p => p.id === 'team-group');
@@ -247,30 +291,35 @@ export default function AboutPage() {
             </div>
           </FadeInOnScroll>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {teamMembers.map((member, index) => {
-              const memberImage = PlaceHolderImages.find(p => p.id === member.image);
-              return (
-                <FadeInOnScroll key={member.name} delay={index * 100}>
-                  <Card className="text-center overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
-                    <div className="relative h-80 w-full">
-                      {memberImage && (
-                        <Image
-                          src={memberImage.imageUrl}
-                          alt={member.name}
-                          data-ai-hint={memberImage.imageHint}
-                          fill
-                          className="object-cover object-top transition-transform duration-300 group-hover:scale-105"
-                        />
-                      )}
-                    </div>
-                    <CardContent className="p-6">
-                      <h3 className="font-headline text-xl font-bold">{member.name}</h3>
-                      <p className="text-muted-foreground">{member.role}</p>
-                    </CardContent>
-                  </Card>
-                </FadeInOnScroll>
-              );
-            })}
+            {leadershipMembers.length > 0 ? leadershipMembers.map((member, index) => (
+              <FadeInOnScroll key={member.name} delay={index * 100}>
+                <Card className="text-center overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
+                  <div className="relative h-80 w-full">
+                    {member.imageUrl ? (
+                      <Image
+                        src={member.imageUrl}
+                        alt={member.name}
+                        data-ai-hint={member.imageHint}
+                        fill
+                        className="object-cover object-top transition-transform duration-300 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center bg-muted text-muted-foreground">
+                        Profile photo coming soon
+                      </div>
+                    )}
+                  </div>
+                  <CardContent className="p-6">
+                    <h3 className="font-headline text-xl font-bold">{member.name}</h3>
+                    <p className="text-muted-foreground">{member.role}</p>
+                  </CardContent>
+                </Card>
+              </FadeInOnScroll>
+            )) : (
+              <div className="sm:col-span-2 lg:col-span-4 rounded-lg border border-dashed border-border p-10 text-center text-muted-foreground">
+                Leadership profiles will appear here when live agent data is available.
+              </div>
+            )}
           </div>
         </div>
       </section>

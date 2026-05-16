@@ -4,9 +4,12 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Instagram, Facebook, Youtube, Linkedin, Twitter, ArrowUp, MapPin } from 'lucide-react';
+import { getSiteConfig, toSocialUrl } from '@/lib/api';
+import { getAgencyDisplayName, getAgencyEmail, getAgencyPhone } from '@/lib/live-mappers';
 
 import { Logo } from '@/components/logo';
 import { Button } from '@/components/ui/button';
+import type { SiteConfig } from '@/lib/live-types';
 
 const footerLinkColumns = [
   {
@@ -33,7 +36,7 @@ const footerLinkColumns = [
     title: 'ABOUT US',
     links: [
       { label: 'About', href: '/about' },
-      { label: 'Meet The Team', href: '#' },
+      { label: 'Meet The Team', href: '/agents' },
       { label: 'Careers', href: '#' },
       { label: 'Apply Now', href: '#' },
       { label: 'Contact', href: '/contact' },
@@ -54,6 +57,7 @@ const footerLinkColumns = [
 
 export function Footer() {
   const [isBackToTopVisible, setIsBackToTopVisible] = useState(false);
+  const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
 
   const toggleBackToTopVisibility = () => {
     if (window.pageYOffset > 300) {
@@ -77,16 +81,67 @@ export function Footer() {
     };
   }, []);
 
+  useEffect(() => {
+    let active = true;
+
+    async function loadSiteConfig() {
+      try {
+        const nextSiteConfig = await getSiteConfig();
+        if (active) {
+          setSiteConfig(nextSiteConfig);
+        }
+      } catch {
+        if (active) {
+          setSiteConfig(null);
+        }
+      }
+    }
+
+    void loadSiteConfig();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const displayName = getAgencyDisplayName(siteConfig);
+  const phone = getAgencyPhone(siteConfig) || '+971 4 876 2333';
+  const email = getAgencyEmail(siteConfig) || 'info@aether-properties.com';
+  const address = siteConfig?.profile?.officeAddress || '7th, 8th & 20th Floor, Control Tower, Motor City, Dubai, UAE.';
+  const socialLinks = [
+    { label: 'Instagram', href: toSocialUrl('instagram', siteConfig?.branding?.instagram) || '#' },
+    { label: 'Facebook', href: siteConfig?.profile?.social?.facebookUrl || '#' },
+    { label: 'Youtube', href: siteConfig?.profile?.social?.youtubeUrl || '#' },
+    { label: 'Linkedin', href: toSocialUrl('linkedin', siteConfig?.branding?.linkedin) || '#' },
+    { label: 'Tiktok', href: siteConfig?.profile?.social?.tiktokUrl || '#' },
+  ];
+  const footerColumns = footerLinkColumns.map((column) =>
+    column.title === 'CONNECT'
+      ? {
+          ...column,
+          links: column.links.map((link) => ({
+            ...link,
+            href: socialLinks.find((social) => social.label === link.label)?.href || '#',
+          })),
+        }
+      : column,
+  );
+
   return (
     <footer className="bg-muted text-foreground pt-16">
         <div className="container">
             <div className="flex flex-col lg:flex-row justify-between gap-12">
                 {/* Column 1: Brand & Contact */}
                 <div className="flex-shrink-0 lg:w-auto">
-                    <Logo />
+                    <Link href="/" aria-label={displayName}>
+                      <Logo logoUrl={siteConfig?.profile?.logo || null} name={displayName} />
+                    </Link>
                     <div className="mt-6 space-y-4 max-w-xs">
-                        <p className="font-bold text-lg text-primary">+971 4 876 2333</p>
-                        <p className="text-sm text-muted-foreground">Aether Luxury Properties LLC, 7th, 8th & 20th Floor, Control Tower, Motor City, Dubai, UAE.</p>
+                        <p className="font-bold text-lg text-primary">{phone}</p>
+                        <p className="text-sm text-muted-foreground">{address}</p>
+                        <a href={`mailto:${email}`} className="block text-sm text-muted-foreground hover:text-primary">
+                          {email}
+                        </a>
                         <a href="#" className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline">
                             <MapPin className="h-4 w-4" />
                             GET DIRECTIONS
@@ -96,7 +151,7 @@ export function Footer() {
 
                 {/* Columns 2-5: Links */}
                 <div className="flex-grow grid grid-cols-2 md:grid-cols-4 gap-8">
-                    {footerLinkColumns.map((column) => (
+                    {footerColumns.map((column) => (
                         <div key={column.title}>
                             <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-4">{column.title}</h3>
                             <ul className="space-y-3">
@@ -152,7 +207,7 @@ export function Footer() {
                         <Link href="#" className="hover:text-primary">Cookie Policy</Link>
                         <Link href="#" className="hover:text-primary">Complaints</Link>
                     </div>
-                    <p className="text-sm text-muted-foreground text-center md:text-right">&copy; Aether Luxury Properties 2026</p>
+                    <p className="text-sm text-muted-foreground text-center md:text-right">&copy; {displayName} {new Date().getFullYear()}</p>
                 </div>
             </div>
         </div>

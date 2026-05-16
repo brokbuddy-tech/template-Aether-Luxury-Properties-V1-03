@@ -3,19 +3,23 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
 import { Logo } from '@/components/logo';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
+import { getSiteConfig } from '@/lib/api';
+import { getAgencyDisplayName } from '@/lib/live-mappers';
+import type { SiteConfig } from '@/lib/live-types';
 
 const navLinks = [
   { href: '/buy', label: 'BUY' },
   { href: '/rent', label: 'RENT' },
   { href: '/sell', label: 'SELL' },
   { href: '/off-plan', label: 'OFF-PLAN' },
+  { href: '/agents', label: 'AGENTS' },
   { href: '/about', label: 'ABOUT US' },
   { href: '/commercial', label: 'COMMERCIAL' },
 ];
@@ -23,6 +27,33 @@ const navLinks = [
 export function Header() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadSiteConfig() {
+      try {
+        const nextSiteConfig = await getSiteConfig();
+        if (active) {
+          setSiteConfig(nextSiteConfig);
+        }
+      } catch {
+        if (active) {
+          setSiteConfig(null);
+        }
+      }
+    }
+
+    void loadSiteConfig();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const displayName = getAgencyDisplayName(siteConfig);
+  const logoUrl = siteConfig?.profile?.logo || null;
 
   const NavLink = ({ href, label }: { href: string; label: string }) => (
     <Link
@@ -40,7 +71,9 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/30 bg-background/80 md:bg-background/50 backdrop-blur-lg supports-[backdrop-filter]:bg-background/70 md:supports-[backdrop-filter]:bg-background/30">
       <div className="container flex h-16 items-center justify-between">
-        <Logo />
+        <Link href="/" aria-label={displayName}>
+          <Logo logoUrl={logoUrl} name={displayName} />
+        </Link>
         
         <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
@@ -63,7 +96,9 @@ export function Header() {
             <SheetContent side="right" className="w-full sm:w-[400px] bg-background">
               <div className="p-4">
                 <div className="flex justify-between items-center mb-8">
-                  <Logo />
+                  <Link href="/" onClick={() => setIsMobileMenuOpen(false)} aria-label={displayName}>
+                    <Logo logoUrl={logoUrl} name={displayName} />
+                  </Link>
                   <SheetTrigger asChild>
                      <Button variant="ghost" size="icon">
                         <X className="h-6 w-6" />

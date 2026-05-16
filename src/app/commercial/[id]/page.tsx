@@ -1,33 +1,32 @@
-
 "use client";
 
-import { useState, useEffect } from 'react';
-import { getCommercialPropertyById, commercialProperties } from "@/lib/data";
+import { useEffect, useState } from 'react';
 import { notFound, useParams } from "next/navigation";
 import Image from "next/image";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Slider } from "@/components/ui/slider";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { 
-  Building, 
-  Car, 
-  ClipboardCheck, 
-  Eye, 
-  MapPin, 
-  Phone, 
+import {
+  Building,
+  Car,
+  ClipboardCheck,
+  Eye,
+  Phone,
   Link2,
   Facebook,
   Twitter,
   Linkedin,
 } from "lucide-react";
-import Link from 'next/link';
 import { CommercialPropertyCard } from '@/components/commercial-property-card';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
+import { getProperties, getPropertyById as getLivePropertyById } from '@/lib/api';
+import { isLikelyCommercialProperty, toAetherCommercialProperty } from '@/lib/live-mappers';
+import { resolveTemplateGallery, resolveTemplateImage } from '@/lib/media';
+import type { CommercialProperty } from '@/lib/types';
 
 function MortgageCalculator({ price }: { price: number }) {
   const [purchasePrice, setPurchasePrice] = useState(price);
@@ -114,43 +113,93 @@ const WhatsAppIcon = () => (
     </svg>
 );
 
+function getCommunityFromAddress(address: string) {
+  const parts = address.split(', ');
+  if (parts.length > 2) {
+    return parts[parts.length - 2];
+  }
+  return parts.length > 1 ? parts[0] : null;
+}
+
 
 export default function CommercialPropertyDetailPage() {
   const params = useParams();
-  const property = getCommercialPropertyById(params.id as string);
+  const [property, setProperty] = useState<CommercialProperty | null>(null);
+  const [relatedProperties, setRelatedProperties] = useState<CommercialProperty[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  if (!property) {
+  useEffect(() => {
+    let active = true;
+
+    async function loadProperty() {
+      try {
+        const liveProperty = await getLivePropertyById(params.id as string);
+        if (!active) return;
+
+        if (liveProperty && isLikelyCommercialProperty(liveProperty)) {
+          const mappedProperty = toAetherCommercialProperty(liveProperty);
+          setProperty(mappedProperty);
+
+          const relatedResponse = await getProperties({ limit: 48 });
+          if (!active) return;
+
+          const currentCommunity = getCommunityFromAddress(mappedProperty.address);
+          const nextRelatedProperties = relatedResponse.properties
+            .filter(isLikelyCommercialProperty)
+            .map(toAetherCommercialProperty)
+            .filter((candidate) => candidate.id !== mappedProperty.id)
+            .filter((candidate) => {
+              if (!currentCommunity) return true;
+              return getCommunityFromAddress(candidate.address) === currentCommunity;
+            })
+            .slice(0, 3);
+
+          setRelatedProperties(nextRelatedProperties);
+        } else {
+          setProperty(null);
+          setRelatedProperties([]);
+        }
+      } catch {
+        if (!active) return;
+        setProperty(null);
+        setRelatedProperties([]);
+      } finally {
+        if (active) {
+          setIsLoaded(true);
+        }
+      }
+    }
+
+    void loadProperty();
+
+    return () => {
+      active = false;
+    };
+  }, [params.id]);
+
+  if (!property && isLoaded) {
     notFound();
   }
 
-  const agentImage = PlaceHolderImages.find(p => p.id === property.agent.image);
-  const galleryImages = property.images.map(id => PlaceHolderImages.find(p => p.id === id)).filter(Boolean) as typeof PlaceHolderImages[0][];
+  if (!property) {
+    return <div className="container py-24 text-center text-muted-foreground">Loading property...</div>;
+  }
+
+  const agentImage = resolveTemplateImage(property.agent.image, 'agent-1', property.agent.name);
+  const galleryImages = resolveTemplateGallery(
+    property.images.length > 0 ? property.images : [property.image],
+    'commercial-1',
+    property.title,
+  );
   const mapImage = PlaceHolderImages.find(p => p.id === 'map-location');
   const qrCodeImage = PlaceHolderImages.find(p => p.id === 'qr-code');
 
-  const getCommunity = (address: string) => {
-    const parts = address.split(', ');
-    if (parts.length > 2) {
-      return parts[parts.length - 2];
-    }
-    return parts.length > 1 ? parts[0] : null;
-  }
-
-  const relatedProperties = commercialProperties.filter(p => {
-    if (p.id === property.id) return false;
-    const pCommunity = getCommunity(p.address);
-    const currentCommunity = getCommunity(property.address);
-    return pCommunity && currentCommunity && pCommunity === currentCommunity;
-  }).slice(0, 3);
-
   return (
     <div className="container py-12">
-      {/* Gallery */}
       <div className="relative mb-8 group">
-        {/* Desktop Grid View */}
         <div className="hidden md:grid md:grid-cols-3 md:grid-rows-2 gap-2 h-auto md:h-[60vh]">
           <div className="col-span-1 md:col-span-2 md:row-span-2 relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
-            {galleryImages[0] && <Image src={galleryImages[0].imageUrl} alt={property.title} fill className="object-cover" />}
+            {galleryImages[0] && <Image src={galleryImages[0].src} alt={galleryImages[0].alt} data-ai-hint={galleryImages[0].hint} fill className="object-cover" />}
             <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
               <span className="text-white/50 text-3xl font-bold font-headline select-none">
                 Aether Luxury Properties
@@ -158,7 +207,7 @@ export default function CommercialPropertyDetailPage() {
             </div>
           </div>
           <div className="relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
-            {galleryImages[1] && <Image src={galleryImages[1].imageUrl} alt={property.title} fill className="object-cover" />}
+            {galleryImages[1] && <Image src={galleryImages[1].src} alt={galleryImages[1].alt} data-ai-hint={galleryImages[1].hint} fill className="object-cover" />}
              <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
               <span className="text-white/50 text-xl font-bold font-headline select-none">
                 Aether Luxury Properties
@@ -166,7 +215,7 @@ export default function CommercialPropertyDetailPage() {
             </div>
           </div>
           <div className="relative rounded-lg overflow-hidden aspect-video md:aspect-auto">
-            {galleryImages[2] && <Image src={galleryImages[2].imageUrl} alt={property.title} fill className="object-cover" />}
+            {galleryImages[2] && <Image src={galleryImages[2].src} alt={galleryImages[2].alt} data-ai-hint={galleryImages[2].hint} fill className="object-cover" />}
              <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
               <span className="text-white/50 text-xl font-bold font-headline select-none">
                 Aether Luxury Properties
@@ -174,23 +223,20 @@ export default function CommercialPropertyDetailPage() {
             </div>
           </div>
         </div>
-        
-        {/* Mobile Carousel View */}
+
         <div className="md:hidden">
             <Carousel className="w-full">
                 <CarouselContent>
                     {galleryImages.map((image, index) => (
                         <CarouselItem key={index}>
                             <div className="relative aspect-video w-full rounded-lg overflow-hidden">
-                                {image && (
-                                    <Image
-                                    src={image.imageUrl}
-                                    alt={`${property.title} - image ${index + 1}`}
-                                    data-ai-hint={image.imageHint}
-                                    fill
-                                    className="object-cover"
-                                    />
-                                )}
+                                <Image
+                                  src={image.src}
+                                  alt={image.alt}
+                                  data-ai-hint={image.hint}
+                                  fill
+                                  className="object-cover"
+                                />
                                  <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
                                     <span className="text-white/50 text-xl font-bold font-headline select-none">
                                         Aether Luxury Properties
@@ -210,7 +256,7 @@ export default function CommercialPropertyDetailPage() {
         </div>
 
       </div>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2">
 
@@ -227,14 +273,14 @@ export default function CommercialPropertyDetailPage() {
             <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-4">Property Description</h2>
             <p className="text-muted-foreground leading-relaxed">{property.description}</p>
           </div>
-          
+
           <Separator />
-          
+
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 py-8">
-            {property.grade && <div className="flex items-center gap-3"><Building className="h-8 w-8 text-accent" /><div className=''><p className="font-bold">Grade</p><p>{property.grade}</p></div></div>}
-            {property.views && <div className="flex items-center gap-3"><Eye className="h-8 w-8 text-accent" /><div className=''><p className="font-bold">Views</p><p>{property.views.join(', ')}</p></div></div>}
-            {property.condition && <div className="flex items-center gap-3"><ClipboardCheck className="h-8 w-8 text-accent" /><div className=''><p className="font-bold">Condition</p><p>{property.condition}</p></div></div>}
-            {property.parking && <div className="flex items-center gap-3"><Car className="h-8 w-8 text-accent" /><div className=''><p className="font-bold">Parking</p><p>{property.parking} spaces</p></div></div>}
+            {property.grade && <div className="flex items-center gap-3"><Building className="h-8 w-8 text-accent" /><div><p className="font-bold">Grade</p><p>{property.grade}</p></div></div>}
+            {property.views && <div className="flex items-center gap-3"><Eye className="h-8 w-8 text-accent" /><div><p className="font-bold">Views</p><p>{property.views.join(', ')}</p></div></div>}
+            {property.condition && <div className="flex items-center gap-3"><ClipboardCheck className="h-8 w-8 text-accent" /><div><p className="font-bold">Condition</p><p>{property.condition}</p></div></div>}
+            {property.parking && <div className="flex items-center gap-3"><Car className="h-8 w-8 text-accent" /><div><p className="font-bold">Parking</p><p>{property.parking} spaces</p></div></div>}
           </div>
 
           {property.amenities && property.amenities.length > 0 && (
@@ -243,7 +289,7 @@ export default function CommercialPropertyDetailPage() {
               <div className="py-8">
                 <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-4">Amenities</h2>
                 <ul className="grid grid-cols-2 md:grid-cols-3 gap-4 text-muted-foreground">
-                  {property.amenities.map(amenity => <li key={amenity}>- {amenity}</li>)}
+                  {property.amenities.map((amenity) => <li key={amenity}>- {amenity}</li>)}
                 </ul>
               </div>
             </>
@@ -262,7 +308,7 @@ export default function CommercialPropertyDetailPage() {
                 />
               </div>
               )}
-            <p className="text-muted-foreground mt-2">{property.address}, Dubai</p>
+            <p className="text-muted-foreground mt-2">{property.address}</p>
           </div>
 
           {property.dldPermitNo && qrCodeImage && (
@@ -287,7 +333,7 @@ export default function CommercialPropertyDetailPage() {
           )}
 
           <Separator />
-          
+
           <MortgageCalculator price={property.price} />
 
         </div>
@@ -297,7 +343,7 @@ export default function CommercialPropertyDetailPage() {
             <Card className="rounded-xl bg-muted p-6">
               <div className="flex flex-col items-center text-center">
                 <Avatar className="h-32 w-32">
-                  {agentImage && <AvatarImage src={agentImage.imageUrl} alt={property.agent.name} />}
+                  {agentImage && <AvatarImage src={agentImage.src} alt={property.agent.name} />}
                   <AvatarFallback>{property.agent.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <h3 className="mt-4 text-xl font-bold uppercase tracking-wider">{property.agent.name}</h3>
@@ -343,10 +389,10 @@ export default function CommercialPropertyDetailPage() {
         <div className="mt-24">
           <Separator />
           <div className="py-16">
-            <h2 className="text-3xl font-bold font-headline mb-8 text-center">Other Properties in {getCommunity(property.address)}</h2>
+            <h2 className="text-3xl font-bold font-headline mb-8 text-center">Other Properties in {getCommunityFromAddress(property.address)}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {relatedProperties.map(p => (
-                <CommercialPropertyCard key={p.id} property={p} />
+              {relatedProperties.map((candidate) => (
+                <CommercialPropertyCard key={candidate.id} property={candidate} />
               ))}
             </div>
           </div>

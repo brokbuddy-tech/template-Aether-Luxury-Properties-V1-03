@@ -4,11 +4,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { OffPlanProject } from '@/lib/types';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Card } from '@/components/ui/card';
 import { Button } from './ui/button';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import { Calendar, User } from 'lucide-react';
+import { resolveTemplateGallery } from '@/lib/media';
 
 const WhatsAppIcon = () => (
     <svg
@@ -24,8 +24,11 @@ const WhatsAppIcon = () => (
 
 
 export function OffPlanCard({ project }: { project: OffPlanProject }) {
-  const images = project.images.map(imgId => PlaceHolderImages.find(p => p.id === imgId)).filter(Boolean) as (typeof PlaceHolderImages[0])[];
-  const mainImage = PlaceHolderImages.find(p => p.id === project.image);
+  const images = resolveTemplateGallery(
+    project.images.length > 0 ? project.images : [project.image],
+    'offplan-1',
+    project.projectName,
+  );
 
   const calculateStartingPrice = () => {
     if (project.paymentPlan && project.paymentPlan.length > 0) {
@@ -46,18 +49,16 @@ export function OffPlanCard({ project }: { project: OffPlanProject }) {
               <div className="relative">
                 <Carousel className="w-full">
                   <CarouselContent>
-                    {(images.length > 0 ? images : (mainImage ? [mainImage] : [])).map((image, index) => (
+                    {images.map((image, index) => (
                       <CarouselItem key={index}>
                         <div className="relative aspect-video w-full">
-                          {image && (
-                            <Image
-                              src={image.imageUrl}
-                              alt={project.projectName}
-                              data-ai-hint={image.imageHint}
-                              fill
-                              className="object-cover"
-                            />
-                          )}
+                          <Image
+                            src={image.src}
+                            alt={image.alt}
+                            data-ai-hint={image.hint}
+                            fill
+                            className="object-cover"
+                          />
                         </div>
                       </CarouselItem>
                     ))}
