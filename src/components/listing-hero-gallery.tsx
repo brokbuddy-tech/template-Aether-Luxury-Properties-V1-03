@@ -24,7 +24,7 @@ interface ListingHeroGalleryProps {
 export function ListingHeroGallery({
   images,
   title,
-  watermark = "Aether Luxury Properties",
+  watermark,
 }: ListingHeroGalleryProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);

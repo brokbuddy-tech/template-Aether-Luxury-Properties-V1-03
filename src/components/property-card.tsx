@@ -56,11 +56,6 @@ export function PropertyCard({ property }: { property: Property }) {
                 </>
               )}
             </Carousel>
-            <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
-              <span className="text-white/50 text-xl font-bold font-headline select-none">
-                Aether Luxury Properties
-              </span>
-            </div>
           </div>
         </Link>
 
