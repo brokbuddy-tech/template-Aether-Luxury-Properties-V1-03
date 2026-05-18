@@ -111,6 +111,7 @@ export function toAetherProperty(listing: LiveProperty): Property {
     images: gallery,
     description: listing.description,
     keyFeatures: buildFeatureList(listing),
+    virtualTourUrl: listing.virtualTourUrl || null,
     agent: {
       name: listing.agent?.name || listing.organizationName || 'Property Consultant',
       image: getAgentImage(listing.agent),
@@ -142,6 +143,7 @@ export function toAetherCommercialProperty(listing: LiveProperty): CommercialPro
     image: gallery[0] || '',
     images: gallery,
     description: listing.description,
+    virtualTourUrl: listing.virtualTourUrl || null,
     agent: {
       name: listing.agent?.name || listing.organizationName || 'Property Consultant',
       image: getAgentImage(listing.agent),
@@ -164,12 +166,21 @@ export function toAetherOffPlanProject(listing: LiveProperty): OffPlanProject {
     image: gallery[0] || '',
     images: gallery,
     description: listing.description,
+    virtualTourUrl: listing.virtualTourUrl || null,
     paymentPlan: buildOffPlanPaymentSteps(listing),
   };
 }
 
 export function getAgencyDisplayName(siteConfig?: SiteConfig | null) {
   return siteConfig?.branding?.displayName || siteConfig?.organization.name || 'Agency Website';
+}
+
+export function getAgencyBrochureUrl(siteConfig?: SiteConfig | null) {
+  return (
+    siteConfig?.profile?.brochureUrl
+    || siteConfig?.branding?.brochureUrl
+    || null
+  );
 }
 
 export function getAgencyEmail(siteConfig?: SiteConfig | null) {
@@ -187,4 +198,18 @@ export function getAgencyPhone(siteConfig?: SiteConfig | null) {
     || siteConfig?.profile?.contact?.secondaryPhone
     || null
   );
+}
+
+function getPossessiveName(agencyName: string) {
+  return agencyName.endsWith('s') ? `${agencyName}'` : `${agencyName}'s`;
+}
+
+export function replaceTemplateBranding(text: string, agencyName: string) {
+  const normalizedAgencyName = agencyName.trim() || 'Agency Website';
+
+  return text
+    .replace(/Aether Luxury Properties/g, normalizedAgencyName)
+    .replace(/Aether Properties/g, normalizedAgencyName)
+    .replace(/Aether's/g, getPossessiveName(normalizedAgencyName))
+    .replace(/\bAether\b/g, normalizedAgencyName);
 }

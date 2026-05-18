@@ -17,6 +17,7 @@ export type Property = {
   images: string[];
   description: string;
   keyFeatures: string[];
+  virtualTourUrl?: string | null;
   agent: {
     name: string;
     image: string;
@@ -37,6 +38,7 @@ export type CommercialProperty = {
   image: string;
   images: string[];
   description: string;
+  virtualTourUrl?: string | null;
   agent: {
     name: string;
     image: string;
@@ -59,6 +61,7 @@ export type OffPlanProject = {
   image: string;
   images: string[];
   description: string;
+  virtualTourUrl?: string | null;
   paymentPlan: {
     milestone: string;
     percentage: number;

@@ -92,7 +92,7 @@ export default function ContactPage() {
   const agencyName = getAgencyDisplayName(siteConfig);
   const agencyAddress = siteConfig?.profile?.officeAddress || '7th, 8th & 20th Floor, Control Tower, Motor City, Dubai, UAE.';
   const agencyPhone = getAgencyPhone(siteConfig) || '+971 4 876 2333';
-  const agencyEmail = getAgencyEmail(siteConfig) || 'info@aether-properties.com';
+  const agencyEmail = getAgencyEmail(siteConfig) || 'contact@example.com';
 
   return (
     <div>

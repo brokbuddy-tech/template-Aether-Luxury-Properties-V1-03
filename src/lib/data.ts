@@ -60,7 +60,7 @@ export const services: Service[] = [
   },
   {
     title: 'About Us',
-    description: 'Learn more about our mission and the Aether difference.',
+    description: 'Learn more about our mission and what sets our team apart.',
     href: '/about',
     image: 'hero-2',
   },
@@ -92,7 +92,7 @@ export const stats: Stat[] = [
 export const newsArticles: NewsArticle[] = [
   {
     title: 'A Smoother Path to Completion',
-    description: "Discover how Aether's structured approach and dedicated client managers are setting new standards for efficiency and transparency in property transactions.",
+    description: 'Discover how our structured approach and dedicated client managers are setting new standards for efficiency and transparency in property transactions.',
     href: '#',
   },
   {

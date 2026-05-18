@@ -90,6 +90,12 @@ function normalizeAssetUrl(value?: string | null) {
   return normalizedProxyPath.startsWith('/') ? normalizedProxyPath : `/${normalizedProxyPath}`;
 }
 
+function normalizeLinkValue(value?: string | null) {
+  const normalized = value?.trim();
+  if (!normalized) return null;
+  return normalizeAssetUrl(normalized) ?? normalized;
+}
+
 function normalizeNumber(value: unknown): number {
   if (typeof value === 'number') return value;
   if (typeof value === 'string') {
@@ -311,6 +317,23 @@ export function mapListingToProperty(listing: any, agencySlug?: string | null): 
     handoverDate: listing.handoverDate || listing.fields?.handoverDate || undefined,
     developerName: listing.developer?.name || listing.fields?.developerName || undefined,
     developerLogo: normalizeAssetUrl(listing.developer?.logo || listing.fields?.developerLogo) || undefined,
+    virtualTourUrl:
+      normalizeLinkValue(
+        getStringValue(
+          listing.virtualTourUrl,
+          listing.virtualTourLink,
+          listing.virtualTour,
+          listing.videoUrl,
+          listing.videoTourUrl,
+          listing.matterportUrl,
+          listing.fields?.virtualTourUrl,
+          listing.fields?.virtualTourLink,
+          listing.fields?.virtualTour,
+          listing.fields?.videoUrl,
+          listing.fields?.videoTourUrl,
+          listing.fields?.matterportUrl,
+        ),
+      ) || undefined,
     latitude: getOptionalNumber(listing.latitude, listing.lat, listing.fields?.latitude, listing.fields?.lat),
     longitude: getOptionalNumber(listing.longitude, listing.lng, listing.fields?.longitude, listing.fields?.lng),
     organizationName: getStringValue(listing.organizationName, listing.organization?.name),
@@ -485,19 +508,47 @@ function normalizeOrganization(
 function normalizeSiteProfile(profile?: SiteConfig['profile'] | null) {
   if (!profile) return null;
 
+  const rawProfile = profile as SiteConfig['profile'] & {
+    brochure?: string | null;
+    brochureUrl?: string | null;
+    companyBrochureUrl?: string | null;
+    companyProfileUrl?: string | null;
+  };
+
   return {
     ...profile,
     logo: normalizeAssetUrl(profile.logo) ?? profile.logo ?? null,
+    brochureUrl:
+      normalizeLinkValue(
+        rawProfile.brochureUrl
+        || rawProfile.companyBrochureUrl
+        || rawProfile.companyProfileUrl
+        || rawProfile.brochure,
+      ) ?? null,
   };
 }
 
 function normalizeSiteBranding(branding: SiteBranding | null | undefined, organizationName: string) {
   if (!branding) return null;
 
+  const rawBranding = branding as SiteBranding & {
+    brochure?: string | null;
+    brochureUrl?: string | null;
+    companyBrochureUrl?: string | null;
+    companyProfileUrl?: string | null;
+  };
+
   return {
     ...branding,
     displayName: organizationName || branding.displayName || null,
     coverImage: normalizeAssetUrl(branding.coverImage) ?? branding.coverImage ?? null,
+    brochureUrl:
+      normalizeLinkValue(
+        rawBranding.brochureUrl
+        || rawBranding.companyBrochureUrl
+        || rawBranding.companyProfileUrl
+        || rawBranding.brochure,
+      ) ?? null,
   };
 }
 

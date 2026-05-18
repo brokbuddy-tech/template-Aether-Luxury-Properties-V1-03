@@ -73,6 +73,7 @@ export type LiveProperty = {
   longitude?: number | null;
   paymentPlanData?: Record<string, unknown> | null;
   constructionTimelineData?: Record<string, unknown> | null;
+  virtualTourUrl?: string | null;
   organizationName?: string;
   organizationSlug?: string;
   agent?: PropertyAgent;
@@ -113,6 +114,7 @@ export type SiteBranding = {
   bio?: string | null;
   publicEmail?: string | null;
   publicPhone?: string | null;
+  brochureUrl?: string | null;
   whatsapp?: string | null;
   website?: string | null;
   instagram?: string | null;
@@ -136,6 +138,7 @@ export type SiteStats = {
 
 export type SiteProfile = {
   logo?: string | null;
+  brochureUrl?: string | null;
   aboutCompany?: string;
   officeAddress?: string;
   officeTimings?: string;

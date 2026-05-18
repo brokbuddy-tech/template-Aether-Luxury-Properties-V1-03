@@ -50,11 +50,15 @@ import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { useAiSearchModal } from '@/hooks/use-ai-search-modal';
 import { Progress } from '@/components/ui/progress';
+import { getSiteConfig } from '@/lib/api';
+import { getAgencyDisplayName } from '@/lib/live-mappers';
+import type { SiteConfig } from '@/lib/live-types';
 
 
 export default function Home() {
   const [priceRange, setPriceRange] = useState([0]);
   const [currency, setCurrency] = useState('AED');
+  const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-2');
   const { openModal: openAiSearchModal } = useAiSearchModal();
   const [expertiseIndex, setExpertiseIndex] = useState(0);
@@ -63,10 +67,11 @@ export default function Home() {
   const teamImage = PlaceHolderImages.find(p => p.id === 'team-group');
   const awardsImage = PlaceHolderImages.find(p => p.id === 'awards-1');
   const ctaImage = PlaceHolderImages.find(p => p.id === 'hero-dubai');
+  const agencyName = getAgencyDisplayName(siteConfig);
 
   const expertiseSlides = [
     {
-      tagline: 'WHY AETHER LUXURY',
+      tagline: `WHY ${agencyName.toUpperCase()}`,
       headline: 'Property Expertise, Backed by Structure',
       body: 'Our agents have deep expertise in Dubai and the systems to back it up – so your move is informed and smooth.',
     },
@@ -84,6 +89,29 @@ export default function Home() {
 
   const [serviceCarouselApi, setServiceCarouselApi] = useState<CarouselApi>()
   const [scrollProgress, setScrollProgress] = useState(0)
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadSiteConfig() {
+      try {
+        const nextSiteConfig = await getSiteConfig();
+        if (active) {
+          setSiteConfig(nextSiteConfig);
+        }
+      } catch {
+        if (active) {
+          setSiteConfig(null);
+        }
+      }
+    }
+
+    void loadSiteConfig();
+
+    return () => {
+      active = false;
+    };
+  }, [])
 
   useEffect(() => {
     if (!serviceCarouselApi) {
@@ -158,7 +186,7 @@ export default function Home() {
               Dubai Real Estate. Built Better.
             </h1>
             <p className="mt-6 max-w-3xl text-lg text-white/90 font-light tracking-widest">
-              Buying, selling, renting or investing in Dubai should feel clear, seamless and well handled. At <strong>Aether Luxury Properties</strong>, we’ve built our business to remove friction, raise standards and deliver better outcomes — for clients and brokers alike.
+              Buying, selling, renting or investing in Dubai should feel clear, seamless and well handled. At <strong>{agencyName}</strong>, we&apos;ve built our business to remove friction, raise standards and deliver better outcomes for clients and brokers alike.
             </p>
           </FadeInOnScroll>
           <FadeInOnScroll delay={200}>
@@ -311,7 +339,7 @@ export default function Home() {
              <FadeInOnScroll>
                 <h2>Explore Property in Dubai</h2>
                 <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
-                  <strong>Aether Luxury Properties</strong> helps buyers, sellers, and investors navigate the Dubai real estate market with absolute clarity and confidence. Our teams combine deep local expertise with advanced digital systems and white-glove support, all built to deliver smoother transactions and superior outcomes—every step of the way.
+                  <strong>{agencyName}</strong> helps buyers, sellers, and investors navigate the Dubai real estate market with absolute clarity and confidence. Our teams combine deep local expertise with advanced digital systems and white-glove support, all built to deliver smoother transactions and superior outcomes every step of the way.
                 </p>
              </FadeInOnScroll>
           </div>
@@ -507,7 +535,7 @@ export default function Home() {
             <div className="text-left max-w-[900px] mb-12">
               <h2 className="text-4xl font-bold text-primary mb-4 font-headline">Explore Communities in Dubai</h2>
               <p className="text-lg text-muted-foreground">
-                Choosing the right community is as fundamental as choosing the property itself. At <strong>Aether Luxury Properties</strong>, our specialized area experts provide you with deep, data-driven insights into localized pricing, market demand, and long-term investment value. We empower you to make confident, informed decisions rather than rushed ones—ensuring your future home or investment perfectly aligns with your lifestyle goals.
+                Choosing the right community is as fundamental as choosing the property itself. At <strong>{agencyName}</strong>, our specialized area experts provide you with deep, data-driven insights into localized pricing, market demand, and long-term investment value. We empower you to make confident, informed decisions rather than rushed ones, ensuring your future home or investment perfectly aligns with your lifestyle goals.
               </p>
             </div>
           </FadeInOnScroll>
@@ -562,10 +590,10 @@ export default function Home() {
         <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white p-4">
           <FadeInOnScroll>
             <h2 className="text-5xl font-extrabold tracking-tight">
-              Find Your Next Home With Aether Luxury.
+              Find Your Next Home With {agencyName}.
             </h2>
             <p className="mt-6 max-w-2xl mx-auto text-lg leading-relaxed text-white/90">
-              Looking to buy, rent, or invest in Dubai? Our team is here to guide you every step of the way. Let’s make your property journey simple, smooth, and successful.
+              Looking to buy, rent, or invest in Dubai? Our team is here to guide you every step of the way. Let&apos;s make your property journey simple, smooth, and successful.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" variant="outline" className="font-headline border-white border-2 bg-transparent text-white hover:bg-white hover:text-black transition-all duration-300 px-8 py-3 h-auto">

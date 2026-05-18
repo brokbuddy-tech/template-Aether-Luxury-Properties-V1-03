@@ -1,8 +1,9 @@
 "use client";
 
+import type { MouseEvent } from "react";
 import { useState } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Video } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import {
   Dialog,
@@ -19,12 +20,14 @@ interface ListingHeroGalleryProps {
   images: ResolvedTemplateImage[];
   title: string;
   watermark?: string;
+  virtualTourUrl?: string | null;
 }
 
 export function ListingHeroGallery({
   images,
   title,
   watermark,
+  virtualTourUrl,
 }: ListingHeroGalleryProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -48,35 +51,85 @@ export function ListingHeroGallery({
     setActiveIndex((prev) => (prev + 1) % images.length);
   };
 
+  const handleVirtualTourClick = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+
+    if (virtualTourUrl) {
+      window.open(virtualTourUrl, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    openGallery(0);
+  };
+
   return (
     <>
       <div className="relative mb-8 group">
         <div className="md:hidden">
           <Carousel className="w-full">
             <CarouselContent>
-              {images.map((image, index) => (
-                <CarouselItem key={`${image.src}-${index}`}>
-                  <button
-                    type="button"
-                    onClick={() => openGallery(index)}
-                    className="relative aspect-video w-full rounded-lg overflow-hidden text-left"
-                    aria-label={`Open gallery image ${index + 1} of ${images.length}`}
-                  >
-                    <Image
-                      src={image.src}
-                      alt={image.alt}
-                      data-ai-hint={image.hint}
-                      fill
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
-                      <span className="text-white/50 text-xl font-bold font-headline select-none">
-                        {watermark}
-                      </span>
-                    </div>
-                  </button>
-                </CarouselItem>
-              ))}
+              {images.map((image, index) => {
+                if (index === 0) {
+                  return (
+                    <CarouselItem key={`${image.src}-${index}`}>
+                      <div className="relative aspect-video w-full overflow-hidden rounded-lg text-left">
+                        <Image
+                          src={image.src}
+                          alt={image.alt}
+                          data-ai-hint={image.hint}
+                          fill
+                          className="object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => openGallery(index)}
+                          className="absolute inset-0 z-10"
+                          aria-label={`Open gallery image ${index + 1} of ${images.length}`}
+                        >
+                          <span className="sr-only">Open gallery image {index + 1}</span>
+                        </button>
+                        <div className="pointer-events-none absolute inset-0 z-20 bg-black/10 flex items-center justify-center">
+                          <span className="text-white/50 text-xl font-bold font-headline select-none">
+                            {watermark}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleVirtualTourClick}
+                          className="absolute bottom-4 left-4 z-30 inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-white"
+                        >
+                          <Video className="h-4 w-4" />
+                          Virtual Tour
+                        </button>
+                      </div>
+                    </CarouselItem>
+                  );
+                }
+
+                return (
+                  <CarouselItem key={`${image.src}-${index}`}>
+                    <button
+                      type="button"
+                      onClick={() => openGallery(index)}
+                      className="relative aspect-video w-full rounded-lg overflow-hidden text-left"
+                      aria-label={`Open gallery image ${index + 1} of ${images.length}`}
+                    >
+                      <Image
+                        src={image.src}
+                        alt={image.alt}
+                        data-ai-hint={image.hint}
+                        fill
+                        className="object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
+                        <span className="text-white/50 text-xl font-bold font-headline select-none">
+                          {watermark}
+                        </span>
+                      </div>
+                    </button>
+                  </CarouselItem>
+                );
+              })}
             </CarouselContent>
             {images.length > 1 && (
               <>
@@ -89,12 +142,7 @@ export function ListingHeroGallery({
 
         <div className="hidden md:grid md:grid-cols-3 md:grid-rows-2 gap-2 h-auto md:h-[60vh]">
           {images[0] && (
-            <button
-              type="button"
-              onClick={() => openGallery(0)}
-              className="col-span-1 md:col-span-2 md:row-span-2 relative rounded-lg overflow-hidden aspect-video md:aspect-auto text-left"
-              aria-label={`Open gallery image 1 of ${images.length}`}
-            >
+            <div className="col-span-1 md:col-span-2 md:row-span-2 relative rounded-lg overflow-hidden aspect-video md:aspect-auto text-left">
               <Image
                 src={images[0].src}
                 alt={images[0].alt}
@@ -102,12 +150,28 @@ export function ListingHeroGallery({
                 fill
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-black/10 flex items-center justify-center pointer-events-none">
+              <button
+                type="button"
+                onClick={() => openGallery(0)}
+                className="absolute inset-0 z-10"
+                aria-label={`Open gallery image 1 of ${images.length}`}
+              >
+                <span className="sr-only">Open gallery image 1</span>
+              </button>
+              <div className="absolute inset-0 z-20 bg-black/10 flex items-center justify-center pointer-events-none">
                 <span className="text-white/50 text-3xl font-bold font-headline select-none">
                   {watermark}
                 </span>
               </div>
-            </button>
+              <button
+                type="button"
+                onClick={handleVirtualTourClick}
+                className="absolute bottom-6 left-6 z-30 inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-white"
+              >
+                <Video className="h-4 w-4" />
+                Virtual Tour
+              </button>
+            </div>
           )}
           {images[1] && (
             <button

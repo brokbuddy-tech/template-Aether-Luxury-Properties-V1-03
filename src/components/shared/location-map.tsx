@@ -62,17 +62,6 @@ export function LocationMap({
         referrerPolicy="no-referrer-when-downgrade"
       />
 
-      <div className="pointer-events-none absolute inset-x-0 top-0 bg-gradient-to-b from-background/90 via-background/60 to-transparent px-4 py-4">
-        <p className="text-sm font-semibold text-foreground">
-          {addressLabel || locationLabel || "Dubai"}
-        </p>
-        <p className="text-xs text-muted-foreground">
-          {hasCoordinates
-            ? `${latitude?.toFixed(5)}, ${longitude?.toFixed(5)}`
-            : "Approximate area view powered by OpenStreetMap"}
-        </p>
-      </div>
-
       {!hasCoordinates && (
         <div className="pointer-events-none absolute bottom-4 left-4 max-w-xs rounded-lg bg-background/85 px-3 py-2 text-xs text-muted-foreground shadow-sm">
           A precise marker is unavailable for this listing, so the map is centered on Dubai.

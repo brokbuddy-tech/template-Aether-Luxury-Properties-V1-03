@@ -8,7 +8,7 @@ type LogoProps = {
 };
 
 export function Logo({ className, logoUrl, name }: LogoProps) {
-  const displayName = name || 'Aether Luxury Properties';
+  const displayName = name || 'Agency Website';
 
   return (
     <div className={`flex items-center gap-3 text-lg font-bold tracking-tight ${className || ''}`}>

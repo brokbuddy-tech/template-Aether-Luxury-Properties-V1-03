@@ -12,8 +12,10 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { ParallaxImage } from '@/components/parallax-image';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
-import { getAgents } from '@/lib/api';
+import { getAgents, getSiteConfig } from '@/lib/api';
+import { getAgencyDisplayName, replaceTemplateBranding } from '@/lib/live-mappers';
 import { resolveTemplateImage } from '@/lib/media';
+import type { SiteConfig } from '@/lib/live-types';
 
 const coreValues = [
   {
@@ -31,40 +33,40 @@ const coreValues = [
     title: 'Results Matter',
     description: 'We are relentlessly driven to deliver on our promises and achieve exceptional outcomes for you.',
   },
-    {
+  {
     icon: <Handshake className="h-10 w-10 text-primary" />,
     title: 'Always Improving',
     description: 'We are constantly learning and evolving our strategies to serve you better in a dynamic market.',
   },
-];
+] as const;
 
 const testimonials = [
   {
     quote: "Aether's team provided unparalleled service and market insight. They made a complex process feel seamless and secured a fantastic deal for our family home.",
-    author: "The Al Futtaim Family",
-    location: "Palm Jumeirah",
+    author: 'The Al Futtaim Family',
+    location: 'Palm Jumeirah',
   },
   {
-    quote: "As an international investor, I rely on transparency and expertise. Aether delivered on both fronts, guiding me to a high-yield off-plan investment with confidence.",
-    author: "Chen Wei",
-    location: "Investor from Singapore",
+    quote: 'As an international investor, I rely on transparency and expertise. Aether delivered on both fronts, guiding me to a high-yield off-plan investment with confidence.',
+    author: 'Chen Wei',
+    location: 'Investor from Singapore',
   },
   {
-    quote: "Selling our villa was an emotional decision, but our agent was a true partner. The marketing was exceptional, and the result exceeded our expectations. Highly recommended.",
-    author: "Mr. & Mrs. Harrison",
-    location: "Emirates Hills",
+    quote: 'Selling our villa was an emotional decision, but our agent was a true partner. The marketing was exceptional, and the result exceeded our expectations. Highly recommended.',
+    author: 'Mr. & Mrs. Harrison',
+    location: 'Emirates Hills',
   },
   {
-    quote: "The attention to detail and personalized service we received was second to none. Aether Properties truly understands the luxury market.",
-    author: "Fatima Al-Marzooqi",
-    location: "Downtown Dubai",
+    quote: 'The attention to detail and personalized service we received was second to none. Aether Properties truly understands the luxury market.',
+    author: 'Fatima Al-Marzooqi',
+    location: 'Downtown Dubai',
   },
   {
     quote: "Aether's data-driven approach gave us the confidence to make a major investment. Their analysis was spot-on, and the returns have been excellent.",
-    author: "David Chen",
-    location: "Business Bay",
+    author: 'David Chen',
+    location: 'Business Bay',
   },
-];
+] as const;
 
 type LeadershipMember = {
   name: string;
@@ -75,6 +77,7 @@ type LeadershipMember = {
 
 export default function AboutPage() {
   const [leadershipMembers, setLeadershipMembers] = useState<LeadershipMember[]>([]);
+  const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -109,12 +112,39 @@ export default function AboutPage() {
     };
   }, []);
 
-  const aboutHeroImage = PlaceHolderImages.find(p => p.id === 'hero-dubai');
-  const videoPlaceholder = PlaceHolderImages.find(p => p.id === 'property-1-int');
-  const teamPortrait = PlaceHolderImages.find(p => p.id === 'team-group');
-  const ceoPortrait = PlaceHolderImages.find(p => p.id === 'agent-1'); // Isabella Rossi - Founder & CEO
-  const corporateImpactImage = PlaceHolderImages.find(p => p.id === 'hero-1');
-  const newsletterBgImage = PlaceHolderImages.find(p => p.id === 'newsletter-bg');
+  useEffect(() => {
+    let active = true;
+
+    async function loadSiteConfig() {
+      try {
+        const nextSiteConfig = await getSiteConfig();
+        if (active) {
+          setSiteConfig(nextSiteConfig);
+        }
+      } catch {
+        if (active) {
+          setSiteConfig(null);
+        }
+      }
+    }
+
+    void loadSiteConfig();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const aboutHeroImage = PlaceHolderImages.find((image) => image.id === 'hero-dubai');
+  const videoPlaceholder = PlaceHolderImages.find((image) => image.id === 'property-1-int');
+  const teamPortrait = PlaceHolderImages.find((image) => image.id === 'team-group');
+  const ceoPortrait = PlaceHolderImages.find((image) => image.id === 'agent-1');
+  const corporateImpactImage = PlaceHolderImages.find((image) => image.id === 'hero-1');
+  const agencyName = getAgencyDisplayName(siteConfig);
+  const brandedTestimonials = testimonials.map((testimonial) => ({
+    ...testimonial,
+    quote: replaceTemplateBranding(testimonial.quote, agencyName),
+  }));
 
   return (
     <div className="flex flex-col">
@@ -130,42 +160,44 @@ export default function AboutPage() {
           />
         )}
         <div className="absolute inset-0 bg-black/60" />
-        <div className="relative flex h-full flex-col items-center justify-center text-center text-white p-4">
+        <div className="relative flex h-full flex-col items-center justify-center p-4 text-center text-white">
           <FadeInOnScroll>
-            <h1 className="text-4xl md:text-6xl font-bold tracking-widest font-headline">
+            <h1 className="text-4xl font-bold tracking-widest font-headline md:text-6xl">
               About Us
             </h1>
             <p className="mt-6 max-w-3xl text-lg text-white/90">
-              Redefining Dubai's real estate landscape through clarity, accountability, and data-driven insights.
+              Redefining Dubai&apos;s real estate landscape through clarity, accountability, and data-driven insights.
             </p>
           </FadeInOnScroll>
         </div>
       </section>
 
-      {/* 1. Hero: "Who We Are" */}
       <section className="bg-background py-16 md:py-24">
         <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
             <FadeInOnScroll>
-              <div className="relative aspect-video rounded-lg overflow-hidden group">
+              <div className="group relative aspect-video overflow-hidden rounded-lg">
                 {videoPlaceholder && (
                   <Image
                     src={videoPlaceholder.imageUrl}
-                    alt="Aether Properties Introduction Video"
+                    alt={`${agencyName} introduction video`}
                     data-ai-hint="luxury interior"
                     fill
                     className="object-cover"
                   />
                 )}
-                <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                  <PlayCircle className="h-16 w-16 md:h-24 md:w-24 text-white/80 group-hover:text-white group-hover:scale-110 transition-all" />
+                <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                  <PlayCircle className="h-16 w-16 text-white/80 transition-all group-hover:scale-110 group-hover:text-white md:h-24 md:w-24" />
                 </div>
               </div>
             </FadeInOnScroll>
             <FadeInOnScroll delay={200}>
-              <h2 className="text-4xl md:text-5xl font-bold font-headline text-primary">Who We Are</h2>
-              <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-                At Aether Luxury Properties, we believe that clarity, accountability, and data-driven insights are the cornerstones of a successful property journey. We've built our company to deliver a fundamentally better real estate experience, for clients and brokers alike.
+              <h2 className="text-4xl font-bold font-headline text-primary md:text-5xl">Who We Are</h2>
+              <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+                {replaceTemplateBranding(
+                  "At Aether Luxury Properties, we believe that clarity, accountability, and data-driven insights are the cornerstones of a successful property journey. We've built our company to deliver a fundamentally better real estate experience, for clients and brokers alike.",
+                  agencyName,
+                )}
               </p>
               <Button asChild variant="outline" className="mt-8">
                 <Link href="#">
@@ -177,13 +209,12 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 2. How We Work */}
       <section className="bg-muted py-16 md:py-24">
         <div className="container">
-          <div className="flex flex-col-reverse lg:flex-row gap-12 items-center">
+          <div className="flex flex-col-reverse items-center gap-12 lg:flex-row">
             <FadeInOnScroll>
-              <h2 className="text-4xl md:text-5xl font-bold font-headline text-primary">How We Work</h2>
-              <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
+              <h2 className="text-4xl font-bold font-headline text-primary md:text-5xl">How We Work</h2>
+              <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
                 Our collaborative model combines deep localized expertise with the operational power of a fully integrated brokerage. From in-house marketing and data analytics to dedicated support for mortgages and property management, we provide a seamless, end-to-end service designed to achieve superior results.
               </p>
               <Button asChild variant="outline" className="mt-8">
@@ -194,30 +225,29 @@ export default function AboutPage() {
             </FadeInOnScroll>
             <FadeInOnScroll delay={200}>
               {teamPortrait && (
-                 <Image
-                    src={teamPortrait.imageUrl}
-                    alt={teamPortrait.description}
-                    data-ai-hint={teamPortrait.imageHint}
-                    width={800}
-                    height={600}
-                    className="rounded-lg object-cover"
-                  />
+                <Image
+                  src={teamPortrait.imageUrl}
+                  alt={teamPortrait.description}
+                  data-ai-hint={teamPortrait.imageHint}
+                  width={800}
+                  height={600}
+                  className="rounded-lg object-cover"
+                />
               )}
             </FadeInOnScroll>
           </div>
         </div>
       </section>
 
-      {/* 3. Our Mission */}
       <section className="bg-background py-16 md:py-24">
         <div className="container text-center">
           <FadeInOnScroll>
-            <h2 className="text-4xl md:text-5xl font-bold font-headline text-primary">Our Mission</h2>
-            <p className="mt-6 max-w-3xl mx-auto text-lg text-muted-foreground leading-relaxed">
-              To raise industry standards by empowering our clients and agents with the data, technology, and support they need to succeed in Dubai's dynamic real estate market.
+            <h2 className="text-4xl font-bold font-headline text-primary md:text-5xl">Our Mission</h2>
+            <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground">
+              To raise industry standards by empowering our clients and agents with the data, technology, and support they need to succeed in Dubai&apos;s dynamic real estate market.
             </p>
           </FadeInOnScroll>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mt-16">
+          <div className="mt-16 grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
             {coreValues.map((value, index) => (
               <FadeInOnScroll key={value.title} delay={index * 100}>
                 <div className="flex flex-col items-center text-center">
@@ -230,42 +260,44 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-      
-      {/* Testimonials Section */}
+
       <section className="bg-muted py-16 md:py-24">
         <div className="container">
           <FadeInOnScroll>
-            <div className="text-center mb-12">
-              <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary">What Our Clients Say</h2>
-              <p className="text-lg text-muted-foreground mt-4 max-w-2xl mx-auto">
-                Our success is measured by the satisfaction of our clients. Here’s what they have to say about their experience with Aether Luxury Properties.
+            <div className="mb-12 text-center">
+              <h2 className="font-headline text-4xl font-bold text-primary md:text-5xl">What Our Clients Say</h2>
+              <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+                {replaceTemplateBranding(
+                  "Our success is measured by the satisfaction of our clients. Here's what they have to say about their experience with Aether Luxury Properties.",
+                  agencyName,
+                )}
               </p>
             </div>
           </FadeInOnScroll>
           <Carousel
             opts={{
-              align: "start",
+              align: 'start',
               loop: true,
             }}
-            className="w-full max-w-6xl mx-auto"
+            className="mx-auto w-full max-w-6xl"
           >
             <CarouselContent className="-ml-4">
-              {testimonials.map((testimonial, index) => (
+              {brandedTestimonials.map((testimonial, index) => (
                 <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
                   <div className="h-full p-1">
-                    <Card className="flex flex-col h-full">
-                      <CardContent className="p-6 flex-grow">
-                        <div className="flex mb-4">
-                          {[...Array(5)].map((_, i) => (
-                            <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
+                    <Card className="flex h-full flex-col">
+                      <CardContent className="flex-grow p-6">
+                        <div className="mb-4 flex">
+                          {[...Array(5)].map((_, starIndex) => (
+                            <Star key={starIndex} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
                           ))}
                         </div>
-                        <p className="text-muted-foreground italic">"{testimonial.quote}"</p>
+                        <p className="italic text-muted-foreground">"{testimonial.quote}"</p>
                       </CardContent>
                       <CardFooter className="p-6 pt-0">
                         <div>
-                            <p className="font-bold font-headline">{testimonial.author}</p>
-                            <p className="text-sm text-muted-foreground">{testimonial.location}</p>
+                          <p className="font-bold font-headline">{testimonial.author}</p>
+                          <p className="text-sm text-muted-foreground">{testimonial.location}</p>
                         </div>
                       </CardFooter>
                     </Card>
@@ -279,21 +311,23 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 4. Team Members Card Section */}
       <section id="team" className="bg-background py-16 md:py-24">
         <div className="container mx-auto">
           <FadeInOnScroll>
-            <div className="text-center mb-12">
-              <h2 className="font-headline text-4xl md:text-5xl font-bold text-primary">Meet Our Leadership</h2>
-              <p className="text-lg text-muted-foreground mt-4 max-w-2xl mx-auto">
-                The driving force behind Aether's commitment to excellence, combining decades of experience with a passion for innovation.
+            <div className="mb-12 text-center">
+              <h2 className="font-headline text-4xl font-bold text-primary md:text-5xl">Meet Our Leadership</h2>
+              <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
+                {replaceTemplateBranding(
+                  "The driving force behind Aether's commitment to excellence, combining decades of experience with a passion for innovation.",
+                  agencyName,
+                )}
               </p>
             </div>
           </FadeInOnScroll>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {leadershipMembers.length > 0 ? leadershipMembers.map((member, index) => (
               <FadeInOnScroll key={member.name} delay={index * 100}>
-                <Card className="text-center overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
+                <Card className="group overflow-hidden text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
                   <div className="relative h-80 w-full">
                     {member.imageUrl ? (
                       <Image
@@ -316,7 +350,7 @@ export default function AboutPage() {
                 </Card>
               </FadeInOnScroll>
             )) : (
-              <div className="sm:col-span-2 lg:col-span-4 rounded-lg border border-dashed border-border p-10 text-center text-muted-foreground">
+              <div className="rounded-lg border border-dashed border-border p-10 text-center text-muted-foreground sm:col-span-2 lg:col-span-4">
                 Leadership profiles will appear here when live agent data is available.
               </div>
             )}
@@ -324,69 +358,70 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 5. Message from CEO */}
       <section className="bg-muted py-16 md:py-24">
         <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-24">
             <FadeInOnScroll>
               {ceoPortrait && (
-                 <Image
-                    src={ceoPortrait.imageUrl}
-                    alt={ceoPortrait.description}
-                    data-ai-hint={ceoPortrait.imageHint}
-                    width={800}
-                    height={900}
-                    className="rounded-lg object-cover object-top aspect-[4/5]"
-                  />
+                <Image
+                  src={ceoPortrait.imageUrl}
+                  alt={ceoPortrait.description}
+                  data-ai-hint={ceoPortrait.imageHint}
+                  width={800}
+                  height={900}
+                  className="aspect-[4/5] rounded-lg object-cover object-top"
+                />
               )}
             </FadeInOnScroll>
-             <FadeInOnScroll delay={200}>
-              <h2 className="text-4xl md:text-5xl font-bold font-headline text-primary">Message from our CEO</h2>
-              <div className="prose lg:prose-lg max-w-none text-muted-foreground mt-6">
+            <FadeInOnScroll delay={200}>
+              <h2 className="text-4xl font-bold font-headline text-primary md:text-5xl">Message from our CEO</h2>
+              <div className="prose mt-6 max-w-none text-muted-foreground lg:prose-lg">
                 <p>
-                  "When we founded Aether Luxury Properties, we started with a simple question: What if we built a real estate company that truly put its clients and agents first? For us, that meant replacing the outdated, transactional model with one built on partnership, transparency, and shared success.
+                  {replaceTemplateBranding(
+                    '"When we founded Aether Luxury Properties, we started with a simple question: What if we built a real estate company that truly put its clients and agents first? For us, that meant replacing the outdated, transactional model with one built on partnership, transparency, and shared success.',
+                    agencyName,
+                  )}
                 </p>
                 <p>
-                  Dubai is one of the most exciting and fast-paced property markets in the world. Navigating it requires more than just access to listings—it demands real-time data, deep local knowledge, and a team that is as invested in your goals as you are. That is the company we have built.
+                  Dubai is one of the most exciting and fast-paced property markets in the world. Navigating it requires more than just access to listings. It demands real-time data, deep local knowledge, and a team that is as invested in your goals as you are. That is the company we have built.
                 </p>
                 <p>
                   Whether you are finding your next home, selling a cherished property, or making a strategic investment, our promise is to provide you with the clarity and support you deserve. We are not just facilitating transactions; we are building the future of real estate, together."
                 </p>
               </div>
               <div className="mt-8">
-                <p className="font-headline font-bold text-2xl tracking-wider text-primary">Isabella Rossi</p>
-                <p className="text-muted-foreground">Founder & CEO, Aether Luxury Properties</p>
+                <p className="font-headline text-2xl font-bold tracking-wider text-primary">Isabella Rossi</p>
+                <p className="text-muted-foreground">Founder & CEO, {agencyName}</p>
               </div>
             </FadeInOnScroll>
           </div>
         </div>
       </section>
-      
-      {/* 6. Corporate Impact & Scale */}
-      <section 
-        className="relative py-24 bg-cover bg-center bg-scroll lg:bg-fixed"
+
+      <section
+        className="relative bg-cover bg-center bg-scroll py-24 lg:bg-fixed"
         style={{ backgroundImage: corporateImpactImage ? `url(${corporateImpactImage.imageUrl})` : 'none' }}
       >
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative container flex items-center justify-center">
           <FadeInOnScroll>
-            <div className="max-w-6xl mx-auto p-12 rounded-lg bg-white/20 md:bg-white/10 backdrop-blur-xl border border-white/20">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center text-white">
+            <div className="mx-auto max-w-6xl rounded-lg border border-white/20 bg-white/20 p-12 backdrop-blur-xl md:bg-white/10">
+              <div className="grid grid-cols-1 gap-8 text-center text-white md:grid-cols-2 lg:grid-cols-4">
                 <div>
                   <p className="text-5xl font-bold text-copper-gold">AED 120B+</p>
-                  <p className="mt-2 uppercase tracking-widest text-sm">Total Lifetime Transaction Value</p>
+                  <p className="mt-2 text-sm uppercase tracking-widest">Total Lifetime Transaction Value</p>
                 </div>
                 <div>
                   <p className="text-5xl font-bold text-copper-gold">300+</p>
-                  <p className="mt-2 uppercase tracking-widest text-sm">Specialized Community Brokers</p>
+                  <p className="mt-2 text-sm uppercase tracking-widest">Specialized Community Brokers</p>
                 </div>
                 <div>
                   <p className="text-5xl font-bold text-copper-gold">15+</p>
-                  <p className="mt-2 uppercase tracking-widest text-sm">International Real Estate Awards</p>
+                  <p className="mt-2 text-sm uppercase tracking-widest">International Real Estate Awards</p>
                 </div>
                 <div>
                   <p className="text-5xl font-bold text-copper-gold">24/7</p>
-                  <p className="mt-2 uppercase tracking-widest text-sm">Client Advisory & Support</p>
+                  <p className="mt-2 text-sm uppercase tracking-widest">Client Advisory & Support</p>
                 </div>
               </div>
             </div>
@@ -394,26 +429,25 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 7. Newsletter Subscription */}
       <section className="bg-background py-16 md:py-24">
         <div className="container">
           <FadeInOnScroll>
-            <div className="mx-auto max-w-4xl rounded-lg border bg-muted p-8 md:p-12 text-center">
-              <h2 className="text-base font-thin uppercase tracking-[0.3em] font-headline text-muted-foreground">STAY AHEAD OF THE MARKET</h2>
-              <p className="mx-auto mt-4 max-w-2xl text-3xl font-headline text-primary">
-                  Subscribe to The Aether Insider for exclusive 2026 market reports, off-plan launches, and luxury lifestyle insights.
+            <div className="mx-auto max-w-4xl rounded-lg border bg-muted p-8 text-center md:p-12">
+              <h2 className="font-headline text-base font-thin uppercase tracking-[0.3em] text-muted-foreground">STAY AHEAD OF THE MARKET</h2>
+              <p className="mx-auto mt-4 max-w-2xl font-headline text-3xl text-primary">
+                Subscribe to the {agencyName} Insider for exclusive 2026 market reports, off-plan launches, and luxury lifestyle insights.
               </p>
               <div className="mt-8 flex justify-center">
-                  <form className="flex flex-col sm:flex-row w-full max-w-lg gap-4">
-                      <Input
-                          type="email"
-                          placeholder="Enter your email address..."
-                          className="h-12 flex-grow"
-                      />
-                      <Button type="submit" size="lg" className="h-12 bg-copper-gold text-white uppercase tracking-widest hover:bg-white hover:text-black transition-all px-8">
-                          Subscribe
-                      </Button>
-                  </form>
+                <form className="flex w-full max-w-lg flex-col gap-4 sm:flex-row">
+                  <Input
+                    type="email"
+                    placeholder="Enter your email address..."
+                    className="h-12 flex-grow"
+                  />
+                  <Button type="submit" size="lg" className="h-12 bg-copper-gold px-8 uppercase tracking-widest text-white transition-all hover:bg-white hover:text-black">
+                    Subscribe
+                  </Button>
+                </form>
               </div>
             </div>
           </FadeInOnScroll>

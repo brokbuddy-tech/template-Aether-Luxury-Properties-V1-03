@@ -6,12 +6,22 @@ import { Footer } from '@/components/layout/footer';
 import { Toaster } from "@/components/ui/toaster"
 import { AiSearchModalProvider } from '@/hooks/use-ai-search-modal';
 import { AiSearchModal } from '@/components/ai-search-modal';
+import { getSiteConfig } from '@/lib/api';
+import { getAgencyDisplayName } from '@/lib/live-mappers';
 
 
-export const metadata: Metadata = {
-  title: 'Aether Luxury Properties',
-  description: 'The pinnacle of luxury real estate.',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const siteConfig = await getSiteConfig();
+  const agencyName = getAgencyDisplayName(siteConfig);
+
+  return {
+    title: agencyName,
+    description:
+      siteConfig?.branding?.tagline
+      || siteConfig?.branding?.bio
+      || 'Dubai real estate made clear, seamless, and well handled.',
+  };
+}
 
 export default function RootLayout({
   children,

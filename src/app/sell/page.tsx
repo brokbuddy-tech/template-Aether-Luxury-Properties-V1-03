@@ -1,7 +1,7 @@
 "use client";
 
 import { Award, Handshake, Target, CheckCircle, Loader2 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -17,6 +17,9 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { getSiteConfig } from '@/lib/api';
+import { getAgencyDisplayName } from '@/lib/live-mappers';
+import type { SiteConfig } from '@/lib/live-types';
 
 const workPrinciples = [
   {
@@ -98,6 +101,8 @@ export default function SellPage() {
   const valuationBgImage = PlaceHolderImages.find(p => p.id === 'hero-dubai');
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
+  const agencyName = getAgencyDisplayName(siteConfig);
 
   const form = useForm<ValuationFormValues>({
     resolver: zodResolver(valuationSchema),
@@ -120,6 +125,29 @@ export default function SellPage() {
       form.reset();
   };
 
+  useEffect(() => {
+    let active = true;
+
+    async function loadSiteConfig() {
+      try {
+        const nextSiteConfig = await getSiteConfig();
+        if (active) {
+          setSiteConfig(nextSiteConfig);
+        }
+      } catch {
+        if (active) {
+          setSiteConfig(null);
+        }
+      }
+    }
+
+    void loadSiteConfig();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
   return (
     <div>
       <section className="relative h-[60vh] w-full bg-black overflow-hidden">
@@ -139,7 +167,7 @@ export default function SellPage() {
               Achieve the True Value of Your Property
             </h1>
             <p className="mt-4 max-w-2xl text-lg text-gray-200">
-              Partner with Aether to navigate the market with confidence and secure an exceptional result.
+              Partner with {agencyName} to navigate the market with confidence and secure an exceptional result.
             </p>
           </FadeInOnScroll>
         </div>
@@ -256,7 +284,7 @@ export default function SellPage() {
                 <div className="text-center max-w-4xl">
                     <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Why Sell With Us?</h2>
                     <p className="text-lg text-muted-foreground leading-relaxed">
-                        At Aether Luxury Properties, selling your property is more than a transaction — it’s a partnership built on trust, transparency, and results. Our mission is to deliver the smoothest, most rewarding selling experience in the Dubai property market.
+                        At {agencyName}, selling your property is more than a transaction. It&apos;s a partnership built on trust, transparency, and results. Our mission is to deliver the smoothest, most rewarding selling experience in the Dubai property market.
                     </p>
                 </div>
             </FadeInOnScroll>
