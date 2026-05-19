@@ -23,11 +23,13 @@ import {
   Twitter,
   Linkedin,
   Info,
+  FileText,
 } from "lucide-react";
 import Link from 'next/link';
 import { ListingHeroGallery } from '@/components/listing-hero-gallery';
 import { PropertyCard } from '@/components/property-card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { PropertyBrochureButton } from '@/components/property-brochure-button';
 import { LocationMap } from '@/components/shared/location-map';
 import { getProperties, getPropertyById as getLivePropertyById } from '@/lib/api';
 import { resolveTemplateGallery, resolveTemplateImage } from '@/lib/media';
@@ -366,6 +368,32 @@ export default function PropertyDetailPage() {
                 <p className="text-muted-foreground">Luxury Property Specialist</p>
 
                 <div className="mt-6 hidden md:grid grid-cols-2 gap-2 w-full">
+                  <div className="md:col-span-2">
+                    <PropertyBrochureButton
+                      brochure={{
+                        title: property.title,
+                        subtitle: property.address,
+                        priceLabel: `AED ${property.price.toLocaleString()}${property.type === 'RENT' ? ' / year' : ''}`,
+                        description: property.description,
+                        heroImage: galleryImages[0]?.src || property.image,
+                        gallery: galleryImages.map((image) => image.src),
+                        stats: [
+                          { label: 'Bedrooms', value: `${property.bedrooms}` },
+                          { label: 'Bathrooms', value: `${property.bathrooms}` },
+                          { label: 'Area', value: `${property.area.toLocaleString()} sqft` },
+                        ],
+                        agentName: property.agent.name,
+                        agentTitle: 'Luxury Property Specialist',
+                        agentImage: agentImage?.src || property.agent.image,
+                        contactPhone: property.agent.phone || null,
+                        contactEmail: property.agent.email || null,
+                      }}
+                    >
+                      <Button variant="outline" className="w-full border-primary/30 bg-background text-primary hover:bg-primary/5 uppercase font-bold px-6 py-3 h-auto">
+                        <FileText /> DOWNLOAD BROCHURE
+                      </Button>
+                    </PropertyBrochureButton>
+                  </div>
                   <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
                     <Phone /> PHONE
                   </Button>

@@ -21,6 +21,9 @@ export type Property = {
   agent: {
     name: string;
     image: string;
+    phone?: string | null;
+    email?: string | null;
+    whatsapp?: string | null;
   };
   dldPermitNo?: string;
 };
@@ -42,6 +45,9 @@ export type CommercialProperty = {
   agent: {
     name: string;
     image: string;
+    phone?: string | null;
+    email?: string | null;
+    whatsapp?: string | null;
   };
   grade?: string;
   views?: string[];

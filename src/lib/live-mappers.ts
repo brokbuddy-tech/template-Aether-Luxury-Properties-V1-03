@@ -115,6 +115,9 @@ export function toAetherProperty(listing: LiveProperty): Property {
     agent: {
       name: listing.agent?.name || listing.organizationName || 'Property Consultant',
       image: getAgentImage(listing.agent),
+      phone: listing.agent?.phone || null,
+      email: listing.agent?.email || null,
+      whatsapp: listing.agent?.whatsapp || null,
     },
     dldPermitNo: listing.reraPermit || undefined,
   };
@@ -147,6 +150,9 @@ export function toAetherCommercialProperty(listing: LiveProperty): CommercialPro
     agent: {
       name: listing.agent?.name || listing.organizationName || 'Property Consultant',
       image: getAgentImage(listing.agent),
+      phone: listing.agent?.phone || null,
+      email: listing.agent?.email || null,
+      whatsapp: listing.agent?.whatsapp || null,
     },
     amenities: listing.amenities,
     dldPermitNo: listing.reraPermit || undefined,

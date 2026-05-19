@@ -15,6 +15,7 @@ import {
   Car,
   ClipboardCheck,
   Eye,
+  FileText,
   Phone,
   Link2,
   Facebook,
@@ -22,6 +23,7 @@ import {
   Linkedin,
 } from "lucide-react";
 import { CommercialPropertyCard } from '@/components/commercial-property-card';
+import { PropertyBrochureButton } from '@/components/property-brochure-button';
 import { ListingHeroGallery } from '@/components/listing-hero-gallery';
 import { LocationMap } from '@/components/shared/location-map';
 import { getProperties, getPropertyById as getLivePropertyById } from '@/lib/api';
@@ -290,6 +292,32 @@ export default function CommercialPropertyDetailPage() {
                 <p className="text-muted-foreground">Luxury Property Specialist</p>
 
                 <div className="mt-6 hidden md:grid grid-cols-2 gap-2 w-full">
+                  <div className="md:col-span-2">
+                    <PropertyBrochureButton
+                      brochure={{
+                        title: property.title,
+                        subtitle: property.address,
+                        priceLabel: `AED ${property.price.toLocaleString()}`,
+                        description: property.description,
+                        heroImage: galleryImages[0]?.src || property.image,
+                        gallery: galleryImages.map((image) => image.src),
+                        stats: [
+                          { label: 'Property Type', value: property.propertyType },
+                          { label: 'Area', value: `${property.area.toLocaleString()} sqft` },
+                          { label: 'Parking', value: property.parking ? `${property.parking} spaces` : 'Available' },
+                        ],
+                        agentName: property.agent.name,
+                        agentTitle: 'Commercial Property Specialist',
+                        agentImage: agentImage?.src || property.agent.image,
+                        contactPhone: property.agent.phone || null,
+                        contactEmail: property.agent.email || null,
+                      }}
+                    >
+                      <Button variant="outline" className="w-full border-primary/30 bg-background text-primary hover:bg-primary/5 uppercase font-bold px-6 py-3 h-auto">
+                        <FileText /> DOWNLOAD BROCHURE
+                      </Button>
+                    </PropertyBrochureButton>
+                  </div>
                   <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
                     <Phone /> PHONE
                   </Button>
