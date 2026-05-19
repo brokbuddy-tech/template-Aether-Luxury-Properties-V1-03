@@ -1,0 +1,9 @@
+   ▲ Next.js 15.5.9
+   - Local:        http://localhost:9102
+   - Network:      http://192.168.1.2:9102
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 13.3s
+ ○ Compiling / ...
+ ✓ Compiled / in 18.9s (1084 modules)
