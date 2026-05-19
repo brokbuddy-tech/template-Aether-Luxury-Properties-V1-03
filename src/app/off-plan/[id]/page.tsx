@@ -6,9 +6,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Card } from "@/components/ui/card";
-import { Calendar, Building } from "lucide-react";
+import { Calendar, Building, FileText } from "lucide-react";
 import { ListingHeroGallery } from "@/components/listing-hero-gallery";
 import { OffPlanCard } from "@/components/off-plan-card";
+import { PropertyBrochureButton } from "@/components/property-brochure-button";
 import { getProperties, getPropertyById as getLivePropertyById } from '@/lib/api';
 import { toAetherOffPlanProject } from '@/lib/live-mappers';
 import { resolveTemplateGallery } from '@/lib/media';
@@ -158,7 +159,31 @@ export default function OffPlanDetailPage() {
                 <h3 className="mt-4 text-xl font-bold uppercase tracking-wider">Register Your Interest</h3>
                 <p className="text-muted-foreground">Get exclusive access to floor plans, pricing, and launch details.</p>
 
-                <div className="mt-6 hidden md:grid grid-cols-1 gap-2 w-full">
+                <div className="mt-6 grid grid-cols-1 gap-2 w-full">
+                  <PropertyBrochureButton
+                    brochure={{
+                      title: project.projectName,
+                      subtitle: project.developer,
+                      description: project.description,
+                      heroImage: galleryImages[0]?.src || project.image,
+                      gallery: galleryImages.map((image) => image.src),
+                      stats: [
+                        { label: 'Developer', value: project.developer },
+                        { label: 'Handover', value: project.handover },
+                        {
+                          label: 'Plan',
+                          value: project.paymentPlan.length > 0 ? `${project.paymentPlan.length} milestones` : 'On request',
+                        },
+                      ],
+                      agentName: project.developer,
+                      agentTitle: 'Master Developer',
+                      organizationName: 'Off-Plan Project',
+                    }}
+                  >
+                    <Button variant="outline" className="w-full border-primary/30 bg-background text-primary hover:bg-primary/5 uppercase font-bold px-6 py-3 h-auto">
+                      <FileText /> DOWNLOAD BROCHURE
+                    </Button>
+                  </PropertyBrochureButton>
                   <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
                     Request Info
                   </Button>

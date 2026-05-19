@@ -93,14 +93,16 @@ export function ListingHeroGallery({
                             {watermark}
                           </span>
                         </div>
-                        <button
-                          type="button"
-                          onClick={handleVirtualTourClick}
-                          className="absolute bottom-4 left-4 z-30 inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-white"
-                        >
-                          <Video className="h-4 w-4" />
-                          Virtual Tour
-                        </button>
+                        {virtualTourUrl ? (
+                          <button
+                            type="button"
+                            onClick={handleVirtualTourClick}
+                            className="absolute bottom-4 left-4 z-30 inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-white"
+                          >
+                            <Video className="h-4 w-4" />
+                            Virtual Tour
+                          </button>
+                        ) : null}
                       </div>
                     </CarouselItem>
                   );
@@ -163,14 +165,16 @@ export function ListingHeroGallery({
                   {watermark}
                 </span>
               </div>
-              <button
-                type="button"
-                onClick={handleVirtualTourClick}
-                className="absolute bottom-6 left-6 z-30 inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-white"
-              >
-                <Video className="h-4 w-4" />
-                Virtual Tour
-              </button>
+              {virtualTourUrl ? (
+                <button
+                  type="button"
+                  onClick={handleVirtualTourClick}
+                  className="absolute bottom-6 left-6 z-30 inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-sm font-semibold text-slate-900 shadow-lg transition hover:bg-white"
+                >
+                  <Video className="h-4 w-4" />
+                  Virtual Tour
+                </button>
+              ) : null}
             </div>
           )}
           {images[1] && (
