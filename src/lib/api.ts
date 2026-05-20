@@ -731,6 +731,11 @@ export async function getAgentProfile(agentSlug: string, agencySlug?: string | n
   };
 }
 
+export async function getTestimonials(agencySlug?: string | null) {
+  const snapshot = await getTemplateSiteSnapshot(agencySlug);
+  return snapshot?.testimonials || [];
+}
+
 export async function submitOrgInquiry(payload: Record<string, unknown>) {
   const response = await fetchTemplateResponse('/inquiry', {
     method: 'POST',

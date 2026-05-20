@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { PlayCircle, ArrowRight, Star, Award, Users, Handshake } from 'lucide-react';
 
 import { PlaceHolderImages } from '@/lib/placeholder-images';
@@ -12,10 +13,11 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { ParallaxImage } from '@/components/parallax-image';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
-import { getAgents, getSiteConfig } from '@/lib/api';
+import { getAgents, getSiteConfig, getTestimonials } from '@/lib/api';
 import { getAgencyDisplayName, replaceTemplateBranding } from '@/lib/live-mappers';
 import { resolveTemplateImage } from '@/lib/media';
 import type { SiteConfig } from '@/lib/live-types';
+import { resolveAgencySlugFromPathname } from '@/lib/agency-routing';
 
 const coreValues = [
   {
@@ -75,16 +77,64 @@ type LeadershipMember = {
   imageHint?: string;
 };
 
+type DynamicTestimonial = {
+  id: string;
+  quote: string;
+  author: string;
+  location?: string;
+  rating: number;
+};
+
+function normalizeTestimonials(input: unknown[]): DynamicTestimonial[] {
+  const normalized: DynamicTestimonial[] = [];
+
+  input.forEach((item, index) => {
+    const testimonial = item as {
+      id?: string;
+      quote?: string | null;
+      content?: string | null;
+      author?: string | null;
+      name?: string | null;
+      clientName?: string | null;
+      location?: string | null;
+      property?: string | null;
+      rating?: number | null;
+    };
+
+    const quote = testimonial.quote?.trim() || testimonial.content?.trim() || '';
+    if (!quote) return;
+
+    const author =
+      testimonial.author?.trim() ||
+      testimonial.name?.trim() ||
+      testimonial.clientName?.trim() ||
+      'Anonymous';
+
+    normalized.push({
+      id: testimonial.id || `${author}-${index}`,
+      quote,
+      author,
+      location: testimonial.location?.trim() || testimonial.property?.trim() || undefined,
+      rating: typeof testimonial.rating === 'number' ? testimonial.rating : 5,
+    });
+  });
+
+  return normalized;
+}
+
 export default function AboutPage() {
+  const pathname = usePathname();
+  const agencySlug = resolveAgencySlugFromPathname(pathname);
   const [leadershipMembers, setLeadershipMembers] = useState<LeadershipMember[]>([]);
   const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
+  const [liveTestimonials, setLiveTestimonials] = useState<DynamicTestimonial[]>([]);
 
   useEffect(() => {
     let active = true;
 
     async function loadLeadershipMembers() {
       try {
-        const response = await getAgents();
+        const response = await getAgents(agencySlug);
         if (!active) return;
 
         const nextMembers = response.agents.slice(0, 4).map((agent) => {
@@ -110,14 +160,14 @@ export default function AboutPage() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [agencySlug]);
 
   useEffect(() => {
     let active = true;
 
     async function loadSiteConfig() {
       try {
-        const nextSiteConfig = await getSiteConfig();
+        const nextSiteConfig = await getSiteConfig(agencySlug);
         if (active) {
           setSiteConfig(nextSiteConfig);
         }
@@ -133,7 +183,30 @@ export default function AboutPage() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [agencySlug]);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadTestimonials() {
+      try {
+        const nextTestimonials = await getTestimonials(agencySlug);
+        if (active) {
+          setLiveTestimonials(normalizeTestimonials(nextTestimonials));
+        }
+      } catch {
+        if (active) {
+          setLiveTestimonials([]);
+        }
+      }
+    }
+
+    void loadTestimonials();
+
+    return () => {
+      active = false;
+    };
+  }, [agencySlug]);
 
   const aboutHeroImage = PlaceHolderImages.find((image) => image.id === 'hero-dubai');
   const videoPlaceholder = PlaceHolderImages.find((image) => image.id === 'property-1-int');
@@ -141,10 +214,14 @@ export default function AboutPage() {
   const ceoPortrait = PlaceHolderImages.find((image) => image.id === 'agent-1');
   const corporateImpactImage = PlaceHolderImages.find((image) => image.id === 'hero-1');
   const agencyName = getAgencyDisplayName(siteConfig);
-  const brandedTestimonials = testimonials.map((testimonial) => ({
+  const brandedTestimonials: DynamicTestimonial[] = testimonials.map((testimonial, index) => ({
+    id: `fallback-${index}`,
     ...testimonial,
     quote: replaceTemplateBranding(testimonial.quote, agencyName),
+    rating: 5,
   }));
+  const testimonialsToRender: DynamicTestimonial[] =
+    liveTestimonials.length > 0 ? liveTestimonials : brandedTestimonials;
 
   return (
     <div className="flex flex-col">
@@ -282,8 +359,8 @@ export default function AboutPage() {
             className="mx-auto w-full max-w-6xl"
           >
             <CarouselContent className="-ml-4">
-              {brandedTestimonials.map((testimonial, index) => (
-                <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
+              {testimonialsToRender.map((testimonial, index) => (
+                <CarouselItem key={testimonial.id || index} className="pl-4 md:basis-1/2 lg:basis-1/3">
                   <div className="h-full p-1">
                     <Card className="flex h-full flex-col">
                       <CardContent className="flex-grow p-6">
@@ -297,7 +374,7 @@ export default function AboutPage() {
                       <CardFooter className="p-6 pt-0">
                         <div>
                           <p className="font-bold font-headline">{testimonial.author}</p>
-                          <p className="text-sm text-muted-foreground">{testimonial.location}</p>
+                          <p className="text-sm text-muted-foreground">{testimonial.location || 'Client testimonial'}</p>
                         </div>
                       </CardFooter>
                     </Card>
