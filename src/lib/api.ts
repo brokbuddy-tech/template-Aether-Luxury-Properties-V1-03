@@ -236,7 +236,8 @@ function mapListingAgent(listing: any): PropertyAgent | undefined {
         legacyBroker?.phone,
       ) || '',
     company: getStringValue(publicAgent?.company, listing?.organizationName, listing?.organization?.name),
-    licenseNumber: getStringValue(publicAgent?.licenseNumber, legacyBroker?.licenseNumber) || undefined,
+    brn: getStringValue(publicAgent?.brn, publicAgent?.licenseNumber, legacyBroker?.brokerProfile?.brn, legacyBroker?.licenseNumber) || undefined,
+    licenseNumber: getStringValue(publicAgent?.brn, publicAgent?.licenseNumber, legacyBroker?.brokerProfile?.brn, legacyBroker?.licenseNumber) || undefined,
     slug: getStringValue(publicAgent?.slug, legacyBroker?.brokerProfile?.slug) || undefined,
   };
 }

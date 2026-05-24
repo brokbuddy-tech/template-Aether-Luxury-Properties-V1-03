@@ -6,6 +6,7 @@ import { getAgentProfile, getSiteConfig, toSocialUrl } from '@/lib/api';
 import { getAgencyDisplayName, toAetherProperty } from '@/lib/live-mappers';
 import { resolveTemplateImage } from '@/lib/media';
 import { PropertyCard } from '@/components/property-card';
+import type { Property } from '@/lib/types';
 
 export default async function AgentProfilePage({
   params,
@@ -30,8 +31,9 @@ export default async function AgentProfilePage({
     agent.name,
   );
   const avatar = resolveTemplateImage(agent.avatarUrl || agent.avatar, 'agent-1', agent.name);
-  const activeListings = profileResponse.activeListings.map(toAetherProperty);
+  const activeListings: Property[] = profileResponse.activeListings.map(toAetherProperty);
   const whatsappUrl = toSocialUrl('whatsapp', agent.whatsapp || agent.phone);
+  const brokerRegistrationNumber = agent.brn || agent.licenseNumber;
 
   return (
     <div className="bg-background">
@@ -69,6 +71,11 @@ export default async function AgentProfilePage({
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">Profile</p>
             <h2 className="mt-3 text-2xl font-bold font-headline">{agent.title || 'Property Consultant'}</h2>
+            {brokerRegistrationNumber && (
+              <p className="mt-3 text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">
+                BRN {brokerRegistrationNumber}
+              </p>
+            )}
           </div>
 
           <div className="space-y-3 text-sm text-muted-foreground">

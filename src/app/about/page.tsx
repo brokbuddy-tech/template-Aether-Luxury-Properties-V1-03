@@ -42,34 +42,6 @@ const coreValues = [
   },
 ] as const;
 
-const testimonials = [
-  {
-    quote: "Aether's team provided unparalleled service and market insight. They made a complex process feel seamless and secured a fantastic deal for our family home.",
-    author: 'The Al Futtaim Family',
-    location: 'Palm Jumeirah',
-  },
-  {
-    quote: 'As an international investor, I rely on transparency and expertise. Aether delivered on both fronts, guiding me to a high-yield off-plan investment with confidence.',
-    author: 'Chen Wei',
-    location: 'Investor from Singapore',
-  },
-  {
-    quote: 'Selling our villa was an emotional decision, but our agent was a true partner. The marketing was exceptional, and the result exceeded our expectations. Highly recommended.',
-    author: 'Mr. & Mrs. Harrison',
-    location: 'Emirates Hills',
-  },
-  {
-    quote: 'The attention to detail and personalized service we received was second to none. Aether Properties truly understands the luxury market.',
-    author: 'Fatima Al-Marzooqi',
-    location: 'Downtown Dubai',
-  },
-  {
-    quote: "Aether's data-driven approach gave us the confidence to make a major investment. Their analysis was spot-on, and the returns have been excellent.",
-    author: 'David Chen',
-    location: 'Business Bay',
-  },
-] as const;
-
 type LeadershipMember = {
   name: string;
   role: string;
@@ -83,6 +55,7 @@ type DynamicTestimonial = {
   author: string;
   location?: string;
   rating: number;
+  badgeLabel?: string;
 };
 
 function normalizeTestimonials(input: unknown[]): DynamicTestimonial[] {
@@ -91,6 +64,7 @@ function normalizeTestimonials(input: unknown[]): DynamicTestimonial[] {
   input.forEach((item, index) => {
     const testimonial = item as {
       id?: string;
+      message?: string | null;
       quote?: string | null;
       content?: string | null;
       author?: string | null;
@@ -99,9 +73,10 @@ function normalizeTestimonials(input: unknown[]): DynamicTestimonial[] {
       location?: string | null;
       property?: string | null;
       rating?: number | null;
+      badgeLabel?: string | null;
     };
 
-    const quote = testimonial.quote?.trim() || testimonial.content?.trim() || '';
+    const quote = testimonial.message?.trim() || testimonial.quote?.trim() || testimonial.content?.trim() || '';
     if (!quote) return;
 
     const author =
@@ -116,6 +91,7 @@ function normalizeTestimonials(input: unknown[]): DynamicTestimonial[] {
       author,
       location: testimonial.location?.trim() || testimonial.property?.trim() || undefined,
       rating: typeof testimonial.rating === 'number' ? testimonial.rating : 5,
+      badgeLabel: testimonial.badgeLabel?.trim() || undefined,
     });
   });
 
@@ -214,14 +190,7 @@ export default function AboutPage() {
   const ceoPortrait = PlaceHolderImages.find((image) => image.id === 'agent-1');
   const corporateImpactImage = PlaceHolderImages.find((image) => image.id === 'hero-1');
   const agencyName = getAgencyDisplayName(siteConfig);
-  const brandedTestimonials: DynamicTestimonial[] = testimonials.map((testimonial, index) => ({
-    id: `fallback-${index}`,
-    ...testimonial,
-    quote: replaceTemplateBranding(testimonial.quote, agencyName),
-    rating: 5,
-  }));
-  const testimonialsToRender: DynamicTestimonial[] =
-    liveTestimonials.length > 0 ? liveTestimonials : brandedTestimonials;
+  const testimonialsToRender: DynamicTestimonial[] = liveTestimonials;
 
   return (
     <div className="flex flex-col">
@@ -338,6 +307,7 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {testimonialsToRender.length > 0 ? (
       <section className="bg-muted py-16 md:py-24">
         <div className="container">
           <FadeInOnScroll>
@@ -374,7 +344,7 @@ export default function AboutPage() {
                       <CardFooter className="p-6 pt-0">
                         <div>
                           <p className="font-bold font-headline">{testimonial.author}</p>
-                          <p className="text-sm text-muted-foreground">{testimonial.location || 'Client testimonial'}</p>
+                          <p className="text-sm text-muted-foreground">{testimonial.badgeLabel || testimonial.location || 'Client testimonial'}</p>
                         </div>
                       </CardFooter>
                     </Card>
@@ -387,6 +357,7 @@ export default function AboutPage() {
           </Carousel>
         </div>
       </section>
+      ) : null}
 
       <section id="team" className="bg-background py-16 md:py-24">
         <div className="container mx-auto">
