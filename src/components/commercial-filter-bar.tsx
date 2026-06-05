@@ -10,6 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { useAiSearchModal } from "@/hooks/use-ai-search-modal";
+import { AmenityIcon } from "@/components/amenity-icon";
 
 const amenitiesList = [
   { id: 'covered-parking', label: 'Covered Parking' },
@@ -146,7 +147,10 @@ export function CommercialFilterBar() {
                             {amenitiesList.map((amenity) => (
                                 <div key={amenity.id} className="flex items-center space-x-2">
                                     <Checkbox id={amenity.id} />
-                                    <Label htmlFor={amenity.id} className="font-normal cursor-pointer">{amenity.label}</Label>
+                                    <Label htmlFor={amenity.id} className="flex cursor-pointer items-center gap-2 font-normal">
+                                      <AmenityIcon name={amenity.label} className="h-4 w-4" />
+                                      {amenity.label}
+                                    </Label>
                                 </div>
                             ))}
                         </div>

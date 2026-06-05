@@ -15,7 +15,6 @@ import {
   BedDouble, 
   Bath, 
   Square,
-  CheckCircle,
   MapPin, 
   Phone, 
   Link2,
@@ -35,6 +34,7 @@ import { getProperties, getPropertyById as getLivePropertyById } from '@/lib/api
 import { resolveTemplateGallery, resolveTemplateImage } from '@/lib/media';
 import { toAetherProperty } from '@/lib/live-mappers';
 import type { Property } from '@/lib/types';
+import { AmenityIcon } from '@/components/amenity-icon';
 
 function MortgageCalculator({ price }: { price: number }) {
   const [purchasePrice, setPurchasePrice] = useState(price);
@@ -313,7 +313,12 @@ export default function PropertyDetailPage() {
               <div className="py-8">
                 <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-4">Key Features</h2>
                 <ul className="grid grid-cols-2 md:grid-cols-3 gap-4 text-muted-foreground">
-                  {property.keyFeatures.map(feature => <li key={feature} className="flex items-center gap-2"><CheckCircle className="h-5 w-5 text-green-500" /> {feature}</li>)}
+                  {property.keyFeatures.map(feature => (
+                    <li key={feature} className="flex items-center gap-2">
+                      <AmenityIcon name={feature} className="h-5 w-5" />
+                      {feature}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </>

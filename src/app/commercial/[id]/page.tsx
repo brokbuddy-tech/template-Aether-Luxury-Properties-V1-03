@@ -30,6 +30,7 @@ import { getProperties, getPropertyById as getLivePropertyById } from '@/lib/api
 import { isLikelyCommercialProperty, toAetherCommercialProperty } from '@/lib/live-mappers';
 import { resolveTemplateGallery, resolveTemplateImage } from '@/lib/media';
 import type { CommercialProperty } from '@/lib/types';
+import { AmenityIcon } from '@/components/amenity-icon';
 
 function MortgageCalculator({ price }: { price: number }) {
   const [purchasePrice, setPurchasePrice] = useState(price);
@@ -236,7 +237,12 @@ export default function CommercialPropertyDetailPage() {
               <div className="py-8">
                 <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-4">Amenities</h2>
                 <ul className="grid grid-cols-2 md:grid-cols-3 gap-4 text-muted-foreground">
-                  {property.amenities.map((amenity) => <li key={amenity}>- {amenity}</li>)}
+                  {property.amenities.map((amenity) => (
+                    <li key={amenity} className="flex items-center gap-2">
+                      <AmenityIcon name={amenity} className="h-5 w-5" />
+                      {amenity}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </>
