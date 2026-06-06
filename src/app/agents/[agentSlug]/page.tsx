@@ -40,8 +40,7 @@ export default async function AgentProfilePage({
 
   return (
     <div className="bg-background">
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/60" />
+      <section className="relative overflow-hidden border-b border-border/20">
         {heroImage && (
           <Image
             src={heroImage.src}
@@ -51,25 +50,54 @@ export default async function AgentProfilePage({
             className="object-cover"
           />
         )}
-        <div className="relative container flex min-h-[60vh] flex-col justify-end py-16 text-white">
-          <div className="flex flex-col gap-6 md:flex-row md:items-end">
+        <div className="absolute inset-0 bg-black/65" />
+        <div className="relative z-10 mx-auto grid min-h-[60vh] max-w-[1600px] grid-cols-1 items-end gap-12 px-6 py-16 text-white md:px-12 lg:grid-cols-[280px_minmax(0,1fr)]">
+          <div className="relative aspect-square w-full max-w-[280px] overflow-hidden border border-white/20 bg-white/10 shadow-2xl">
             {avatar && (
-              <div className="relative h-28 w-28 overflow-hidden rounded-full border-4 border-white/30 bg-white/10">
-                <Image src={avatar.src} alt={avatar.alt} data-ai-hint={avatar.hint} fill className="object-cover" />
-              </div>
+              <Image src={avatar.src} alt={avatar.alt} data-ai-hint={avatar.hint} fill className="object-cover" />
             )}
+          </div>
+
+          <div className="space-y-6">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-white/70">{agencyName}</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.3em] text-primary">{agencyName}</p>
               <h1 className="mt-3 text-4xl font-bold font-headline md:text-6xl">{agent.name}</h1>
               <p className="mt-3 max-w-3xl text-lg text-white/85">
-                {agent.bio || agent.tagline || agent.title || 'Property Consultant'}
+                {agent.tagline || agent.title || 'Property Consultant'}
               </p>
+            </div>
+
+            <div className="flex flex-wrap gap-6 text-sm text-white/80">
+              {brokerRegistrationNumber && (
+                <span className="flex items-center gap-2">
+                  <span className="text-primary">BRN</span>
+                  {brokerRegistrationNumber}
+                </span>
+              )}
+              {agent.email && (
+                <a href={`mailto:${agent.email}`} className="flex items-center gap-2 hover:text-primary">
+                  <Mail className="h-4 w-4 text-primary" />
+                  {agent.email}
+                </a>
+              )}
+              {agent.phone && (
+                <a href={`tel:${agent.phone}`} className="flex items-center gap-2 hover:text-primary">
+                  <Phone className="h-4 w-4 text-primary" />
+                  {agent.phone}
+                </a>
+              )}
+              {whatsappUrl && (
+                <a href={whatsappUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-primary">
+                  <MessageCircle className="h-4 w-4 text-primary" />
+                  WhatsApp
+                </a>
+              )}
             </div>
           </div>
         </div>
       </section>
 
-      <section className="container grid gap-12 py-12 md:grid-cols-[1.2fr_2fr] md:py-16">
+      <section className="mx-auto grid max-w-[1600px] grid-cols-1 gap-16 px-6 py-12 md:px-12 md:py-16 lg:grid-cols-[320px_minmax(0,1fr)]">
         <aside className="space-y-6 rounded-2xl border bg-card p-6 shadow-sm">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">Profile</p>
@@ -142,7 +170,7 @@ export default async function AgentProfilePage({
             </div>
 
             {activeListings.length > 0 ? (
-              <div className="mt-8 grid gap-8 md:grid-cols-2">
+              <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
                 {activeListings.map((property) => (
                   <PropertyCard key={property.id} property={property} />
                 ))}
