@@ -372,8 +372,8 @@ export default function PropertyDetailPage() {
                 <h3 className="mt-4 text-xl font-bold uppercase tracking-wider">{property.agent.name}</h3>
                 <p className="text-muted-foreground">Luxury Property Specialist</p>
 
-                <div className="mt-6 hidden md:grid grid-cols-2 gap-2 w-full">
-                  <div className="md:col-span-2">
+                <div className="mt-6 grid w-full grid-cols-1 gap-2 sm:grid-cols-2">
+                  <div className="sm:col-span-2">
                     <PropertyBrochureButton
                       brochure={{
                         title: property.title,
