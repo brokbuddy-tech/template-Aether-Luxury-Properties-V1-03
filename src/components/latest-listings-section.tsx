@@ -39,7 +39,7 @@ export function LatestListingsSection() {
   }, []);
 
   return (
-    <section className="mt-8 bg-[#050505] px-6 py-20 md:mt-10 md:px-12 md:py-24">
+    <section className="mt-8 bg-background px-6 py-20 md:mt-10 md:px-12 md:py-24">
       <div className="mx-auto max-w-[1600px]">
         <FadeInOnScroll>
           <div className="mb-14 flex flex-col justify-between gap-8 md:flex-row md:items-end">
@@ -47,7 +47,7 @@ export function LatestListingsSection() {
               <span className="block text-[10px] font-bold uppercase tracking-[0.4em] text-accent">
                 New Arrivals
               </span>
-              <h2 className="font-headline text-3xl font-light tracking-wider text-white md:text-5xl">
+              <h2 className="font-headline text-3xl font-light tracking-wider text-primary md:text-5xl">
                 LATEST <span className="font-bold">LISTINGS</span>
               </h2>
             </div>
@@ -73,7 +73,7 @@ export function LatestListingsSection() {
             ))}
           </div>
         ) : (
-          <div className="border border-white/10 bg-white/5 px-8 py-16 text-center text-sm uppercase tracking-[0.3em] text-white/40">
+          <div className="border border-border bg-muted/40 px-8 py-16 text-center text-sm uppercase tracking-[0.3em] text-muted-foreground">
             Live listings will appear here once they are available.
           </div>
         )}
