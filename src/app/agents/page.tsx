@@ -48,7 +48,7 @@ export default async function AgentsPage() {
                       />
                     )}
                   </div>
-                  <div className="flex min-h-[276px] flex-1 flex-col space-y-4 p-6">
+                  <div className="flex min-h-[276px] flex-1 flex-col gap-4 p-6">
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
                         {agent.title || 'Property Consultant'}
