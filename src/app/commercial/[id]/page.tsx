@@ -319,7 +319,7 @@ export default function CommercialPropertyDetailPage() {
                         contactEmail: property.agent.email || null,
                       }}
                     >
-                      <Button variant="outline" className="w-full border-primary/30 bg-background text-primary hover:bg-primary/5 uppercase font-bold px-6 py-3 h-auto">
+                      <Button variant="outline" className="w-full border-primary/30 bg-background text-primary hover:bg-primary/5 hover:text-primary uppercase font-bold px-6 py-3 h-auto">
                         <FileText /> DOWNLOAD BROCHURE
                       </Button>
                     </PropertyBrochureButton>
