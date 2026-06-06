@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Sparkles } from 'lucide-react';
+import { cleanQueryForCategory, normalizeCategory } from '@/lib/search-utils';
 
 type AiSearchFilters = {
   q?: string;
@@ -33,8 +34,14 @@ function getSearchDestination(filters: AiSearchFilters) {
 
 function buildSearchHref(filters: AiSearchFilters) {
   const params = new URLSearchParams();
+  const category = normalizeCategory(filters.category);
+  const normalizedFilters = {
+    ...filters,
+    category,
+    q: cleanQueryForCategory(filters.q, category),
+  };
 
-  Object.entries(filters).forEach(([key, value]) => {
+  Object.entries(normalizedFilters).forEach(([key, value]) => {
     if (!value || key === 'type' || key === 'transactionType' || key === 'propertyType') return;
     params.set(key, value);
   });

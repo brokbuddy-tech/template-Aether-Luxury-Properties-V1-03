@@ -6,6 +6,7 @@ import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
 import { OffPlanFilterBar } from '@/components/off-plan-filter-bar';
 import { getProperties } from '@/lib/api';
 import { toAetherOffPlanProject } from '@/lib/live-mappers';
+import { cleanQueryForCategory, matchesTemplateCategory, normalizeCategory } from '@/lib/search-utils';
 
 type PageSearchParams = Promise<{ [key: string]: string | string[] | undefined } | undefined>;
 
@@ -16,20 +17,23 @@ function getParam(params: Awaited<PageSearchParams>, key: string) {
 
 export default async function OffPlanPage({ searchParams }: { searchParams?: PageSearchParams }) {
   const resolvedSearchParams = await searchParams;
-  const searchQuery = getParam(resolvedSearchParams, 'q');
+  const category = normalizeCategory(getParam(resolvedSearchParams, 'category'));
+  const searchQuery = cleanQueryForCategory(getParam(resolvedSearchParams, 'q'), category);
+  const headingLabel = searchQuery || category;
   const liveResponse = await getProperties({
     readiness: 'OFFPLAN',
     q: searchQuery,
-    category: getParam(resolvedSearchParams, 'category'),
     minPrice: getParam(resolvedSearchParams, 'minPrice'),
     maxPrice: getParam(resolvedSearchParams, 'maxPrice'),
     bedrooms: getParam(resolvedSearchParams, 'bedrooms'),
     bathrooms: getParam(resolvedSearchParams, 'bathrooms'),
     minArea: getParam(resolvedSearchParams, 'minArea'),
     maxArea: getParam(resolvedSearchParams, 'maxArea'),
-    limit: 48,
+    limit: category ? 96 : 48,
   });
-  const offPlanProjects = liveResponse.properties.map(toAetherOffPlanProject);
+  const offPlanProjects = liveResponse.properties
+    .filter((property) => matchesTemplateCategory(property, category))
+    .map(toAetherOffPlanProject);
   const heroImage = PlaceHolderImages.find(p => p.id === 'offplan-1');
 
   return (
@@ -43,7 +47,7 @@ export default async function OffPlanPage({ searchParams }: { searchParams?: Pag
         <div className="relative flex h-full flex-col items-center justify-center text-center text-white p-4">
           <FadeInOnScroll>
             <h1 className="text-4xl md:text-6xl font-bold tracking-widest font-headline">
-              {searchQuery ? `${searchQuery} Off-Plan Projects` : 'Off-Plan Projects'}
+              {headingLabel ? `${headingLabel} Off-Plan Projects` : 'Off-Plan Projects'}
             </h1>
             <p className="mt-6 max-w-3xl text-lg text-white/90">
               Invest in the future of Dubai with exclusive access to premier off-plan properties.

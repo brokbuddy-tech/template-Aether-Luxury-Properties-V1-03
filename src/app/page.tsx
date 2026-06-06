@@ -54,6 +54,7 @@ import { getSiteConfig } from '@/lib/api';
 import { getAgencyDisplayName } from '@/lib/live-mappers';
 import type { SiteConfig } from '@/lib/live-types';
 import { LatestListingsSection } from '@/components/latest-listings-section';
+import { cleanQueryForCategory, normalizeCategory } from '@/lib/search-utils';
 
 type AiSearchFilters = {
   q?: string;
@@ -79,8 +80,14 @@ function getSearchDestination(filters: AiSearchFilters, fallbackMode: 'buy' | 'r
 
 function buildSearchHref(filters: AiSearchFilters, fallbackMode: 'buy' | 'rent') {
   const params = new URLSearchParams();
+  const category = normalizeCategory(filters.category);
+  const normalizedFilters = {
+    ...filters,
+    category,
+    q: cleanQueryForCategory(filters.q, category),
+  };
 
-  Object.entries(filters).forEach(([key, value]) => {
+  Object.entries(normalizedFilters).forEach(([key, value]) => {
     if (!value || value === 'any') return;
     if (key === 'type' || key === 'transactionType' || key === 'propertyType') return;
     params.set(key, value);
@@ -220,9 +227,9 @@ export default function Home() {
   };
 
   const getCurrentFilters = (): AiSearchFilters => ({
-    q: searchQuery.trim() || undefined,
+    q: cleanQueryForCategory(searchQuery, propertyCategory),
     transactionType: transactionMode === 'rent' ? 'RENT' : 'SALE',
-    category: propertyCategory !== 'any' ? propertyCategory : undefined,
+    category: normalizeCategory(propertyCategory),
     bedrooms: bedrooms !== 'any' ? bedrooms : undefined,
     bathrooms: bathrooms !== 'any' ? bathrooms : undefined,
     maxPrice: priceRange[0] > 0 ? String(priceRange[0]) : undefined,

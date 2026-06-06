@@ -6,6 +6,7 @@ import { CommercialFilterBar } from '@/components/commercial-filter-bar';
 import { CommercialPropertyCard } from '@/components/commercial-property-card';
 import { getProperties } from '@/lib/api';
 import { isLikelyCommercialProperty, toAetherCommercialProperty } from '@/lib/live-mappers';
+import { cleanQueryForCategory, matchesTemplateCategory, normalizeCategory } from '@/lib/search-utils';
 
 type PageSearchParams = Promise<{ [key: string]: string | string[] | undefined } | undefined>;
 
@@ -16,19 +17,22 @@ function getParam(params: Awaited<PageSearchParams>, key: string) {
 
 export default async function CommercialPage({ searchParams }: { searchParams?: PageSearchParams }) {
   const resolvedSearchParams = await searchParams;
-  const searchQuery = getParam(resolvedSearchParams, 'q');
+  const category = normalizeCategory(getParam(resolvedSearchParams, 'category'));
+  const searchQuery = cleanQueryForCategory(getParam(resolvedSearchParams, 'q'), category);
+  const headingLabel = searchQuery || category;
   const liveResponse = await getProperties({
     propertyType: 'COMMERCIAL',
+    transactionType: getParam(resolvedSearchParams, 'transactionType'),
     q: searchQuery,
-    category: getParam(resolvedSearchParams, 'category'),
     minPrice: getParam(resolvedSearchParams, 'minPrice'),
     maxPrice: getParam(resolvedSearchParams, 'maxPrice'),
     minArea: getParam(resolvedSearchParams, 'minArea'),
     maxArea: getParam(resolvedSearchParams, 'maxArea'),
-    limit: 48,
+    limit: category ? 96 : 48,
   });
   const commercialProperties = liveResponse.properties
     .filter(isLikelyCommercialProperty)
+    .filter((property) => matchesTemplateCategory(property, category))
     .map(toAetherCommercialProperty);
   const heroImage = PlaceHolderImages.find(p => p.id === 'commercial-1');
 
@@ -43,7 +47,7 @@ export default async function CommercialPage({ searchParams }: { searchParams?: 
         <div className="relative flex h-full flex-col items-center justify-center text-center text-white p-4">
           <FadeInOnScroll>
             <h1 className="text-4xl md:text-6xl font-bold tracking-widest font-headline">
-              {searchQuery ? `${searchQuery} Commercial Properties` : 'Commercial Properties'}
+              {headingLabel ? `${headingLabel} Commercial Properties` : 'Commercial Properties'}
             </h1>
             <p className="mt-6 max-w-3xl text-lg text-white/90">
               Focusing on high-yield business assets in Dubai's premier commercial districts.
