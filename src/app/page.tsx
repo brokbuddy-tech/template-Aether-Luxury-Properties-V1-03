@@ -28,7 +28,6 @@ import {
   socialLinks,
   newsArticles,
 } from '@/lib/data';
-import { ParallaxImage } from '@/components/parallax-image';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
 import {
   Card,
@@ -60,7 +59,6 @@ export default function Home() {
   const [priceRange, setPriceRange] = useState([0]);
   const [currency, setCurrency] = useState('AED');
   const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
-  const heroImage = PlaceHolderImages.find(p => p.id === 'hero-2');
   const { openModal: openAiSearchModal } = useAiSearchModal();
   const [expertiseIndex, setExpertiseIndex] = useState(0);
   const [newsIndex, setNewsIndex] = useState(0);
@@ -170,16 +168,17 @@ export default function Home() {
     <div className="flex flex-col">
       {/* Section 2: Hero & Search */}
       <section className="relative h-[90vh] w-full overflow-hidden">
-        {heroImage && (
-          <ParallaxImage
-            src={heroImage.imageUrl}
-            alt={heroImage.description}
-            data-ai-hint={heroImage.imageHint}
-            fill
-            className="object-cover"
-            priority
-          />
-        )}
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+        >
+          <source src="/home.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-black/60" />
         <div className="relative flex h-full flex-col items-center justify-center text-center text-white p-4">
           <FadeInOnScroll>
