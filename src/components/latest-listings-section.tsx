@@ -48,7 +48,7 @@ export function LatestListingsSection() {
                 New Arrivals
               </span>
               <h2 className="font-headline text-3xl font-light tracking-wider text-primary md:text-5xl">
-                LATEST <span className="font-bold">LISTINGS</span>
+                LATEST LISTINGS
               </h2>
             </div>
             <Button
