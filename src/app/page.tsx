@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import {
   ArrowRight,
   Briefcase,
@@ -54,10 +55,64 @@ import { getAgencyDisplayName } from '@/lib/live-mappers';
 import type { SiteConfig } from '@/lib/live-types';
 import { LatestListingsSection } from '@/components/latest-listings-section';
 
+type AiSearchFilters = {
+  q?: string;
+  type?: string;
+  transactionType?: string;
+  propertyType?: string;
+  category?: string;
+  readiness?: string;
+  bedrooms?: string;
+  bathrooms?: string;
+  minPrice?: string;
+  maxPrice?: string;
+  minArea?: string;
+  maxArea?: string;
+};
+
+function getSearchDestination(filters: AiSearchFilters, fallbackMode: 'buy' | 'rent') {
+  if (filters.propertyType === 'COMMERCIAL' || filters.type === 'commercial') return '/commercial';
+  if (filters.readiness === 'OFFPLAN' || filters.type === 'new-homes') return '/off-plan';
+  if (filters.transactionType === 'RENT' || filters.type === 'rent') return '/rent';
+  return fallbackMode === 'rent' ? '/rent' : '/buy';
+}
+
+function buildSearchHref(filters: AiSearchFilters, fallbackMode: 'buy' | 'rent') {
+  const params = new URLSearchParams();
+
+  Object.entries(filters).forEach(([key, value]) => {
+    if (!value || value === 'any') return;
+    if (key === 'type' || key === 'transactionType' || key === 'propertyType') return;
+    params.set(key, value);
+  });
+
+  const query = params.toString();
+  return `${getSearchDestination(filters, fallbackMode)}${query ? `?${query}` : ''}`;
+}
+
+async function parseAiSearch(query: string, filters: AiSearchFilters) {
+  const response = await fetch('/api/ai-search', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query, filters }),
+  });
+
+  if (!response.ok) throw new Error('AI search failed');
+  const data = await response.json() as { filters?: AiSearchFilters };
+  return data.filters || {};
+}
+
 
 export default function Home() {
+  const router = useRouter();
   const [priceRange, setPriceRange] = useState([0]);
   const [currency, setCurrency] = useState('AED');
+  const [transactionMode, setTransactionMode] = useState<'buy' | 'rent'>('buy');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [propertyCategory, setPropertyCategory] = useState('any');
+  const [bedrooms, setBedrooms] = useState('any');
+  const [bathrooms, setBathrooms] = useState('any');
+  const [isAiSearching, setIsAiSearching] = useState(false);
   const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
   const { openModal: openAiSearchModal } = useAiSearchModal();
   const [expertiseIndex, setExpertiseIndex] = useState(0);
@@ -164,6 +219,36 @@ export default function Home() {
     return `${prefix}${value}${suffix}`;
   };
 
+  const getCurrentFilters = (): AiSearchFilters => ({
+    q: searchQuery.trim() || undefined,
+    transactionType: transactionMode === 'rent' ? 'RENT' : 'SALE',
+    category: propertyCategory !== 'any' ? propertyCategory : undefined,
+    bedrooms: bedrooms !== 'any' ? bedrooms : undefined,
+    bathrooms: bathrooms !== 'any' ? bathrooms : undefined,
+    maxPrice: priceRange[0] > 0 ? String(priceRange[0]) : undefined,
+  });
+
+  const handleSearch = () => {
+    router.push(buildSearchHref(getCurrentFilters(), transactionMode));
+  };
+
+  const handleAiSearch = async () => {
+    if (!searchQuery.trim()) {
+      openAiSearchModal();
+      return;
+    }
+
+    setIsAiSearching(true);
+    try {
+      const filters = await parseAiSearch(searchQuery, getCurrentFilters());
+      router.push(buildSearchHref({ ...getCurrentFilters(), ...filters }, transactionMode));
+    } catch {
+      router.push(buildSearchHref(getCurrentFilters(), transactionMode));
+    } finally {
+      setIsAiSearching(false);
+    }
+  };
+
   return (
     <div className="flex flex-col">
       {/* Section 2: Hero & Search */}
@@ -192,7 +277,7 @@ export default function Home() {
           <FadeInOnScroll delay={200}>
             <div className="mt-12 w-full max-w-4xl">
               <div className="p-2 rounded-lg bg-white/20 md:bg-white/10 backdrop-blur-xl border border-white/20">
-                <Tabs defaultValue="buy">
+                <Tabs value={transactionMode} onValueChange={(value) => setTransactionMode(value as 'buy' | 'rent')}>
                   <TabsList className="bg-transparent">
                     <TabsTrigger value="buy" className="text-white data-[state=active]:bg-copper-gold data-[state=active]:text-white">BUY</TabsTrigger>
                     <TabsTrigger value="rent" className="text-white data-[state=active]:bg-copper-gold data-[state=active]:text-white">RENT</TabsTrigger>
@@ -202,26 +287,32 @@ export default function Home() {
                   <Input
                     type="text"
                     placeholder="Search for community, building or location"
+                    value={searchQuery}
+                    onChange={(event) => setSearchQuery(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter') handleSearch();
+                    }}
                     className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus-visible:ring-accent flex-grow"
                   />
-                  <Select>
+                  <Select value={propertyCategory} onValueChange={setPropertyCategory}>
                     <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0 w-full md:w-[220px]">
                       <SelectValue placeholder="Property Type" />
                     </SelectTrigger>
                     <SelectContent className='bg-black/60 md:bg-black/50 text-white border-white/20 backdrop-blur-xl'>
-                      <SelectItem value="apartments">Apartments</SelectItem>
-                      <SelectItem value="villas">Villas</SelectItem>
-                      <SelectItem value="penthouses">Penthouses</SelectItem>
-                      <SelectItem value="townhouses">Townhouses</SelectItem>
+                      <SelectItem value="any">Property Type</SelectItem>
+                      <SelectItem value="Apartment">Apartments</SelectItem>
+                      <SelectItem value="Villa">Villas</SelectItem>
+                      <SelectItem value="Penthouse">Penthouses</SelectItem>
+                      <SelectItem value="Townhouse">Townhouses</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Button className="bg-accent hover:bg-accent/90 text-accent-foreground w-full md:w-auto">
+                  <Button className="bg-accent hover:bg-accent/90 text-accent-foreground w-full md:w-auto" onClick={handleSearch}>
                     <Search className="mr-2 h-4 w-4" />
                     Search
                   </Button>
-                  <Button variant="ghost" className="text-white hover:bg-white/20 hover:text-white w-full md:w-auto" onClick={openAiSearchModal}>
+                  <Button variant="ghost" className="text-white hover:bg-white/20 hover:text-white w-full md:w-auto" onClick={handleAiSearch} disabled={isAiSearching}>
                     <Sparkles className="mr-2 h-4 w-4" />
-                    AI Search
+                    {isAiSearching ? 'Searching...' : 'AI Search'}
                   </Button>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -272,7 +363,7 @@ export default function Home() {
                                 <div className="grid grid-cols-2 gap-4">
                                   <div className="space-y-2">
                                       <Label className='text-white'>Bedrooms</Label>
-                                      <Select>
+                                      <Select value={bedrooms} onValueChange={setBedrooms}>
                                           <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
                                               <SelectValue placeholder="Any" />
                                           </SelectTrigger>
@@ -288,7 +379,7 @@ export default function Home() {
                                   </div>
                                   <div className="space-y-2">
                                       <Label className='text-white'>Bathrooms</Label>
-                                      <Select>
+                                      <Select value={bathrooms} onValueChange={setBathrooms}>
                                           <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
                                               <SelectValue placeholder="Any" />
                                           </SelectTrigger>
@@ -318,7 +409,7 @@ export default function Home() {
                                         </SelectContent>
                                     </Select>
                                 </div>
-                                <Button className="bg-accent hover:bg-accent/90 text-accent-foreground w-full">
+                                <Button className="bg-accent hover:bg-accent/90 text-accent-foreground w-full" onClick={handleSearch}>
                                     Apply Filters
                                   </Button>
                             </div>

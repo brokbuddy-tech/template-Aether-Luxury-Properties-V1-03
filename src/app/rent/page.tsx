@@ -9,18 +9,29 @@ import { toAetherProperty } from '@/lib/live-mappers';
 
 type PageSearchParams = Promise<{ [key: string]: string | string[] | undefined } | undefined>;
 
+function getParam(params: Awaited<PageSearchParams>, key: string) {
+  const value = params?.[key];
+  return Array.isArray(value) ? value[0] : value;
+}
+
 export default async function RentPage({ searchParams }: { searchParams?: PageSearchParams }) {
   const resolvedSearchParams = await searchParams;
-  const community = resolvedSearchParams?.community as string | undefined;
+  const community = getParam(resolvedSearchParams, 'community');
+  const searchQuery = getParam(resolvedSearchParams, 'q') || community;
 
-  const liveResponse = await getProperties({ transactionType: 'RENT', limit: 48 });
-  let rentProperties = liveResponse.properties.map(toAetherProperty);
-
-  if (community) {
-    rentProperties = rentProperties.filter((property) =>
-      property.address.toLowerCase().includes(community.toLowerCase()),
-    );
-  }
+  const liveResponse = await getProperties({
+    transactionType: 'RENT',
+    q: searchQuery,
+    category: getParam(resolvedSearchParams, 'category'),
+    minPrice: getParam(resolvedSearchParams, 'minPrice'),
+    maxPrice: getParam(resolvedSearchParams, 'maxPrice'),
+    bedrooms: getParam(resolvedSearchParams, 'bedrooms'),
+    bathrooms: getParam(resolvedSearchParams, 'bathrooms'),
+    minArea: getParam(resolvedSearchParams, 'minArea'),
+    maxArea: getParam(resolvedSearchParams, 'maxArea'),
+    limit: 48,
+  });
+  const rentProperties = liveResponse.properties.map(toAetherProperty);
 
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-2');
 
@@ -41,7 +52,7 @@ export default async function RentPage({ searchParams }: { searchParams?: PageSe
             <div className="relative flex h-full flex-col items-center justify-center text-center text-white p-4">
             <FadeInOnScroll>
                 <h1 className="text-4xl md:text-6xl font-bold tracking-widest font-headline">
-                {community ? `Properties for Rent in ${community}` : 'Properties for Rent'}
+                {searchQuery ? `Properties for Rent in ${searchQuery}` : 'Properties for Rent'}
                 </h1>
                 <p className="mt-6 max-w-3xl text-lg text-white/90">
                 Explore our curated selection of luxury rentals for your next home in Dubai.
@@ -60,7 +71,7 @@ export default async function RentPage({ searchParams }: { searchParams?: PageSe
                 </div>
                  {rentProperties.length === 0 && (
                   <div className="text-center py-16">
-                    <p className="text-lg text-muted-foreground">No properties for rent found in this community.</p>
+                    <p className="text-lg text-muted-foreground">No rentals found for this search.</p>
                   </div>
                 )}
                 {/* Pagination */}

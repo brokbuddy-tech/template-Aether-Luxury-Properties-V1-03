@@ -9,18 +9,29 @@ import { toAetherProperty } from '@/lib/live-mappers';
 
 type PageSearchParams = Promise<{ [key: string]: string | string[] | undefined } | undefined>;
 
+function getParam(params: Awaited<PageSearchParams>, key: string) {
+  const value = params?.[key];
+  return Array.isArray(value) ? value[0] : value;
+}
+
 export default async function BuyPage({ searchParams }: { searchParams?: PageSearchParams }) {
   const resolvedSearchParams = await searchParams;
-  const community = resolvedSearchParams?.community as string | undefined;
+  const community = getParam(resolvedSearchParams, 'community');
+  const searchQuery = getParam(resolvedSearchParams, 'q') || community;
 
-  const liveResponse = await getProperties({ transactionType: 'SALE', limit: 48 });
-  let buyProperties = liveResponse.properties.map(toAetherProperty);
-
-  if (community) {
-    buyProperties = buyProperties.filter((property) =>
-      property.address.toLowerCase().includes(community.toLowerCase()),
-    );
-  }
+  const liveResponse = await getProperties({
+    transactionType: 'SALE',
+    q: searchQuery,
+    category: getParam(resolvedSearchParams, 'category'),
+    minPrice: getParam(resolvedSearchParams, 'minPrice'),
+    maxPrice: getParam(resolvedSearchParams, 'maxPrice'),
+    bedrooms: getParam(resolvedSearchParams, 'bedrooms'),
+    bathrooms: getParam(resolvedSearchParams, 'bathrooms'),
+    minArea: getParam(resolvedSearchParams, 'minArea'),
+    maxArea: getParam(resolvedSearchParams, 'maxArea'),
+    limit: 48,
+  });
+  const buyProperties = liveResponse.properties.map(toAetherProperty);
   
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-1');
 
@@ -41,7 +52,7 @@ export default async function BuyPage({ searchParams }: { searchParams?: PageSea
             <div className="relative flex h-full flex-col items-center justify-center text-center text-white p-4">
             <FadeInOnScroll>
                 <h1 className="text-4xl md:text-6xl font-bold tracking-widest font-headline">
-                {community ? `${community} Properties` : 'Properties for Sale'}
+                {searchQuery ? `${searchQuery} Properties` : 'Properties for Sale'}
                 </h1>
                 <p className="mt-6 max-w-3xl text-lg text-white/90">
                 Discover your dream home from our exclusive collection of luxury properties in Dubai.
@@ -60,7 +71,7 @@ export default async function BuyPage({ searchParams }: { searchParams?: PageSea
                 </div>
                 {buyProperties.length === 0 && (
                   <div className="text-center py-16">
-                    <p className="text-lg text-muted-foreground">No properties found in this community.</p>
+                    <p className="text-lg text-muted-foreground">No properties found for this search.</p>
                   </div>
                 )}
                 {/* Pagination */}

@@ -7,8 +7,26 @@ import { CommercialPropertyCard } from '@/components/commercial-property-card';
 import { getProperties } from '@/lib/api';
 import { isLikelyCommercialProperty, toAetherCommercialProperty } from '@/lib/live-mappers';
 
-export default async function CommercialPage() {
-  const liveResponse = await getProperties({ limit: 48 });
+type PageSearchParams = Promise<{ [key: string]: string | string[] | undefined } | undefined>;
+
+function getParam(params: Awaited<PageSearchParams>, key: string) {
+  const value = params?.[key];
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export default async function CommercialPage({ searchParams }: { searchParams?: PageSearchParams }) {
+  const resolvedSearchParams = await searchParams;
+  const searchQuery = getParam(resolvedSearchParams, 'q');
+  const liveResponse = await getProperties({
+    propertyType: 'COMMERCIAL',
+    q: searchQuery,
+    category: getParam(resolvedSearchParams, 'category'),
+    minPrice: getParam(resolvedSearchParams, 'minPrice'),
+    maxPrice: getParam(resolvedSearchParams, 'maxPrice'),
+    minArea: getParam(resolvedSearchParams, 'minArea'),
+    maxArea: getParam(resolvedSearchParams, 'maxArea'),
+    limit: 48,
+  });
   const commercialProperties = liveResponse.properties
     .filter(isLikelyCommercialProperty)
     .map(toAetherCommercialProperty);
@@ -25,7 +43,7 @@ export default async function CommercialPage() {
         <div className="relative flex h-full flex-col items-center justify-center text-center text-white p-4">
           <FadeInOnScroll>
             <h1 className="text-4xl md:text-6xl font-bold tracking-widest font-headline">
-              Commercial Properties
+              {searchQuery ? `${searchQuery} Commercial Properties` : 'Commercial Properties'}
             </h1>
             <p className="mt-6 max-w-3xl text-lg text-white/90">
               Focusing on high-yield business assets in Dubai's premier commercial districts.

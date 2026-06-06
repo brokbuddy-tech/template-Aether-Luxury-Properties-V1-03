@@ -7,8 +7,28 @@ import { OffPlanFilterBar } from '@/components/off-plan-filter-bar';
 import { getProperties } from '@/lib/api';
 import { toAetherOffPlanProject } from '@/lib/live-mappers';
 
-export default async function OffPlanPage() {
-  const liveResponse = await getProperties({ readiness: 'OFFPLAN', limit: 48 });
+type PageSearchParams = Promise<{ [key: string]: string | string[] | undefined } | undefined>;
+
+function getParam(params: Awaited<PageSearchParams>, key: string) {
+  const value = params?.[key];
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export default async function OffPlanPage({ searchParams }: { searchParams?: PageSearchParams }) {
+  const resolvedSearchParams = await searchParams;
+  const searchQuery = getParam(resolvedSearchParams, 'q');
+  const liveResponse = await getProperties({
+    readiness: 'OFFPLAN',
+    q: searchQuery,
+    category: getParam(resolvedSearchParams, 'category'),
+    minPrice: getParam(resolvedSearchParams, 'minPrice'),
+    maxPrice: getParam(resolvedSearchParams, 'maxPrice'),
+    bedrooms: getParam(resolvedSearchParams, 'bedrooms'),
+    bathrooms: getParam(resolvedSearchParams, 'bathrooms'),
+    minArea: getParam(resolvedSearchParams, 'minArea'),
+    maxArea: getParam(resolvedSearchParams, 'maxArea'),
+    limit: 48,
+  });
   const offPlanProjects = liveResponse.properties.map(toAetherOffPlanProject);
   const heroImage = PlaceHolderImages.find(p => p.id === 'offplan-1');
 
@@ -23,7 +43,7 @@ export default async function OffPlanPage() {
         <div className="relative flex h-full flex-col items-center justify-center text-center text-white p-4">
           <FadeInOnScroll>
             <h1 className="text-4xl md:text-6xl font-bold tracking-widest font-headline">
-              Off-Plan Projects
+              {searchQuery ? `${searchQuery} Off-Plan Projects` : 'Off-Plan Projects'}
             </h1>
             <p className="mt-6 max-w-3xl text-lg text-white/90">
               Invest in the future of Dubai with exclusive access to premier off-plan properties.
