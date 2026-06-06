@@ -53,6 +53,7 @@ import { Progress } from '@/components/ui/progress';
 import { getSiteConfig } from '@/lib/api';
 import { getAgencyDisplayName } from '@/lib/live-mappers';
 import type { SiteConfig } from '@/lib/live-types';
+import { LatestListingsSection } from '@/components/latest-listings-section';
 
 
 export default function Home() {
@@ -406,6 +407,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <LatestListingsSection />
 
        {/* Section 5: Professional Expertise Section */}
        <section className="py-16 md:py-24 bg-background">

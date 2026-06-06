@@ -29,8 +29,8 @@ export function PropertyCard({ property }: { property: Property }) {
   );
 
   return (
-    <div className="relative group">
-      <Card className="flex flex-col w-full max-w-[350px] mx-auto border border-gray-200 rounded-lg overflow-hidden shadow-sm bg-white group-hover:shadow-xl transition-shadow duration-300">
+    <div className="relative group h-full">
+      <Card className="mx-auto flex h-full w-full max-w-[350px] flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-shadow duration-300 group-hover:shadow-xl">
         <Link href={`/property/${property.id}`} className="block">
           <div className="relative">
             <Carousel className="w-full">

@@ -52,7 +52,7 @@ export default async function AgentProfilePage({
         )}
         <div className="absolute inset-0 bg-black/65" />
         <div className="relative z-10 mx-auto grid min-h-[60vh] max-w-[1600px] grid-cols-1 items-end gap-12 px-6 py-16 text-white md:px-12 lg:grid-cols-[280px_minmax(0,1fr)]">
-          <div className="relative aspect-square w-full max-w-[280px] overflow-hidden border border-white/20 bg-white/10 shadow-2xl">
+          <div className="relative aspect-square w-full max-w-[280px] overflow-hidden border border-white/20 bg-white/10 shadow-2xl rounded-xl">
             {avatar && (
               <Image src={avatar.src} alt={avatar.alt} data-ai-hint={avatar.hint} fill className="object-cover" />
             )}
@@ -70,25 +70,25 @@ export default async function AgentProfilePage({
             <div className="flex flex-wrap gap-6 text-sm text-white/80">
               {brokerRegistrationNumber && (
                 <span className="flex items-center gap-2">
-                  <span className="text-primary">BRN</span>
+                  <span className="">BRN:</span>
                   {brokerRegistrationNumber}
                 </span>
               )}
               {agent.email && (
-                <a href={`mailto:${agent.email}`} className="flex items-center gap-2 hover:text-primary">
-                  <Mail className="h-4 w-4 text-primary" />
+                <a href={`mailto:${agent.email}`} className="flex items-center gap-2">
+                  <Mail className="h-4 w-4" />
                   {agent.email}
                 </a>
               )}
               {agent.phone && (
-                <a href={`tel:${agent.phone}`} className="flex items-center gap-2 hover:text-primary">
-                  <Phone className="h-4 w-4 text-primary" />
+                <a href={`tel:${agent.phone}`} className="flex items-center gap-2">
+                  <Phone className="h-4 w-4" />
                   {agent.phone}
                 </a>
               )}
               {whatsappUrl && (
-                <a href={whatsappUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:text-primary">
-                  <MessageCircle className="h-4 w-4 text-primary" />
+                <a href={whatsappUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2">
+                  <MessageCircle className="h-4 w-4" />
                   WhatsApp
                 </a>
               )}
