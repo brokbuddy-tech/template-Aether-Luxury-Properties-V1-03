@@ -36,7 +36,7 @@ export default async function AgentsPage() {
               const avatar = resolveTemplateImage(agent.avatarUrl || agent.avatar, 'agent-1', agent.name);
 
               return (
-                <article key={agent.slug || agent.id || agent.name} className="overflow-hidden rounded-2xl border bg-card shadow-sm">
+                <article key={agent.slug || agent.id || agent.name} className="flex h-full flex-col overflow-hidden rounded-2xl border bg-card shadow-sm">
                   <div className="relative aspect-[4/3] bg-muted">
                     {avatar && (
                       <Image
@@ -48,14 +48,14 @@ export default async function AgentsPage() {
                       />
                     )}
                   </div>
-                  <div className="space-y-4 p-6">
+                  <div className="flex min-h-[276px] flex-1 flex-col space-y-4 p-6">
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
                         {agent.title || 'Property Consultant'}
                       </p>
                       <h2 className="mt-2 text-2xl font-bold font-headline">{agent.name}</h2>
                       {agent.tagline && (
-                        <p className="mt-2 text-sm text-muted-foreground">{agent.tagline}</p>
+                        <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{agent.tagline}</p>
                       )}
                     </div>
 
@@ -76,7 +76,7 @@ export default async function AgentsPage() {
 
                     <Link
                       href={`/agents/${agent.slug || agent.id}`}
-                      className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.25em] text-primary"
+                      className="mt-auto inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.25em] text-primary"
                     >
                       View Profile
                       <ArrowRight className="h-4 w-4" />
