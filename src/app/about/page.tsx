@@ -378,11 +378,11 @@ export default function AboutPage() {
               </p>
             </div>
           </FadeInOnScroll>
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid auto-rows-fr grid-cols-1 items-stretch gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {leadershipMembers.length > 0 ? (
               leadershipMembers.map((member, index) => (
-                <FadeInOnScroll key={member.name} delay={index * 100}>
-                  <Card className="group overflow-hidden text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+                <FadeInOnScroll key={member.name} className="h-full" delay={index * 100}>
+                  <Card className="group flex h-full flex-col overflow-hidden text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
                     <div className="relative h-80 w-full">
                       {member.imageUrl ? (
                         <Image
@@ -398,7 +398,7 @@ export default function AboutPage() {
                         </div>
                       )}
                     </div>
-                    <CardContent className="p-6">
+                    <CardContent className="flex flex-1 flex-col justify-center p-6">
                       <h3 className="font-headline text-xl font-bold">
                         {member.name}
                       </h3>
