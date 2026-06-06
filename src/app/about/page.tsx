@@ -8,14 +8,15 @@ import { PlayCircle, ArrowRight, Star, Award, Users, Handshake } from 'lucide-re
 
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
+import { ReviewCarousel } from '@/components/review-carousel';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { ParallaxImage } from '@/components/parallax-image';
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import { getAgents, getSiteConfig, getTestimonials } from '@/lib/api';
 import { getAgencyDisplayName, replaceTemplateBranding } from '@/lib/live-mappers';
 import { resolveTemplateImage } from '@/lib/media';
+import { normalizePublicTestimonials, type ReviewCarouselItem } from '@/lib/reviews';
 import type { SiteConfig } from '@/lib/live-types';
 import { resolveAgencySlugFromPathname } from '@/lib/agency-routing';
 
@@ -49,61 +50,12 @@ type LeadershipMember = {
   imageHint?: string;
 };
 
-type DynamicTestimonial = {
-  id: string;
-  quote: string;
-  author: string;
-  location?: string;
-  rating: number;
-  badgeLabel?: string;
-};
-
-function normalizeTestimonials(input: unknown[]): DynamicTestimonial[] {
-  const normalized: DynamicTestimonial[] = [];
-
-  input.forEach((item, index) => {
-    const testimonial = item as {
-      id?: string;
-      message?: string | null;
-      quote?: string | null;
-      content?: string | null;
-      author?: string | null;
-      name?: string | null;
-      clientName?: string | null;
-      location?: string | null;
-      property?: string | null;
-      rating?: number | null;
-      badgeLabel?: string | null;
-    };
-
-    const quote = testimonial.message?.trim() || testimonial.quote?.trim() || testimonial.content?.trim() || '';
-    if (!quote) return;
-
-    const author =
-      testimonial.author?.trim() ||
-      testimonial.name?.trim() ||
-      testimonial.clientName?.trim() ||
-      'Anonymous';
-
-    normalized.push({
-      id: testimonial.id || `${author}-${index}`,
-      quote,
-      author,
-      location: testimonial.location?.trim() || testimonial.property?.trim() || undefined,
-      rating: typeof testimonial.rating === 'number' ? testimonial.rating : 5,
-      badgeLabel: testimonial.badgeLabel?.trim() || undefined,
-    });
-  });
-
-  return normalized;
-}
-
 export default function AboutPage() {
   const pathname = usePathname();
   const agencySlug = resolveAgencySlugFromPathname(pathname);
   const [leadershipMembers, setLeadershipMembers] = useState<LeadershipMember[]>([]);
   const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
-  const [liveTestimonials, setLiveTestimonials] = useState<DynamicTestimonial[]>([]);
+  const [liveTestimonials, setLiveTestimonials] = useState<ReviewCarouselItem[]>([]);
 
   useEffect(() => {
     let active = true;
@@ -168,7 +120,7 @@ export default function AboutPage() {
       try {
         const nextTestimonials = await getTestimonials(agencySlug);
         if (active) {
-          setLiveTestimonials(normalizeTestimonials(nextTestimonials));
+          setLiveTestimonials(normalizePublicTestimonials(nextTestimonials));
         }
       } catch {
         if (active) {
@@ -190,7 +142,7 @@ export default function AboutPage() {
   const ceoPortrait = PlaceHolderImages.find((image) => image.id === 'agent-1');
   const corporateImpactImage = PlaceHolderImages.find((image) => image.id === 'hero-1');
   const agencyName = getAgencyDisplayName(siteConfig);
-  const testimonialsToRender: DynamicTestimonial[] = liveTestimonials;
+  const testimonialsToRender = liveTestimonials;
 
   return (
     <div className="flex flex-col">
@@ -307,57 +259,15 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {testimonialsToRender.length > 0 ? (
-      <section className="bg-muted py-16 md:py-24">
-        <div className="container">
-          <FadeInOnScroll>
-            <div className="mb-12 text-center">
-              <h2 className="font-headline text-4xl font-bold text-primary md:text-5xl">What Our Clients Say</h2>
-              <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-                {replaceTemplateBranding(
-                  "Our success is measured by the satisfaction of our clients. Here's what they have to say about their experience with Aether Luxury Properties.",
-                  agencyName,
-                )}
-              </p>
-            </div>
-          </FadeInOnScroll>
-          <Carousel
-            opts={{
-              align: 'start',
-              loop: true,
-            }}
-            className="mx-auto w-full max-w-6xl"
-          >
-            <CarouselContent className="-ml-4">
-              {testimonialsToRender.map((testimonial, index) => (
-                <CarouselItem key={testimonial.id || index} className="pl-4 md:basis-1/2 lg:basis-1/3">
-                  <div className="h-full p-1">
-                    <Card className="flex h-full flex-col">
-                      <CardContent className="flex-grow p-6">
-                        <div className="mb-4 flex">
-                          {[...Array(5)].map((_, starIndex) => (
-                            <Star key={starIndex} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                          ))}
-                        </div>
-                        <p className="italic text-muted-foreground">"{testimonial.quote}"</p>
-                      </CardContent>
-                      <CardFooter className="p-6 pt-0">
-                        <div>
-                          <p className="font-bold font-headline">{testimonial.author}</p>
-                          <p className="text-sm text-muted-foreground">{testimonial.badgeLabel || testimonial.location || 'Client testimonial'}</p>
-                        </div>
-                      </CardFooter>
-                    </Card>
-                  </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-        </div>
-      </section>
-      ) : null}
+      <ReviewCarousel
+        title="What Our Clients Say"
+        description={replaceTemplateBranding(
+          "Our success is measured by the satisfaction of our clients. Here's what they have to say about their experience with Aether Luxury Properties.",
+          agencyName,
+        )}
+        items={testimonialsToRender}
+        variant="light"
+      />
 
       <section id="team" className="bg-background py-16 md:py-24">
         <div className="container mx-auto">

@@ -6,6 +6,8 @@ import { getAgentProfile, getSiteConfig, toSocialUrl } from '@/lib/api';
 import { getAgencyDisplayName, toAetherProperty } from '@/lib/live-mappers';
 import { resolveTemplateImage } from '@/lib/media';
 import { PropertyCard } from '@/components/property-card';
+import { ReviewCarousel } from '@/components/review-carousel';
+import { normalizeBrokerReviewCards } from '@/lib/reviews';
 import type { Property } from '@/lib/types';
 
 export default async function AgentProfilePage({
@@ -34,6 +36,7 @@ export default async function AgentProfilePage({
   const activeListings: Property[] = profileResponse.activeListings.map(toAetherProperty);
   const whatsappUrl = toSocialUrl('whatsapp', agent.whatsapp || agent.phone);
   const brokerRegistrationNumber = agent.brn || agent.licenseNumber;
+  const brokerReviews = normalizeBrokerReviewCards(agent.reviewSources);
 
   return (
     <div className="bg-background">
@@ -118,6 +121,14 @@ export default async function AgentProfilePage({
               {agent.bio || agent.tagline || `Connect with ${agent.name} for tailored guidance on buying, renting, and investing in Dubai.`}
             </p>
           </div>
+
+          <ReviewCarousel
+            title="What My Clients Say"
+            description={`Verified feedback from clients who worked directly with ${agent.name}.`}
+            items={brokerReviews}
+            variant="light"
+            className="rounded-2xl"
+          />
 
           <div>
             <div className="flex items-center justify-between gap-4">

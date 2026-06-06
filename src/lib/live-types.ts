@@ -1,3 +1,5 @@
+import type { BrokerReviewSources } from './reviews';
+
 export type PropertyStatus = 'Off-plan' | 'Ready';
 export type PropertyTransactionType = 'Sale' | 'Rent';
 
@@ -108,6 +110,7 @@ export type SiteAgent = {
   coverImageUrl?: string | null;
   metaTitle?: string | null;
   metaDescription?: string | null;
+  reviewSources?: BrokerReviewSources | null;
 };
 
 export type SiteBranding = {
