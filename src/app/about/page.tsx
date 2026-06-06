@@ -65,6 +65,7 @@ type LeadershipMember = {
   role: string;
   imageUrl: string;
   imageHint?: string;
+  profileSlug: string;
 };
 
 export default function AboutPage() {
@@ -97,6 +98,7 @@ export default function AboutPage() {
             role: agent.title || "Property Consultant",
             imageUrl: avatar?.src || "",
             imageHint: avatar?.hint,
+            profileSlug: agent.slug || agent.id || "",
           } satisfies LeadershipMember;
         });
 
@@ -382,28 +384,34 @@ export default function AboutPage() {
             {leadershipMembers.length > 0 ? (
               leadershipMembers.map((member, index) => (
                 <FadeInOnScroll key={member.name} className="h-full" delay={index * 100}>
-                  <Card className="group flex h-full flex-col overflow-hidden text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-                    <div className="relative h-80 w-full">
-                      {member.imageUrl ? (
-                        <Image
-                          src={member.imageUrl}
-                          alt={member.name}
-                          data-ai-hint={member.imageHint}
-                          fill
-                          className="object-cover object-top transition-transform duration-300 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="flex h-full items-center justify-center bg-muted text-muted-foreground">
-                          Profile photo coming soon
-                        </div>
-                      )}
-                    </div>
-                    <CardContent className="flex flex-1 flex-col justify-center p-6">
-                      <h3 className="font-headline text-xl font-bold">
-                        {member.name}
-                      </h3>
-                      <p className="text-muted-foreground">{member.role}</p>
-                    </CardContent>
+                  <Card className="group h-full overflow-hidden text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+                    <Link
+                      href={`/agents/${encodeURIComponent(member.profileSlug)}`}
+                      className="flex h-full flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      aria-label={`View ${member.name}'s profile`}
+                    >
+                      <div className="relative h-80 w-full">
+                        {member.imageUrl ? (
+                          <Image
+                            src={member.imageUrl}
+                            alt={member.name}
+                            data-ai-hint={member.imageHint}
+                            fill
+                            className="object-cover object-top transition-transform duration-300 group-hover:scale-105"
+                          />
+                        ) : (
+                          <div className="flex h-full items-center justify-center bg-muted text-muted-foreground">
+                            Profile photo coming soon
+                          </div>
+                        )}
+                      </div>
+                      <CardContent className="flex flex-1 flex-col justify-center p-6">
+                        <h3 className="font-headline text-xl font-bold">
+                          {member.name}
+                        </h3>
+                        <p className="text-muted-foreground">{member.role}</p>
+                      </CardContent>
+                    </Link>
                   </Card>
                 </FadeInOnScroll>
               ))
