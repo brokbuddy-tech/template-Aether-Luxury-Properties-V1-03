@@ -3,7 +3,7 @@
 import type { MouseEvent } from "react";
 import { useState } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Video } from "lucide-react";
+import { ChevronLeft, ChevronRight, Images, Video } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import {
   Dialog,
@@ -217,6 +217,10 @@ export function ListingHeroGallery({
                   {watermark}
                 </span>
               </div>
+              <span className="pointer-events-none absolute bottom-4 right-4 z-20 inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-slate-900 shadow-lg backdrop-blur-md">
+                <Images className="h-4 w-4" />
+                View More
+              </span>
             </button>
           )}
         </div>
