@@ -181,11 +181,11 @@ export default function Home() {
         </video>
         <div className="absolute inset-0 bg-black/60" />
         <div className="relative flex h-full flex-col items-center justify-center text-center text-white p-4">
-          <FadeInOnScroll>
+          <FadeInOnScroll className="w-full">
             <h1>
               Dubai Real Estate. Built Better.
             </h1>
-            <p className="mt-6 max-w-3xl text-lg text-white/90 font-light tracking-widest">
+            <p className="mx-auto mt-6 max-w-3xl text-center text-lg font-light tracking-widest text-white/90">
               Buying, selling, renting or investing in Dubai should feel clear, seamless and well handled. At <strong>{agencyName}</strong>, we&apos;ve built our business to remove friction, raise standards and deliver better outcomes for clients and brokers alike.
             </p>
           </FadeInOnScroll>
