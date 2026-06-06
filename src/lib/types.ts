@@ -17,6 +17,9 @@ export type Property = {
   images: string[];
   description: string;
   keyFeatures: string[];
+  featured?: boolean;
+  createdAt?: string;
+  recentlyListed?: boolean;
   virtualTourUrl?: string | null;
   agent: {
     name: string;
@@ -41,6 +44,9 @@ export type CommercialProperty = {
   image: string;
   images: string[];
   description: string;
+  featured?: boolean;
+  createdAt?: string;
+  recentlyListed?: boolean;
   virtualTourUrl?: string | null;
   agent: {
     name: string;
@@ -67,6 +73,9 @@ export type OffPlanProject = {
   image: string;
   images: string[];
   description: string;
+  featured?: boolean;
+  createdAt?: string;
+  recentlyListed?: boolean;
   virtualTourUrl?: string | null;
   paymentPlan: {
     milestone: string;

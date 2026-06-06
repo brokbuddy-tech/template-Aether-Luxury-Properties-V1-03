@@ -242,6 +242,40 @@ function mapListingAgent(listing: any): PropertyAgent | undefined {
   };
 }
 
+const RECENTLY_LISTED_WINDOW_MS = 15 * 24 * 60 * 60 * 1000;
+
+function isTruthyListingFlag(value: unknown) {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') return value !== 0;
+  if (typeof value === 'string') {
+    return ['true', '1', 'yes', 'y', 'on'].includes(value.trim().toLowerCase());
+  }
+  return Boolean(value);
+}
+
+function isFeaturedListing(listing: any) {
+  return [
+    listing.isFeatured,
+    listing.featured,
+    listing.fields?.isFeatured,
+    listing.fields?.featured,
+  ].some(isTruthyListingFlag);
+}
+
+function getCreatedAtIso(value: unknown) {
+  if (!value) return undefined;
+  const date = value instanceof Date ? value : new Date(String(value));
+  return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
+}
+
+function isRecentlyListed(createdAt?: string) {
+  if (!createdAt) return false;
+  const createdTime = Date.parse(createdAt);
+  if (!Number.isFinite(createdTime)) return false;
+  const ageMs = Date.now() - createdTime;
+  return ageMs >= 0 && ageMs <= RECENTLY_LISTED_WINDOW_MS;
+}
+
 export function mapListingToProperty(listing: any, agencySlug?: string | null): LiveProperty {
   const sourceImages: PublicListingImage[] = Array.isArray(listing.images) ? listing.images : [];
   const sortedImages = sourceImages
@@ -287,6 +321,9 @@ export function mapListingToProperty(listing: any, agencySlug?: string | null): 
       ? listing.fields.amenities.filter(Boolean).map(String)
       : [];
 
+  const createdAt = getCreatedAtIso(listing.createdAt);
+  const featured = isFeaturedListing(listing);
+
   return {
     id: String(listing.id),
     title: listing.title?.trim() || 'Untitled Property',
@@ -313,7 +350,9 @@ export function mapListingToProperty(listing: any, agencySlug?: string | null): 
     description: normalizeListingDescription(listing.description),
     transactionType: listing.transactionType === 'RENT' ? 'Rent' : 'Sale',
     status: listing.readiness?.toUpperCase() === 'OFFPLAN' ? 'Off-plan' : 'Ready',
-    featured: Boolean(listing.featured || listing.isFeatured),
+    featured,
+    createdAt,
+    recentlyListed: isRecentlyListed(createdAt),
     dldPermitLink: listing.dldPermitLink || listing.fields?.dldPermitLink || undefined,
     handoverDate: listing.handoverDate || listing.fields?.handoverDate || undefined,
     developerName: listing.developer?.name || listing.fields?.developerName || undefined,

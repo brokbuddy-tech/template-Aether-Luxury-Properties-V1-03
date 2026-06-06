@@ -70,6 +70,20 @@ export function OffPlanCard({ project }: { project: OffPlanProject }) {
                 </>
               )}
             </Carousel>
+            {(project.featured || project.recentlyListed) && (
+              <div className="absolute right-3 top-3 z-20 flex flex-col items-end gap-2">
+                {project.featured && (
+                  <span className="rounded-sm bg-accent px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-accent-foreground shadow-sm">
+                    Featured
+                  </span>
+                )}
+                {project.recentlyListed && (
+                  <span className="rounded-sm bg-black/75 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm backdrop-blur-sm">
+                    Recently Listed
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         </Link>
 

@@ -111,6 +111,9 @@ export function toAetherProperty(listing: LiveProperty): Property {
     images: gallery,
     description: listing.description,
     keyFeatures: buildFeatureList(listing),
+    featured: listing.featured,
+    createdAt: listing.createdAt,
+    recentlyListed: listing.recentlyListed,
     virtualTourUrl: listing.virtualTourUrl || null,
     agent: {
       name: listing.agent?.name || listing.organizationName || 'Property Consultant',
@@ -146,6 +149,9 @@ export function toAetherCommercialProperty(listing: LiveProperty): CommercialPro
     image: gallery[0] || '',
     images: gallery,
     description: listing.description,
+    featured: listing.featured,
+    createdAt: listing.createdAt,
+    recentlyListed: listing.recentlyListed,
     virtualTourUrl: listing.virtualTourUrl || null,
     agent: {
       name: listing.agent?.name || listing.organizationName || 'Property Consultant',
@@ -172,6 +178,9 @@ export function toAetherOffPlanProject(listing: LiveProperty): OffPlanProject {
     image: gallery[0] || '',
     images: gallery,
     description: listing.description,
+    featured: listing.featured,
+    createdAt: listing.createdAt,
+    recentlyListed: listing.recentlyListed,
     virtualTourUrl: listing.virtualTourUrl || null,
     paymentPlan: buildOffPlanPaymentSteps(listing),
   };
