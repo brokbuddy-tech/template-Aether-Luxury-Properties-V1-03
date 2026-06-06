@@ -36,8 +36,9 @@ export function OffPlanFilterBar() {
   const [category, setCategory] = useState("any");
 
   useEffect(() => {
-    setSearchQuery(searchParams.get("q") || "");
-    setCategory(normalizeCategory(searchParams.get("category")) || "any");
+    const nextCategory = normalizeCategory(searchParams.get("category")) || "any";
+    setSearchQuery(cleanQueryForCategory(searchParams.get("q"), nextCategory) || "");
+    setCategory(nextCategory);
   }, [searchKey, searchParams]);
 
   const applyFilters = () => {

@@ -55,7 +55,7 @@ export function FilterBar() {
 
   useEffect(() => {
     const nextCategory = normalizeCategory(searchParams.get("category")) || "any";
-    setSearchQuery(searchParams.get("q") || "");
+    setSearchQuery(cleanQueryForCategory(searchParams.get("q"), nextCategory) || "");
     setCategory(nextCategory);
     setMinPrice(searchParams.get("minPrice") || "any");
     setMaxPrice(searchParams.get("maxPrice") || "any");

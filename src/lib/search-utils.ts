@@ -52,8 +52,8 @@ export function normalizeCategory(value?: string | null) {
 
 export function cleanQueryForCategory(query?: string | null, category?: string | null) {
   const trimmed = (query || '').trim();
-  const normalizedCategory = normalizeCategory(category);
-  if (!trimmed || !normalizedCategory) return trimmed || undefined;
+  const categories = (category || '').split(',').map(normalizeCategory).filter(Boolean) as string[];
+  if (!trimmed || categories.length === 0) return trimmed || undefined;
 
   const tokens = trimmed
     .split(/\s+/)
@@ -62,7 +62,7 @@ export function cleanQueryForCategory(query?: string | null, category?: string |
 
   if (tokens.length === 0 || tokens.length > 2) return trimmed;
 
-  const categoryTerms = CATEGORY_TERMS[normalizedCategory] || [normalizedCategory];
+  const categoryTerms = categories.flatMap((selectedCategory) => CATEGORY_TERMS[selectedCategory] || [selectedCategory]);
   const isOnlyCategoryText = tokens.every((token) =>
     categoryTerms.some((term) => {
       const normalizedTerm = cleanToken(term);
@@ -76,6 +76,8 @@ export function cleanQueryForCategory(query?: string | null, category?: string |
 
 export function matchesTemplateCategory(
   source: {
+    category?: string | null;
+    propertyType?: string | null;
     type?: string | null;
     title?: string | null;
     description?: string | null;
@@ -83,16 +85,20 @@ export function matchesTemplateCategory(
   },
   category?: string | null,
 ) {
-  const normalizedCategory = normalizeCategory(category);
-  if (!normalizedCategory) return true;
+  const categories = (category || '').split(',').map(normalizeCategory).filter(Boolean) as string[];
+  if (categories.length === 0) return true;
 
-  const terms = CATEGORY_TERMS[normalizedCategory] || [normalizedCategory];
   const haystack = [
+    source.category,
+    source.propertyType,
     source.type,
     source.title,
     source.description,
     source.searchableText,
   ].filter(Boolean).join(' ').toLowerCase();
 
-  return terms.some((term) => haystack.includes(term.toLowerCase()));
+  return categories.some((selectedCategory) => {
+    const terms = CATEGORY_TERMS[selectedCategory] || [selectedCategory];
+    return terms.some((term) => haystack.includes(term.toLowerCase()));
+  });
 }

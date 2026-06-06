@@ -55,9 +55,10 @@ export function CommercialFilterBar() {
   const [maxArea, setMaxArea] = useState("");
 
   useEffect(() => {
-    setSearchQuery(searchParams.get("q") || "");
+    const nextCategory = normalizeCategory(searchParams.get("category")) || "any";
+    setSearchQuery(cleanQueryForCategory(searchParams.get("q"), nextCategory) || "");
     setTransactionType(searchParams.get("transactionType") === "RENT" ? "RENT" : "SALE");
-    setCategory(normalizeCategory(searchParams.get("category")) || "any");
+    setCategory(nextCategory);
     setMinPrice(searchParams.get("minPrice") || "any");
     setMaxPrice(searchParams.get("maxPrice") || "any");
     setMinArea(searchParams.get("minArea") || "");
