@@ -13,6 +13,7 @@ import { getAgencyDisplayName } from '@/lib/live-mappers';
 export async function generateMetadata(): Promise<Metadata> {
   const siteConfig = await getSiteConfig();
   const agencyName = getAgencyDisplayName(siteConfig);
+  const logoIconUrl = siteConfig?.profile?.logo?.trim() || undefined;
 
   return {
     title: agencyName,
@@ -20,6 +21,13 @@ export async function generateMetadata(): Promise<Metadata> {
       siteConfig?.branding?.tagline
       || siteConfig?.branding?.bio
       || 'Dubai real estate made clear, seamless, and well handled.',
+    icons: logoIconUrl
+      ? {
+          icon: [{ url: logoIconUrl }],
+          shortcut: [{ url: logoIconUrl }],
+          apple: [{ url: logoIconUrl }],
+        }
+      : undefined,
   };
 }
 
