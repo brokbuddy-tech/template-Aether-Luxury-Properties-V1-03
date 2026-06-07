@@ -1,14 +1,13 @@
 
 "use client";
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { Instagram, Facebook, Youtube, Linkedin, Twitter, ArrowUp, Download, MapPin, type LucideIcon } from 'lucide-react';
+import { Instagram, Facebook, Linkedin, X as XIcon, ArrowUp, type LucideIcon } from 'lucide-react';
 import { getSiteConfig, toSocialUrl } from '@/lib/api';
-import { getAgencyBrochureUrl, getAgencyDisplayName, getAgencyEmail, getAgencyPhone } from '@/lib/live-mappers';
+import { getAgencyDisplayName } from '@/lib/live-mappers';
 
-import { Logo } from '@/components/logo';
-import { Button } from '@/components/ui/button';
 import type { SiteConfig } from '@/lib/live-types';
 
 type FooterLink = {
@@ -24,59 +23,38 @@ type FooterLinkColumn = {
 
 const footerLinkColumns: FooterLinkColumn[] = [
   {
-    title: 'PROPERTY',
+    title: 'Site Map',
     links: [
+      { label: 'Homepage', href: '/' },
       { label: 'Buy', href: '/buy' },
       { label: 'Rent', href: '/rent' },
       { label: 'Sell', href: '/sell' },
       { label: 'Off Plan', href: '/off-plan' },
       { label: 'Commercial', href: '/commercial' },
+      { label: 'Agents', href: '/agents' },
+      { label: 'About Us', href: '/about' },
+      { label: 'Contact Us', href: '/contact' },
     ],
   },
   {
-    title: 'RESOURCES',
+    title: 'Legal',
     links: [
-      { label: 'Community Guides', href: '#' },
-      { label: 'News & Insights', href: '#' },
-      { label: 'Market Reports', href: '#' },
-      { label: 'Property Videos', href: '#' },
-      { label: 'Podcasts', href: '#' },
-    ],
-  },
-  {
-    title: 'ABOUT US',
-    links: [
-      { label: 'About', href: '/about' },
-      { label: 'Meet The Team', href: '/agents' },
-      { label: 'Careers', href: '#' },
-      { label: 'Apply Now', href: '#' },
-      { label: 'Contact', href: '/contact' },
-    ],
-  },
-  {
-    title: 'CONNECT',
-    links: [
-      { label: 'Instagram', href: '#', icon: Instagram },
-      { label: 'Facebook', href: '#', icon: Facebook },
-      { label: 'Youtube', href: '#', icon: Youtube },
-      { label: 'Linkedin', href: '#', icon: Linkedin },
-      { label: 'Tiktok', href: '#', icon: Twitter },
+      { label: 'Privacy Policy', href: '#' },
+      { label: 'Terms of Services', href: '#' },
+      { label: "Lawyer's Corners", href: '#' },
     ],
   },
 ];
 
+const socialIconLinks: FooterLink[] = [
+  { label: 'X', href: '#', icon: XIcon },
+  { label: 'Linkedin', href: '#', icon: Linkedin },
+  { label: 'Instagram', href: '#', icon: Instagram },
+  { label: 'Facebook', href: '#', icon: Facebook },
+];
 
 export function Footer() {
-  const [isBackToTopVisible, setIsBackToTopVisible] = useState(false);
   const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
-
-  const toggleBackToTopVisibility = () => {
-    if (window.pageYOffset > 300) {
-      setIsBackToTopVisible(true);
-    } else {
-      setIsBackToTopVisible(false);
-    }
-  };
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -84,13 +62,6 @@ export function Footer() {
       behavior: 'smooth',
     });
   };
-
-  useEffect(() => {
-    window.addEventListener('scroll', toggleBackToTopVisibility);
-    return () => {
-      window.removeEventListener('scroll', toggleBackToTopVisibility);
-    };
-  }, []);
 
   useEffect(() => {
     let active = true;
@@ -115,147 +86,134 @@ export function Footer() {
     };
   }, []);
 
-  const displayName = getAgencyDisplayName(siteConfig);
-  const phone = getAgencyPhone(siteConfig) || '+971 4 876 2333';
-  const email = getAgencyEmail(siteConfig) || 'contact@example.com';
-  const address = siteConfig?.profile?.officeAddress || '7th, 8th & 20th Floor, Control Tower, Motor City, Dubai, UAE.';
-  const brochureHref =
-    getAgencyBrochureUrl(siteConfig)
-    || (email ? `mailto:${email}?subject=${encodeURIComponent(`${displayName} brochure request`)}` : '/contact');
-  const directionsHref = address
-    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`
-    : '#';
-  const brochureIsExternal = /^https?:\/\//i.test(brochureHref) || brochureHref.startsWith('mailto:');
+  const mappedDisplayName = getAgencyDisplayName(siteConfig);
+  const displayName = mappedDisplayName === 'Agency Website' ? 'Aether Luxury' : mappedDisplayName;
+  const logoUrl = siteConfig?.profile?.logo || null;
+  const footerDescription =
+    siteConfig?.branding?.tagline
+    || siteConfig?.branding?.bio
+    || siteConfig?.profile?.aboutCompany
+    || 'Luxury real estate advisors helping clients discover, market, and secure exceptional Dubai properties.';
   const socialLinks = [
-    { label: 'Instagram', href: toSocialUrl('instagram', siteConfig?.branding?.instagram) || '#' },
-    { label: 'Facebook', href: siteConfig?.profile?.social?.facebookUrl || '#' },
-    { label: 'Youtube', href: siteConfig?.profile?.social?.youtubeUrl || '#' },
+    { label: 'X', href: toSocialUrl('twitter', siteConfig?.branding?.twitter || siteConfig?.profile?.social?.twitterUrl) || '#' },
     { label: 'Linkedin', href: toSocialUrl('linkedin', siteConfig?.branding?.linkedin) || '#' },
-    { label: 'Tiktok', href: siteConfig?.profile?.social?.tiktokUrl || '#' },
+    { label: 'Instagram', href: toSocialUrl('instagram', siteConfig?.branding?.instagram || siteConfig?.profile?.social?.instagramUrl) || '#' },
+    { label: 'Facebook', href: siteConfig?.profile?.social?.facebookUrl || '#' },
   ];
-  const footerColumns = footerLinkColumns.map((column) =>
-    column.title === 'CONNECT'
-      ? {
-        ...column,
-        links: column.links.map((link) => ({
-          ...link,
-          href: socialLinks.find((social) => social.label === link.label)?.href || '#',
-        })),
-      }
-      : column,
+  const socialColumns = socialIconLinks.map((link) => ({
+    ...link,
+    href: socialLinks.find((social) => social.label === link.label)?.href || '#',
+  }));
+  const copyrightText =
+    siteConfig?.profile?.footer?.copyrightSuffix
+    || `Copyright \u00A9 ${new Date().getFullYear()}, ${displayName}, All Rights Reserved.`;
+
+  const renderLink = (link: FooterLink, className: string) => (
+    <Link href={link.href} className={className}>
+      {link.label}
+    </Link>
   );
 
   return (
-    <footer className="bg-muted text-foreground pt-16">
-      <div className="container">
-        <div className="flex flex-col lg:flex-row justify-between gap-12">
-          {/* Column 1: Brand & Contact */}
-          <div className="flex-shrink-0 lg:w-auto">
-            <Link href="/" aria-label={displayName}>
-              <Logo logoUrl={siteConfig?.profile?.logo || null} name={displayName} />
-            </Link>
-            <div className="mt-6 space-y-4 max-w-xs">
-              <p className="font-bold text-lg text-primary">{phone}</p>
-              <p className="text-sm text-muted-foreground">{address}</p>
-              <a href={`mailto:${email}`} className="block text-sm text-muted-foreground hover:text-primary">
-                {email}
-              </a>
-              <div className="flex flex-col items-start gap-3 pt-1">
-                <a
-                  href={directionsHref}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline"
-                >
-                  <MapPin className="h-4 w-4" />
-                  GET DIRECTIONS
-                </a>
-                {/* <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                            <a
-                              href={brochureHref}
-                              target={brochureIsExternal ? '_blank' : undefined}
-                              rel={brochureIsExternal ? 'noreferrer' : undefined}
-                            >
-                              <Download className="mr-2 h-4 w-4" />
-                              BROCHURE
-                            </a>
-                          </Button> */}
+    <footer className="bg-[#004d46] text-[#d9ebe7]">
+      <div className="w-full overflow-hidden bg-[#004d46]">
+        <div className="relative min-h-[420px] px-8 py-14 sm:px-12 md:px-20 lg:px-28">
+          <svg
+            className="pointer-events-none absolute inset-y-0 right-0 hidden h-full w-[62%] text-[#2c7069] opacity-55 md:block"
+            viewBox="0 0 720 430"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path d="M160 430L470 0" stroke="currentColor" strokeWidth="1" />
+            <path d="M250 430L565 128L720 332" stroke="currentColor" strokeWidth="1" />
+            <path d="M360 430L500 285L720 410" stroke="currentColor" strokeWidth="1" />
+            <path d="M720 300L570 0" stroke="currentColor" strokeWidth="1" />
+          </svg>
+
+          <div className="relative z-10 grid gap-12 lg:grid-cols-[minmax(260px,1fr)_minmax(320px,0.95fr)] lg:gap-24">
+            <div className="flex max-w-[360px] flex-col items-start">
+              <Link href="/" aria-label={displayName} className="inline-flex items-center gap-3">
+                {logoUrl ? (
+                  <span className="relative h-9 w-9 overflow-hidden rounded-full border border-[#e3aa1d]/50 bg-white">
+                    <Image src={logoUrl} alt={displayName} fill className="object-contain p-1" />
+                  </span>
+                ) : (
+                  <span className="flex h-8 w-8 items-center justify-center text-[#e3aa1d]">
+                    <svg viewBox="0 0 32 32" className="h-8 w-8" fill="none" aria-hidden="true">
+                      <path d="M16 4L27 26H5L16 4Z" stroke="currentColor" strokeWidth="2.2" />
+                      <path d="M16 10L22 23H10L16 10Z" stroke="currentColor" strokeWidth="2.2" />
+                      <path d="M16 16L19 23H13L16 16Z" stroke="currentColor" strokeWidth="2.2" />
+                    </svg>
+                  </span>
+                )}
+                <span className="font-headline text-2xl font-bold uppercase tracking-[0.08em] text-[#f2f5f2]">
+                  {displayName}
+                </span>
+              </Link>
+
+              <p className="mt-11 max-w-[310px] text-[17px] font-bold leading-7 text-[#e1efeb]">
+                {footerDescription}
+              </p>
+
+              <div className="mt-9 flex items-center gap-7">
+                {socialColumns.map((link) => {
+                  const Icon = link.icon;
+                  return (
+                    <a
+                      key={link.label}
+                      href={link.href}
+                      target={link.href === '#' ? undefined : '_blank'}
+                      rel={link.href === '#' ? undefined : 'noopener noreferrer'}
+                      aria-label={link.label}
+                      className="text-[#d9ebe7] transition-colors hover:text-[#e3aa1d]"
+                    >
+                      {Icon && <Icon className="h-[22px] w-[22px]" strokeWidth={2.4} />}
+                    </a>
+                  );
+                })}
               </div>
+
+              <button
+                type="button"
+                onClick={scrollToTop}
+                className="mt-12 inline-flex h-12 items-center gap-4 border border-[#d9ebe7]/80 px-5 text-[11px] font-bold uppercase tracking-[0.08em] text-[#d9ebe7] transition-colors hover:border-[#e3aa1d] hover:text-[#e3aa1d]"
+              >
+                <span className="flex h-5 w-5 items-center justify-center">
+                  <ArrowUp className="h-5 w-5" />
+                </span>
+                Back To Top
+              </button>
             </div>
-          </div>
 
-          {/* Columns 2-5: Links */}
-          <div className="flex-grow grid grid-cols-2 md:grid-cols-4 gap-8">
-            {footerColumns.map((column) => (
-              <div key={column.title}>
-                <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-4">{column.title}</h3>
-                <ul className="space-y-3">
-                  {column.links.map((link) => {
-                    const Icon = link.icon;
-                    const content = (
-                      <>
-                        {Icon && <Icon className="h-5 w-5" />}
-                        <span>{link.label}</span>
-                      </>
-                    );
-
-                    return (
+            <div className="grid max-w-[520px] grid-cols-1 gap-10 sm:grid-cols-2 lg:ml-auto lg:mr-16 xl:mr-24">
+              {footerLinkColumns.map((column) => (
+                <div key={column.title}>
+                  <h3 className="mb-8 font-body text-[15px] font-bold tracking-normal text-[#f2f5f2]">
+                    {column.title}
+                  </h3>
+                  <ul className="space-y-4">
+                    {column.links.map((link, index) => (
                       <li key={link.label}>
-                        <Link href={link.href} target={link.icon ? '_blank' : '_self'} rel={link.icon ? 'noopener noreferrer' : ''} className="flex items-center gap-3 text-base text-muted-foreground hover:text-primary transition-colors">
-                          {content}
-                        </Link>
+                        {renderLink(
+                          link,
+                          [
+                            'text-[15px] leading-none text-[#b9d2cd] transition-colors hover:text-[#f2f5f2]',
+                            index === 0 && column.title === 'Site Map' ? 'underline underline-offset-4 text-[#e5f3ef]' : '',
+                          ].join(' ')
+                        )}
                       </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ))}
-          </div>
-
-          {/* Column 6: Awards */}
-          <div className="flex-shrink-0">
-            <h3 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-4 lg:text-right">Awards</h3>
-            <div className="flex gap-4 items-start justify-start lg:justify-end">
-              <div className="bg-gray-800 text-white p-4 h-[150px] w-24 flex flex-col justify-center items-center text-center rounded">
-                <p className="font-bold text-xs">Dubai Property Awards</p>
-                <p className="text-xs mt-1">2025-2026</p>
-                <p className="text-xs mt-2 leading-tight">Best Real Estate Agency Single Office</p>
-              </div>
-              <div className="bg-gray-800 text-white p-4 h-[150px] w-24 flex flex-col justify-center items-center text-center rounded">
-                <p className="font-bold text-xs">Dubai Property Awards</p>
-                <p className="text-xs mt-1">2025-2026</p>
-                <p className="text-xs mt-2 leading-tight">Best Real Estate Agency Marketing</p>
-              </div>
-              <div className="bg-red-600 text-white p-4 h-[150px] w-24 flex flex-col justify-center items-center text-center rounded">
-                <p className="font-bold text-sm">Great Place To Work</p>
-                <p className="text-xs mt-1">Certified</p>
-              </div>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        <div className="mt-16 border-t border-border pt-8 pb-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
-              <Link href="#" className="hover:text-primary">Terms & Conditions</Link>
-              <Link href="#" className="hover:text-primary">Privacy Policy</Link>
-              <Link href="#" className="hover:text-primary">Cookie Policy</Link>
-              <Link href="#" className="hover:text-primary">Complaints</Link>
-            </div>
-            <p className="text-sm text-muted-foreground text-center md:text-right">&copy; {displayName} {new Date().getFullYear()}</p>
-          </div>
+        <div className="bg-[#e3aa1d] px-6 py-2 text-center text-[10px] leading-none text-[#164942]">
+          {copyrightText}
         </div>
       </div>
-      {isBackToTopVisible && (
-        <Button
-          onClick={scrollToTop}
-          className="fixed bottom-5 right-5 h-12 w-12 rounded-full border border-border/30 bg-background/30 text-primary backdrop-blur-lg shadow-lg hover:bg-background/50 transition-opacity duration-300"
-          size="icon"
-          aria-label="Back to top"
-        >
-          <ArrowUp className="h-6 w-6" />
-        </Button>
-      )}
     </footer>
   );
 }
