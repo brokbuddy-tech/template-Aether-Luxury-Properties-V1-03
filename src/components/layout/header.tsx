@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
 import { Logo } from '@/components/logo';
@@ -28,6 +28,10 @@ export function Header() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
+  const desktopNavRef = useRef<HTMLElement | null>(null);
+  const desktopLinkRefs = useRef<Record<string, HTMLAnchorElement | null>>({});
+  const activeNavHref = navLinks.find((link) => pathname === link.href || pathname.startsWith(`${link.href}/`))?.href;
+  const [activeUnderline, setActiveUnderline] = useState<{ left: number; width: number } | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -55,18 +59,52 @@ export function Header() {
   const displayName = getAgencyDisplayName(siteConfig);
   const logoUrl = siteConfig?.profile?.logo || null;
 
-  const NavLink = ({ href, label }: { href: string; label: string }) => (
+  useEffect(() => {
+    const updateUnderline = () => {
+      if (!activeNavHref || !desktopNavRef.current) {
+        setActiveUnderline(null);
+        return;
+      }
+
+      const activeLink = desktopLinkRefs.current[activeNavHref];
+      if (!activeLink) {
+        setActiveUnderline(null);
+        return;
+      }
+
+      const navRect = desktopNavRef.current.getBoundingClientRect();
+      const linkRect = activeLink.getBoundingClientRect();
+      setActiveUnderline({
+        left: linkRect.left - navRect.left,
+        width: linkRect.width,
+      });
+    };
+
+    updateUnderline();
+    window.addEventListener('resize', updateUnderline);
+    return () => window.removeEventListener('resize', updateUnderline);
+  }, [activeNavHref]);
+
+  const NavLink = ({ href, label, isDesktop = false }: { href: string; label: string; isDesktop?: boolean }) => {
+    const isActive = pathname === href || pathname.startsWith(`${href}/`);
+
+    return (
     <Link
       href={href}
+      ref={isDesktop ? (node) => {
+        desktopLinkRefs.current[href] = node;
+      } : undefined}
+      aria-current={isActive ? 'page' : undefined}
       className={cn(
-        'text-base font-bold transition-colors hover:text-primary uppercase tracking-wider',
-        pathname === href ? 'text-primary' : 'text-foreground/60'
+        'relative py-2 text-base font-bold transition-colors hover:text-primary uppercase tracking-wider',
+        isActive ? 'text-primary' : 'text-foreground/60'
       )}
       onClick={() => setIsMobileMenuOpen(false)}
     >
       {label}
     </Link>
-  );
+    );
+  };
   
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/30 bg-background/80 md:bg-background/50 backdrop-blur-lg supports-[backdrop-filter]:bg-background/70 md:supports-[backdrop-filter]:bg-background/30">
@@ -75,9 +113,18 @@ export function Header() {
           <Logo logoUrl={logoUrl} name={displayName} />
         </Link>
         
-        <nav className="hidden md:flex items-center gap-8">
+        <nav ref={desktopNavRef} className="relative hidden md:flex items-center gap-8 pb-1">
+          {activeUnderline && (
+            <span
+              className="pointer-events-none absolute bottom-0 h-0.5 rounded-full bg-primary transition-all duration-300 ease-out"
+              style={{
+                left: activeUnderline.left,
+                width: activeUnderline.width,
+              }}
+            />
+          )}
           {navLinks.map((link) => (
-            <NavLink key={link.href} {...link} />
+            <NavLink key={link.href} {...link} isDesktop />
           ))}
         </nav>
 
