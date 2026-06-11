@@ -6,6 +6,7 @@ import { Footer } from '@/components/layout/footer';
 import { Toaster } from "@/components/ui/toaster"
 import { AiSearchModalProvider } from '@/hooks/use-ai-search-modal';
 import { AiSearchModal } from '@/components/ai-search-modal';
+import { AetherLuxuryContactPopup } from '@/components/aether-luxury-contact-popup';
 import { getSiteConfig } from '@/lib/api';
 import { getAgencyDisplayName } from '@/lib/live-mappers';
 
@@ -53,6 +54,7 @@ export default function RootLayout({
             </div>
           </div>
           <AiSearchModal />
+          <AetherLuxuryContactPopup />
           <Toaster />
         </AiSearchModalProvider>
       </body>

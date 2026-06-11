@@ -26,7 +26,7 @@ const contactSchema = z.object({
   email: z.string().email('Invalid email address'),
   phone: z.string().min(1, 'Phone number is required'),
   subject: z.string().min(1, 'Subject is required'),
-  message: z.string().min(1, 'Message is required'),
+  message: z.string().min(10, 'Message must be at least 10 characters'),
 });
 
 type ContactFormValues = z.infer<typeof contactSchema>;
@@ -72,6 +72,8 @@ export default function ContactPage() {
         email: data.email,
         phone: data.phone,
         message: `Subject: ${data.subject}\n\n${data.message}`,
+        templateName: 'Aether Luxury Properties',
+        formContext: 'contact-page',
       });
       toast({
           title: "Message Sent!",
@@ -186,7 +188,7 @@ export default function ContactPage() {
                           )} />
                         </div>
                         <FormField control={form.control} name="message" render={({ field }) => (
-                          <FormItem><FormLabel>Message</FormLabel><FormControl><Textarea placeholder="Your message here..." className="min-h-[150px]" {...field} /></FormControl><FormMessage /></FormItem>
+                          <FormItem><FormLabel>Message</FormLabel><FormControl><Textarea placeholder="Your message here..." className="min-h-[150px]" minLength={10} {...field} /></FormControl><FormMessage /></FormItem>
                         )} />
                         <Button type="submit" disabled={isSubmitting} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
                             {isSubmitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending...</> : 'Send Message'}
