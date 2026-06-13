@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
-import { submitOrgInquiry } from "@/lib/api";
+import { submitContactInquiryAction } from "@/app/actions/submit-inquiry";
 import { getEffectiveAgencySlug } from "@/lib/agency-routing";
 
 const POPUP_STORAGE_KEY = "aetherLuxuryContactPopupClosed";
@@ -71,14 +71,15 @@ export function AetherLuxuryContactPopup() {
     const formData = new FormData(form);
 
     try {
-      await submitOrgInquiry({
+      await submitContactInquiryAction({
         name: String(formData.get("name") || "").trim(),
         email: String(formData.get("email") || "").trim(),
         phone: String(formData.get("phone") || "").trim(),
         message: String(formData.get("message") || "").trim(),
         templateName: "Aether Luxury Properties",
         formContext: "timed-contact-popup",
-      }, agencySlug);
+        agencySlug,
+      });
 
       markPopupSeen("submitted");
       form.reset();

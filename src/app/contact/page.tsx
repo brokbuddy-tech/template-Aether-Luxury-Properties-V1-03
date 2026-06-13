@@ -17,7 +17,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { getSiteConfig, submitOrgInquiry } from '@/lib/api';
+import { submitContactInquiryAction } from '@/app/actions/submit-inquiry';
+import { getSiteConfig } from '@/lib/api';
 import { getEffectiveAgencySlug } from '@/lib/agency-routing';
 import { getAgencyDisplayName, getAgencyEmail, getAgencyPhone } from '@/lib/live-mappers';
 import type { SiteConfig } from '@/lib/live-types';
@@ -70,14 +71,15 @@ export default function ContactPage() {
   const onSubmit: SubmitHandler<ContactFormValues> = async (data) => {
     setIsSubmitting(true);
     try {
-      await submitOrgInquiry({
+      await submitContactInquiryAction({
         name: data.name,
         email: data.email,
         phone: data.phone,
         message: `Subject: ${data.subject}\n\n${data.message}`,
         templateName: 'Aether Luxury Properties',
         formContext: 'contact-page',
-      }, agencySlug);
+        agencySlug,
+      });
       toast({
           title: "Message Sent!",
           description: "Thank you for reaching out. We will get back to you shortly.",
