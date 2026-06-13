@@ -72,7 +72,6 @@ export function PropertyCard({ property }: { property: Property }) {
             )}
           </div>
         </Link>
-
         <div className="p-4 flex flex-col flex-grow text-[#111827]">
           <p className="text-2xl font-extrabold">
             AED {property.price.toLocaleString()}
@@ -89,14 +88,18 @@ export function PropertyCard({ property }: { property: Property }) {
               <span className="truncate">{property.address}</span>
             </div>
             <div className="flex items-center gap-4 text-sm pt-2">
-              <div className="flex items-center gap-1">
-                <BedDouble className="h-4 w-4" />
-                <span>{property.bedrooms} Beds</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Bath className="h-4 w-4" />
-                <span>{property.bathrooms} Baths</span>
-              </div>
+              {property.bedrooms > 0 && (
+                <div className="flex items-center gap-1">
+                  <BedDouble className="h-4 w-4" />
+                  <span>{property.bedrooms} Beds</span>
+                </div>
+              )}
+              {property.bathrooms > 0 && (
+                <div className="flex items-center gap-1">
+                  <Bath className="h-4 w-4" />
+                  <span>{property.bathrooms} Baths</span>
+                </div>
+              )}
               <div className="flex items-center gap-1">
                 <Square className="h-4 w-4" />
                 <span>{property.area.toLocaleString()} sqft</span>

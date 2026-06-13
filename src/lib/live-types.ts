@@ -82,6 +82,7 @@ export type LiveProperty = {
   organizationName?: string;
   organizationSlug?: string;
   agent?: PropertyAgent;
+  floorPlans?: any[];
 };
 
 export type SiteAgent = {

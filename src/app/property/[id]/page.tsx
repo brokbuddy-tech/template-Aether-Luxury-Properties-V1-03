@@ -11,12 +11,12 @@ import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { 
-  BedDouble, 
-  Bath, 
+import {
+  BedDouble,
+  Bath,
   Square,
-  MapPin, 
-  Phone, 
+  MapPin,
+  Phone,
   Link2,
   Facebook,
   Twitter,
@@ -28,6 +28,7 @@ import Link from 'next/link';
 import { ListingHeroGallery } from '@/components/listing-hero-gallery';
 import { PropertyCard } from '@/components/property-card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PropertyBrochureButton } from '@/components/property-brochure-button';
 import { LocationMap } from '@/components/shared/location-map';
 import { getProperties, getPropertyById as getLivePropertyById } from '@/lib/api';
@@ -62,63 +63,63 @@ function MortgageCalculator({ price }: { price: number }) {
 
   return (
     <Card className="bg-muted/50 mt-12">
-        <CardHeader>
-            <CardTitle className="font-thin tracking-[0.2em]">EXPLORE YOUR MORTGAGE POSSIBILITIES</CardTitle>
-        </CardHeader>
-        <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="md:col-span-2 space-y-8">
-                    <div>
-                        <div className="flex justify-between items-center mb-2">
-                            <Label htmlFor="purchasePrice">Purchase Price (AED)</Label>
-                            <span className="font-bold">{purchasePrice.toLocaleString()}</span>
-                        </div>
-                        <Slider id="purchasePrice" value={[purchasePrice]} onValueChange={(v) => setPurchasePrice(v[0])} min={price * 0.5} max={price * 1.5} step={10000} />
-                    </div>
-                    <div>
-                        <div className="flex justify-between items-center mb-2">
-                            <Label htmlFor="downPayment">Down Payment ({downPaymentPercent}%)</Label>
-                            <span className="font-bold">{downPaymentValue.toLocaleString()}</span>
-                        </div>
-                        <Slider id="downPayment" value={[downPaymentPercent]} onValueChange={(v) => setDownPaymentPercent(v[0])} min={10} max={80} step={1} />
-                    </div>
-                    <div>
-                        <div className="flex justify-between items-center mb-2">
-                            <Label htmlFor="loanPeriod">Loan Period (Years)</Label>
-                            <span className="font-bold">{loanPeriod}</span>
-                        </div>
-                        <Slider id="loanPeriod" value={[loanPeriod]} onValueChange={(v) => setLoanPeriod(v[0])} min={5} max={30} step={1} />
-                    </div>
-                     <div>
-                        <div className="flex justify-between items-center mb-2">
-                            <Label htmlFor="interestRate">Interest Rate (%)</Label>
-                            <span className="font-bold">{interestRate.toFixed(2)}</span>
-                        </div>
-                        <Slider id="interestRate" value={[interestRate]} onValueChange={(v) => setInterestRate(v[0])} min={1} max={10} step={0.01} />
-                    </div>
-                </div>
-                <div className="flex items-center justify-center bg-background rounded-lg p-6">
-                    <div className="text-center">
-                        <p className="text-muted-foreground">Monthly Payment</p>
-                        <p className="text-4xl font-bold text-primary mt-2">AED {monthlyPayment.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}</p>
-                    </div>
-                </div>
+      <CardHeader>
+        <CardTitle className="font-thin tracking-[0.2em]">EXPLORE YOUR MORTGAGE POSSIBILITIES</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="md:col-span-2 space-y-8">
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <Label htmlFor="purchasePrice">Purchase Price (AED)</Label>
+                <span className="font-bold">{purchasePrice.toLocaleString()}</span>
+              </div>
+              <Slider id="purchasePrice" value={[purchasePrice]} onValueChange={(v) => setPurchasePrice(v[0])} min={price * 0.5} max={price * 1.5} step={10000} />
             </div>
-        </CardContent>
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <Label htmlFor="downPayment">Down Payment ({downPaymentPercent}%)</Label>
+                <span className="font-bold">{downPaymentValue.toLocaleString()}</span>
+              </div>
+              <Slider id="downPayment" value={[downPaymentPercent]} onValueChange={(v) => setDownPaymentPercent(v[0])} min={10} max={80} step={1} />
+            </div>
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <Label htmlFor="loanPeriod">Loan Period (Years)</Label>
+                <span className="font-bold">{loanPeriod}</span>
+              </div>
+              <Slider id="loanPeriod" value={[loanPeriod]} onValueChange={(v) => setLoanPeriod(v[0])} min={5} max={30} step={1} />
+            </div>
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <Label htmlFor="interestRate">Interest Rate (%)</Label>
+                <span className="font-bold">{interestRate.toFixed(2)}</span>
+              </div>
+              <Slider id="interestRate" value={[interestRate]} onValueChange={(v) => setInterestRate(v[0])} min={1} max={10} step={0.01} />
+            </div>
+          </div>
+          <div className="flex items-center justify-center bg-background rounded-lg p-6">
+            <div className="text-center">
+              <p className="text-muted-foreground">Monthly Payment</p>
+              <p className="text-4xl font-bold text-primary mt-2">AED {monthlyPayment.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</p>
+            </div>
+          </div>
+        </div>
+      </CardContent>
     </Card>
   );
 }
 
 const WhatsAppIcon = () => (
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-    >
-        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 4.315 1.919 6.066l-1.425 5.215 5.233-1.383z" />
-    </svg>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+  >
+    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.894 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 4.315 1.919 6.066l-1.425 5.215 5.233-1.383z" />
+  </svg>
 );
 
 function getCommunityFromAddress(address: string) {
@@ -202,6 +203,9 @@ export default function PropertyDetailPage() {
     property.title,
   );
   const qrCodeImage = PlaceHolderImages.find(p => p.id === 'qr-code');
+  const availableFloorPlans = (property.floorPlans ?? []).filter(
+    (fp) => typeof fp?.url === 'string' && fp.url.trim().length > 0
+  );
 
   const upfrontCosts = {
     securityDeposit: property.price * 0.05,
@@ -213,8 +217,8 @@ export default function PropertyDetailPage() {
     chillerDeposit: 2000,
     moveInPermit: 0,
   };
-    
-  const totalCost = 
+
+  const totalCost =
     property.price +
     upfrontCosts.securityDeposit +
     upfrontCosts.agencyFee +
@@ -233,229 +237,349 @@ export default function PropertyDetailPage() {
         title={property.title}
         virtualTourUrl={property.virtualTourUrl}
       />
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2">
-            {property.type === 'RENT' && (
-                <Accordion type="single" collapsible className="w-full bg-muted/50 rounded-lg mb-8">
-                    <AccordionItem value="item-1" className="border-0">
-                        <AccordionTrigger className="px-4 py-3 text-base font-semibold hover:no-underline">
-                            <div className="flex items-center gap-3">
-                                <Info className="h-5 w-5 text-muted-foreground" />
-                                Show upfront costs
-                            </div>
-                        </AccordionTrigger>
-                        <AccordionContent className="px-4 pb-4">
-                            <div className="space-y-2 text-sm">
-                                <div className="flex justify-between items-center">
-                                    <p>Rental Price (Yearly)</p>
-                                    <p className="font-semibold">AED {property.price.toLocaleString()}</p>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <p>Security Deposit</p>
-                                    <p className="font-semibold">AED {upfrontCosts.securityDeposit.toLocaleString()}</p>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <p>Agency Fee</p>
-                                    <p className="font-semibold">AED {upfrontCosts.agencyFee.toLocaleString()} <span className="text-xs text-muted-foreground">+ 5% VAT</span></p>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <p>Ejari Fee</p>
-                                    <p className="font-semibold">AED {upfrontCosts.ejariFee.toLocaleString()} <span className="text-xs text-muted-foreground">+ 5% VAT</span></p>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <p>DEWA Deposit</p>
-                                    <p className="font-semibold">AED {upfrontCosts.dewaDeposit.toLocaleString()}</p>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <p>Empower/Chiller Deposit</p>
-                                    <p className="font-semibold">AED {upfrontCosts.chillerDeposit.toLocaleString()}</p>
-                                </div>
-                                <div className="flex justify-between items-center">
-                                    <p>Move-in Permit</p>
-                                    <p className="font-semibold">AED {upfrontCosts.moveInPermit.toLocaleString()}</p>
-                                </div>
-                            </div>
-                            <Separator className="my-4" />
-                            <div className="text-center">
-                                <p className="text-lg font-bold">TOTAL: AED {totalCost.toLocaleString('en-US', {maximumFractionDigits: 0})}</p>
-                            </div>
-                        </AccordionContent>
-                    </AccordionItem>
-                </Accordion>
-            )}
+          {property.type === 'RENT' && (
+            <Accordion type="single" collapsible className="w-full bg-muted/50 rounded-lg mb-8">
+              <AccordionItem value="item-1" className="border-0">
+                <AccordionTrigger className="px-4 py-3 text-base font-semibold hover:no-underline">
+                  <div className="flex items-center gap-3">
+                    <Info className="h-5 w-5 text-muted-foreground" />
+                    Show upfront costs
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="px-4 pb-4">
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between items-center">
+                      <p>Rental Price (Yearly)</p>
+                      <p className="font-semibold">AED {property.price.toLocaleString()}</p>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <p>Security Deposit</p>
+                      <p className="font-semibold">AED {upfrontCosts.securityDeposit.toLocaleString()}</p>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <p>Agency Fee</p>
+                      <p className="font-semibold">AED {upfrontCosts.agencyFee.toLocaleString()} <span className="text-xs text-muted-foreground">+ 5% VAT</span></p>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <p>Ejari Fee</p>
+                      <p className="font-semibold">AED {upfrontCosts.ejariFee.toLocaleString()} <span className="text-xs text-muted-foreground">+ 5% VAT</span></p>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <p>DEWA Deposit</p>
+                      <p className="font-semibold">AED {upfrontCosts.dewaDeposit.toLocaleString()}</p>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <p>Empower/Chiller Deposit</p>
+                      <p className="font-semibold">AED {upfrontCosts.chillerDeposit.toLocaleString()}</p>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <p>Move-in Permit</p>
+                      <p className="font-semibold">AED {upfrontCosts.moveInPermit.toLocaleString()}</p>
+                    </div>
+                  </div>
+                  <Separator className="my-4" />
+                  <div className="text-center">
+                    <p className="text-lg font-bold">TOTAL: AED {totalCost.toLocaleString('en-US', { maximumFractionDigits: 0 })}</p>
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          )}
 
           <div className="mb-8">
             <p className="text-3xl md:text-4xl font-extrabold text-primary">AED {property.price.toLocaleString()}{property.type === 'RENT' ? ' / year' : ''}</p>
             <p className="text-muted-foreground text-sm">Property ID-{property.id}</p>
             <h1 className="text-xl md:text-2xl font-bold font-headline mt-2">{property.title}</h1>
-            <p className="text-base md:text-lg text-muted-foreground">{property.address}</p>
           </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <div className="lg:col-span-2">
+              {property.type === 'RENT' && (
+                <Accordion type="single" collapsible className="w-full bg-muted/50 rounded-lg mb-8">
+                  <AccordionItem value="item-1" className="border-0">
+                    <AccordionTrigger className="px-4 py-3 text-base font-semibold hover:no-underline">
+                      <div className="flex items-center gap-3">
+                        <Info className="h-5 w-5 text-muted-foreground" />
+                        Show upfront costs
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="px-4 pb-4">
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between items-center">
+                          <p>Rental Price (Yearly)</p>
+                          <p className="font-semibold">AED {property.price.toLocaleString()}</p>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <p>Security Deposit</p>
+                          <p className="font-semibold">AED {upfrontCosts.securityDeposit.toLocaleString()}</p>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <p>Agency Fee</p>
+                          <p className="font-semibold">AED {upfrontCosts.agencyFee.toLocaleString()} <span className="text-xs text-muted-foreground">+ 5% VAT</span></p>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <p>Ejari Fee</p>
+                          <p className="font-semibold">AED {upfrontCosts.ejariFee.toLocaleString()} <span className="text-xs text-muted-foreground">+ 5% VAT</span></p>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <p>DEWA Deposit</p>
+                          <p className="font-semibold">AED {upfrontCosts.dewaDeposit.toLocaleString()}</p>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <p>Empower/Chiller Deposit</p>
+                          <p className="font-semibold">AED {upfrontCosts.chillerDeposit.toLocaleString()}</p>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <p>Move-in Permit</p>
+                          <p className="font-semibold">AED {upfrontCosts.moveInPermit.toLocaleString()}</p>
+                        </div>
+                      </div>
+                      <Separator className="my-4" />
+                      <div className="text-center">
+                        <p className="text-lg font-bold">TOTAL: AED {totalCost.toLocaleString('en-US', { maximumFractionDigits: 0 })}</p>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              )}
 
-          <Separator />
+              <div className="mb-8">
+                <p className="text-3xl md:text-4xl font-extrabold text-primary">AED {property.price.toLocaleString()}{property.type === 'RENT' ? ' / year' : ''}</p>
+                <p className="text-muted-foreground text-sm">Property ID-{property.id}</p>
+                <h1 className="text-xl md:text-2xl font-bold font-headline mt-2">{property.title}</h1>
+                <p className="text-base md:text-lg text-muted-foreground">{property.address}</p>
+              </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 py-8">
-            <div className="flex items-center gap-3"><BedDouble className="h-8 w-8 text-accent" /><div className=''><p className="font-bold">{property.bedrooms} Beds</p></div></div>
-            <div className="flex items-center gap-3"><Bath className="h-8 w-8 text-accent" /><div className=''><p className="font-bold">{property.bathrooms} Baths</p></div></div>
-            <div className="flex items-center gap-3"><Square className="h-8 w-8 text-accent" /><div className=''><p className="font-bold">{property.area.toLocaleString()} sqft</p></div></div>
-          </div>
-          
-          <Separator />
-
-          <div className="py-8">
-            <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-4">Property Description</h2>
-            <p className="text-muted-foreground leading-relaxed whitespace-pre-line">{property.description}</p>
-          </div>
-          
-          {property.keyFeatures && property.keyFeatures.length > 0 && (
-             <>
               <Separator />
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 py-8">
+                {property.bedrooms > 0 && <div className="flex items-center gap-3"><BedDouble className="h-8 w-8 text-accent" /><div className=''><p className="font-bold">{property.bedrooms} Beds</p></div></div>}
+                {property.bathrooms > 0 && <div className="flex items-center gap-3"><Bath className="h-8 w-8 text-accent" /><div className=''><p className="font-bold">{property.bathrooms} Baths</p></div></div>}
+                <div className="flex items-center gap-3"><Square className="h-8 w-8 text-accent" /><div className=''><p className="font-bold">{property.area.toLocaleString()} sqft</p></div></div>
+              </div>
+
+              <Separator />
+
               <div className="py-8">
-                <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-4">Key Features</h2>
-                <ul className="grid grid-cols-2 md:grid-cols-3 gap-4 text-muted-foreground">
-                  {property.keyFeatures.map(feature => (
-                    <li key={feature} className="flex items-center gap-2">
-                      <AmenityIcon name={feature} className="h-5 w-5" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
+                <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-4">Property Description</h2>
+                <p className="text-muted-foreground leading-relaxed whitespace-pre-line">{property.description}</p>
               </div>
-            </>
-          )}
 
-          <div className="py-8">
-            <h2 className="text-xl font-bold font-headline mb-4">LOCATION</h2>
-            <LocationMap
-              latitude={property.latitude}
-              longitude={property.longitude}
-              addressLabel={property.address}
-              locationLabel={getCommunityFromAddress(property.address) || property.address}
-            />
-            <p className="text-muted-foreground mt-2">{property.address}</p>
-          </div>
+              {availableFloorPlans.length > 0 && (
+                <>
+                  <Separator />
+                  <div className="py-8">
+                    <h2 className="text-xl font-bold font-headline mb-4">Floor Plans</h2>
+                    <Tabs defaultValue={availableFloorPlans[0]?.type || '0'} className="w-full mt-6">
+                      <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent mb-6 overflow-x-auto flex-nowrap">
+                        {availableFloorPlans.map((fp, i) => (
+                          <TabsTrigger
+                            key={i}
+                            value={fp.type || `${i}`}
+                            className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none px-4 py-3 uppercase text-sm tracking-wider font-semibold whitespace-nowrap"
+                          >
+                            {fp.type || fp.title || `Plan ${i + 1}`}
+                          </TabsTrigger>
+                        ))}
+                      </TabsList>
+                      {availableFloorPlans.map((fp, i) => (
+                        <TabsContent key={i} value={fp.type || `${i}`} className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+                          <div className="relative w-full border rounded-lg overflow-hidden bg-white p-6 shadow-sm">
+                            <div className="relative w-full aspect-[4/3] md:aspect-[16/9] flex items-center justify-center">
+                              <Image
+                                src={fp.url}
+                                alt={fp.title || fp.type || 'Floor Plan'}
+                                fill
+                                className="object-contain"
+                                unoptimized={fp.url.endsWith('.svg')}
+                              />
+                            </div>
+                            {fp.title && fp.title !== fp.type && (
+                              <p className="text-center mt-6 font-medium text-lg">{fp.title}</p>
+                            )}
+                          </div>
+                        </TabsContent>
+                      ))}
+                    </Tabs>
+                  </div>
+                </>
+              )}
 
-          {property.dldPermitNo && qrCodeImage && (
-            <div className="py-8">
-                <div className="p-8 rounded-lg bg-muted/50 flex flex-col md:flex-row items-center text-center md:text-left gap-8">
-                    <Image
-                        src={qrCodeImage.imageUrl.replace('data=Example', `data=${property.dldPermitNo}`)}
-                        alt="DLD Permit QR Code"
-                        width={120}
-                        height={120}
-                        className='rounded-md'
-                    />
-                    <div>
-                        <p className="text-xl font-bold">DLD Permit No:</p>
-                        <p className="text-2xl text-muted-foreground mt-1">{property.dldPermitNo}</p>
-                        <p className="text-sm text-muted-foreground mt-4 italic">
-                            This property listing has been reviewed and verified by Dubai Land Department
-                        </p>
+              {property.keyFeatures && property.keyFeatures.length > 0 && (
+                <>
+                  <Separator />
+                  <div className="py-8">
+                    <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-4">Key Features</h2>
+                    <ul className="grid grid-cols-2 md:grid-cols-3 gap-4 text-muted-foreground">
+                      {property.keyFeatures.map(feature => (
+                        <li key={feature} className="flex items-center gap-2">
+                          <AmenityIcon name={feature} className="h-5 w-5" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              )}
+
+              <div className="py-8">
+                <h2 className="text-xl font-bold font-headline mb-4">LOCATION</h2>
+                <LocationMap
+                  latitude={property.latitude}
+                  longitude={property.longitude}
+                  addressLabel={property.address}
+                  locationLabel={getCommunityFromAddress(property.address) || property.address}
+                />
+                <p className="text-muted-foreground mt-2">{property.address}</p>
+              </div>
+
+              {property.type === 'BUY' && <MortgageCalculator price={property.price} />}
+
+              {(property.dldPermitNo || property.trakheesi || property.reraPermit || property.agent.brn) && (
+                <>
+                  <Separator />
+                  <div className="py-8 mt-4">
+                    <h2 className="text-xl font-bold font-headline mb-6">Regulatory Information</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+                      <div className="space-y-4">
+                        {(property.dldPermitNo || property.trakheesi) && (
+                          <div className="flex justify-between items-center border-b pb-3">
+                            <span className="text-muted-foreground flex items-center gap-2"><Info className="h-4 w-4" /> Permit Number</span>
+                            <span className="font-semibold">{property.trakheesi || property.dldPermitNo}</span>
+                          </div>
+                        )}
+                        {property.reraPermit && (
+                          <div className="flex justify-between items-center border-b pb-3">
+                            <span className="text-muted-foreground flex items-center gap-2"><Info className="h-4 w-4" /> RERA Project Number</span>
+                            <span className="font-semibold">{property.reraPermit}</span>
+                          </div>
+                        )}
+                        {property.agent.brn && (
+                          <div className="flex justify-between items-center border-b pb-3">
+                            <span className="text-muted-foreground flex items-center gap-2"><Info className="h-4 w-4" /> BRN</span>
+                            <span className="font-semibold">{property.agent.brn}</span>
+                          </div>
+                        )}
+                      </div>
+                      {(property.dldPermitNo || property.trakheesi || property.dldPermitLink) && qrCodeImage && (
+                        <div className="flex flex-col items-center justify-center p-6 bg-muted/30 rounded-xl border">
+                          <p className="text-sm font-bold mb-4 uppercase tracking-widest text-center">Trakheesi Permit</p>
+                          <div className="bg-white p-2 rounded-lg shadow-sm border">
+                            <Image
+                              src={property.dldPermitLink || qrCodeImage.imageUrl.replace('data=Example', `data=${property.trakheesi || property.dldPermitNo}`)}
+                              alt="Trakheesi QR Code"
+                              width={140}
+                              height={140}
+                              className='rounded-md'
+                            />
+                          </div>
+                        </div>
+                      )}
                     </div>
-                </div>
+                  </div>
+                </>
+              )}
             </div>
-          )}
 
-          <Separator />
-          
-          {property.type === 'BUY' && <MortgageCalculator price={property.price} />}
-        </div>
+            <div className="lg:col-span-1">
+              <div className="sticky top-24">
+                <Card className="rounded-xl bg-muted p-6">
+                  <div className="flex flex-col items-center text-center">
+                    <Avatar className="h-32 w-32">
+                      {agentImage && <AvatarImage src={agentImage.src} alt={property.agent.name} />}
+                      <AvatarFallback>{property.agent.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <h3 className="mt-4 text-xl font-bold uppercase tracking-wider">{property.agent.name}</h3>
+                    <p className="text-muted-foreground">Luxury Property Specialist</p>
 
-        <div className="lg:col-span-1">
-          <div className="sticky top-24">
-            <Card className="rounded-xl bg-muted p-6">
-              <div className="flex flex-col items-center text-center">
-                <Avatar className="h-32 w-32">
-                  {agentImage && <AvatarImage src={agentImage.src} alt={property.agent.name} />}
-                  <AvatarFallback>{property.agent.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-                <h3 className="mt-4 text-xl font-bold uppercase tracking-wider">{property.agent.name}</h3>
-                <p className="text-muted-foreground">Luxury Property Specialist</p>
-
-                <div className="mt-6 grid w-full grid-cols-1 gap-2 sm:grid-cols-2">
-                  <div className="sm:col-span-2">
-                    <PropertyBrochureButton
-                      brochure={{
-                        title: property.title,
-                        subtitle: property.address,
-                        priceLabel: `AED ${property.price.toLocaleString()}${property.type === 'RENT' ? ' / year' : ''}`,
-                        description: property.description,
-                        heroImage: galleryImages[0]?.src || property.image,
-                        gallery: galleryImages.map((image) => image.src),
-                        stats: [
-                          { label: 'Bedrooms', value: `${property.bedrooms}` },
-                          { label: 'Bathrooms', value: `${property.bathrooms}` },
-                          { label: 'Area', value: `${property.area.toLocaleString()} sqft` },
-                        ],
-                        agentName: property.agent.name,
-                        agentTitle: 'Luxury Property Specialist',
-                        agentImage: agentImage?.src || property.agent.image,
-                        contactPhone: property.agent.phone || null,
-                        contactEmail: property.agent.email || null,
-                      }}
-                    >
-                      <Button variant="outline" className="w-full border-primary/30 bg-background text-primary hover:bg-primary/5 hover:text-primary uppercase font-bold px-6 py-3 h-auto">
-                        <FileText /> DOWNLOAD BROCHURE
+                    <div className="mt-6 grid w-full grid-cols-1 gap-2 sm:grid-cols-2">
+                      <div className="sm:col-span-2">
+                        <PropertyBrochureButton
+                          brochure={{
+                            title: property.title,
+                            subtitle: property.address,
+                            priceLabel: `AED ${property.price.toLocaleString()}${property.type === 'RENT' ? ' / year' : ''}`,
+                            description: property.description,
+                            heroImage: galleryImages[0]?.src || property.image,
+                            gallery: galleryImages.map((image) => image.src),
+                            stats: [
+                              ...(property.bedrooms > 0 ? [{ label: 'Bedrooms', value: `${property.bedrooms}` }] : []),
+                              ...(property.bathrooms > 0 ? [{ label: 'Bathrooms', value: `${property.bathrooms}` }] : []),
+                              { label: 'Area', value: `${property.area.toLocaleString()} sqft` },
+                            ],
+                            agentName: property.agent.name,
+                            agentTitle: 'Luxury Property Specialist',
+                            agentImage: agentImage?.src || property.agent.image,
+                            contactPhone: property.agent.phone || null,
+                            contactEmail: property.agent.email || null,
+                          }}
+                        >
+                          <Button variant="outline" className="w-full border-primary/30 bg-background text-primary hover:bg-primary/5 hover:text-primary uppercase font-bold px-6 py-3 h-auto">
+                            <FileText /> DOWNLOAD BROCHURE
+                          </Button>
+                        </PropertyBrochureButton>
+                      </div>
+                      <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
+                        <Phone /> PHONE
                       </Button>
-                    </PropertyBrochureButton>
-                  </div>
-                  <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
-                    <Phone /> PHONE
-                  </Button>
-                  <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
-                    <WhatsAppIcon /> WHATSAPP
-                  </Button>
-                </div>
+                      <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold px-6 py-3 h-auto">
+                        <WhatsAppIcon /> WHATSAPP
+                      </Button>
+                    </div>
 
-                <Separator className="my-6" />
+                    <Separator className="my-6" />
 
-                <div className="w-full">
-                  <p className="text-sm font-bold text-muted-foreground mb-3 uppercase">Share this property</p>
-                  <div className="flex justify-center gap-2">
-                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                        <Link2 />
-                    </Button>
-                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                        <WhatsAppIcon />
-                    </Button>
-                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                        <Facebook />
-                    </Button>
-                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                        <Twitter />
-                    </Button>
-                    <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
-                        <Linkedin />
-                    </Button>
+                    <div className="w-full">
+                      <p className="text-sm font-bold text-muted-foreground mb-3 uppercase">Share this property</p>
+                      <div className="flex justify-center gap-2">
+                        <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                          <Link2 />
+                        </Button>
+                        <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                          <WhatsAppIcon />
+                        </Button>
+                        <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                          <Facebook />
+                        </Button>
+                        <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                          <Twitter />
+                        </Button>
+                        <Button size="icon" className="rounded-full bg-accent hover:bg-accent/90 text-accent-foreground">
+                          <Linkedin />
+                        </Button>
+                      </div>
+                    </div>
                   </div>
+                </Card>
+              </div>
+            </div>
+          </div>
+          {relatedProperties.length > 0 && (
+            <div className="mt-24">
+              <Separator />
+              <div className="py-16">
+                <h2 className="text-3xl font-bold font-headline mb-8 text-center">Other Properties in {getCommunityFromAddress(property.address)}</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                  {relatedProperties.map(p => (
+                    <PropertyCard key={p.id} property={p} />
+                  ))}
                 </div>
               </div>
-            </Card>
-          </div>
-        </div>
-      </div>
-      {relatedProperties.length > 0 && (
-        <div className="mt-24">
-          <Separator />
-          <div className="py-16">
-            <h2 className="text-3xl font-bold font-headline mb-8 text-center">Other Properties in {getCommunityFromAddress(property.address)}</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-              {relatedProperties.map(p => (
-                <PropertyCard key={p.id} property={p} />
-              ))}
             </div>
-          </div>
-        </div>
-      )}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-sm p-2 border-t z-10">
-        <div className="container mx-auto">
-          <div className="grid grid-cols-2 gap-2 w-full">
-            <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold h-auto py-3">
-              <Phone /> PHONE
-            </Button>
-            <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold h-auto py-3">
-              <WhatsAppIcon /> WHATSAPP
-            </Button>
+          )}
+          <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-sm p-2 border-t z-10">
+            <div className="container mx-auto">
+              <div className="grid grid-cols-2 gap-2 w-full">
+                <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold h-auto py-3">
+                  <Phone /> PHONE
+                </Button>
+                <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold h-auto py-3">
+                  <WhatsAppIcon /> WHATSAPP
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

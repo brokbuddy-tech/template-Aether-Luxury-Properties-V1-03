@@ -27,8 +27,13 @@ export type Property = {
     phone?: string | null;
     email?: string | null;
     whatsapp?: string | null;
+    brn?: string | null;
   };
   dldPermitNo?: string;
+  trakheesi?: string;
+  reraPermit?: string;
+  dldPermitLink?: string | null;
+  floorPlans?: any[];
 };
 
 export type CommercialProperty = {

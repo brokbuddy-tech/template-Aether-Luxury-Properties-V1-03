@@ -121,8 +121,13 @@ export function toAetherProperty(listing: LiveProperty): Property {
       phone: listing.agent?.phone || null,
       email: listing.agent?.email || null,
       whatsapp: listing.agent?.whatsapp || null,
+      brn: listing.agent?.brn || null,
     },
     dldPermitNo: listing.reraPermit || undefined,
+    trakheesi: listing.trakheesi,
+    reraPermit: listing.reraPermit,
+    dldPermitLink: listing.dldPermitLink,
+    floorPlans: listing.floorPlans,
   };
 }
 
