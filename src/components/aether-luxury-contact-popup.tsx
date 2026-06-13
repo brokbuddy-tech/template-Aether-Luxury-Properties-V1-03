@@ -22,7 +22,7 @@ const POPUP_DELAY_MS = 40_000;
 
 function markPopupSeen(value: "shown" | "closed" | "submitted") {
   try {
-    window.localStorage.setItem(POPUP_STORAGE_KEY, value);
+    window.sessionStorage.setItem(POPUP_STORAGE_KEY, value);
   } catch {
     // Some privacy modes disable storage; the modal still works for this session.
   }
@@ -30,7 +30,7 @@ function markPopupSeen(value: "shown" | "closed" | "submitted") {
 
 function hasPopupBeenSeen() {
   try {
-    return Boolean(window.localStorage.getItem(POPUP_STORAGE_KEY));
+    return Boolean(window.sessionStorage.getItem(POPUP_STORAGE_KEY));
   } catch {
     return false;
   }
