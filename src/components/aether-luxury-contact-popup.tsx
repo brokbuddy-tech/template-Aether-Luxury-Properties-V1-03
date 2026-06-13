@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { submitOrgInquiry } from "@/lib/api";
+import { getEffectiveAgencySlug } from "@/lib/agency-routing";
 
 const POPUP_STORAGE_KEY = "aetherLuxuryContactPopupClosed";
 const POPUP_DELAY_MS = 40_000;
@@ -36,6 +37,7 @@ function hasPopupBeenSeen() {
 }
 
 export function AetherLuxuryContactPopup() {
+  const agencySlug = getEffectiveAgencySlug();
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -76,7 +78,7 @@ export function AetherLuxuryContactPopup() {
         message: String(formData.get("message") || "").trim(),
         templateName: "Aether Luxury Properties",
         formContext: "timed-contact-popup",
-      });
+      }, agencySlug);
 
       markPopupSeen("submitted");
       form.reset();
@@ -127,7 +129,7 @@ export function AetherLuxuryContactPopup() {
                 </DialogDescription>
               </DialogHeader>
 
-              <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
+              <form className="mt-8 space-y-5" method="post" action="#" noValidate onSubmit={handleSubmit}>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Input
                     name="name"

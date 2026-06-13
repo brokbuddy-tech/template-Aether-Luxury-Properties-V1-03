@@ -776,12 +776,12 @@ export async function getTestimonials(agencySlug?: string | null) {
   return snapshot?.testimonials || [];
 }
 
-export async function submitOrgInquiry(payload: Record<string, unknown>) {
+export async function submitOrgInquiry(payload: Record<string, unknown>, agencySlug?: string | null) {
   const response = await fetchTemplateResponse('/inquiry', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
-  });
+  }, 10000, agencySlug);
 
   if (!response.ok) {
     let message = 'We could not submit your request right now. Please try again shortly.';

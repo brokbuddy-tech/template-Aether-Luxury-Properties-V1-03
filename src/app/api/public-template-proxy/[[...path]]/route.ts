@@ -163,19 +163,43 @@ function sanitizeProxyResponseHeaders(headers: Headers) {
   return responseHeaders;
 }
 
+async function resolveAgencyContextWithFallback(requestedSlug: string) {
+  const directContext = await resolveAgencyContext(requestedSlug);
+  if (directContext?.organization?.hexCode) {
+    return {
+      agencySlug: requestedSlug,
+      hexCode: directContext.organization.hexCode,
+    };
+  }
+
+  const defaultSlug = getDefaultAgencySlug();
+  if (defaultSlug && defaultSlug !== requestedSlug) {
+    const fallbackContext = await resolveAgencyContext(defaultSlug);
+    if (fallbackContext?.organization?.hexCode) {
+      return {
+        agencySlug: defaultSlug,
+        hexCode: fallbackContext.organization.hexCode,
+      };
+    }
+  }
+
+  return null;
+}
+
 async function proxyRequest(request: NextRequest, context: RouteContext) {
   const { path = [] } = await context.params;
   const routeAgencySlug = isAgencySlugSegment(path[0]) ? normalizeAgencySlug(path[0]) || undefined : undefined;
-  const agencySlug = resolveAgencySlugFromRequest(request, routeAgencySlug);
+  const requestedAgencySlug = resolveAgencySlugFromRequest(request, routeAgencySlug);
   const upstreamPath = routeAgencySlug ? path.slice(1) : path;
 
-  if (!agencySlug) {
+  if (!requestedAgencySlug) {
     return Response.json({ message: 'Agency not found.' }, { status: 404 });
   }
 
-  const agencyContext = await resolveAgencyContext(agencySlug);
-  const hexCode = agencyContext?.organization?.hexCode;
-  if (!hexCode) {
+  const resolvedAgency = await resolveAgencyContextWithFallback(requestedAgencySlug);
+  const agencySlug = resolvedAgency?.agencySlug;
+  const hexCode = resolvedAgency?.hexCode;
+  if (!agencySlug || !hexCode) {
     return Response.json({ message: 'Agency not found.' }, { status: 404 });
   }
 

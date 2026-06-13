@@ -18,6 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { getSiteConfig, submitOrgInquiry } from '@/lib/api';
+import { getEffectiveAgencySlug } from '@/lib/agency-routing';
 import { getAgencyDisplayName, getAgencyEmail, getAgencyPhone } from '@/lib/live-mappers';
 import type { SiteConfig } from '@/lib/live-types';
 
@@ -64,6 +65,8 @@ export default function ContactPage() {
     };
   }, []);
 
+  const agencySlug = getEffectiveAgencySlug(siteConfig?.organization.slug);
+
   const onSubmit: SubmitHandler<ContactFormValues> = async (data) => {
     setIsSubmitting(true);
     try {
@@ -74,7 +77,7 @@ export default function ContactPage() {
         message: `Subject: ${data.subject}\n\n${data.message}`,
         templateName: 'Aether Luxury Properties',
         formContext: 'contact-page',
-      });
+      }, agencySlug);
       toast({
           title: "Message Sent!",
           description: "Thank you for reaching out. We will get back to you shortly.",
