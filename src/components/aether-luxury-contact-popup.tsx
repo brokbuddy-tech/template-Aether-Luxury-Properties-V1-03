@@ -101,68 +101,81 @@ export function AetherLuxuryContactPopup() {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-h-[92vh] overflow-y-auto border-[#C7A76C]/30 bg-[#080806] p-0 text-white shadow-2xl sm:max-w-2xl sm:rounded-none [&>button]:right-5 [&>button]:top-5 [&>button]:rounded-none [&>button]:border [&>button]:border-white/15 [&>button]:bg-black/30 [&>button]:p-3 [&>button]:!text-white/80 [&>button]:opacity-100 [&>button]:ring-offset-black [&>button:hover]:border-[#C7A76C] [&>button:hover]:!text-[#C7A76C]">
+      <DialogContent className="max-h-[92vh] overflow-y-auto border border-slate-200 bg-white p-0 text-slate-950 shadow-xl sm:max-w-2xl sm:rounded-xl [&>button]:right-5 [&>button]:top-5 [&>button]:rounded-md [&>button]:border [&>button]:border-slate-200 [&>button]:bg-white [&>button]:p-3 [&>button]:!text-slate-500 [&>button]:opacity-100 [&>button]:shadow-sm [&>button]:ring-offset-white [&>button:hover]:border-teal-700 [&>button:hover]:!text-teal-700">
         <div className="relative isolate overflow-hidden">
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(199,167,108,0.22),transparent_34%),linear-gradient(135deg,#080806_0%,#15110a_48%,#050505_100%)]" />
+          <div className="absolute inset-0 -z-10 bg-white" />
 
           <div className="grid gap-0 md:grid-cols-[0.9fr_1.1fr]">
-            <div className="hidden border-r border-white/10 bg-black/20 p-8 md:flex md:flex-col md:justify-between">
+            <div className="hidden border-r border-slate-200 bg-slate-50 p-8 md:flex md:flex-col md:justify-between">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.45em] text-[#C7A76C]">
+                <p className="text-[10px] font-bold uppercase tracking-[0.45em] text-teal-700">
                   Private advisory
                 </p>
-                <h3 className="mt-8 font-headline text-4xl font-bold leading-tight">
+
+                <h3 className="mt-8 font-headline text-4xl font-bold leading-tight text-slate-950">
                   A quieter way to begin.
                 </h3>
               </div>
-              <p className="text-sm leading-7 text-white/55">
+
+              <p className="text-sm leading-7 text-slate-500">
                 Share your brief and a specialist will respond with a tailored next step.
               </p>
             </div>
 
-            <div className="p-7 sm:p-10">
+            <div className="bg-white p-7 sm:p-10">
               <DialogHeader className="pr-10 text-left">
-                <DialogTitle className="font-headline text-3xl font-bold uppercase tracking-[0.16em] text-white sm:text-4xl">
+                <DialogTitle className="font-headline text-3xl font-bold uppercase tracking-[0.16em] text-slate-950 sm:text-4xl">
                   Contact Us
                 </DialogTitle>
-                <DialogDescription className="mt-3 text-sm leading-7 text-white/55">
+
+                <DialogDescription className="mt-3 text-sm leading-7 text-slate-500">
                   Tell us what you are looking for and our advisory team will follow up discreetly.
                 </DialogDescription>
               </DialogHeader>
 
-              <form className="mt-8 space-y-5" method="post" action="#" noValidate onSubmit={handleSubmit}>
+              <form
+                className="mt-8 space-y-5"
+                method="post"
+                action="#"
+                noValidate
+                onSubmit={handleSubmit}
+              >
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Input
                     name="name"
                     required
                     placeholder="Full name"
-                    className="h-12 rounded-none border-white/15 bg-white/[0.03] text-white placeholder:text-white/35 focus-visible:ring-[#C7A76C]"
+                    className="h-12 rounded-md border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus-visible:border-teal-700 focus-visible:ring-teal-700"
                   />
+
                   <Input
                     name="email"
                     type="email"
                     required
                     placeholder="Email address"
-                    className="h-12 rounded-none border-white/15 bg-white/[0.03] text-white placeholder:text-white/35 focus-visible:ring-[#C7A76C]"
+                    className="h-12 rounded-md border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus-visible:border-teal-700 focus-visible:ring-teal-700"
                   />
                 </div>
+
                 <Input
                   name="phone"
                   type="tel"
                   placeholder="Phone number"
-                  className="h-12 rounded-none border-white/15 bg-white/[0.03] text-white placeholder:text-white/35 focus-visible:ring-[#C7A76C]"
+                  className="h-12 rounded-md border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus-visible:border-teal-700 focus-visible:ring-teal-700"
                 />
+
                 <Textarea
                   name="message"
                   required
                   minLength={10}
                   placeholder="Tell us about your property interest..."
-                  className="min-h-[130px] resize-none rounded-none border-white/15 bg-white/[0.03] text-white placeholder:text-white/35 focus-visible:ring-[#C7A76C]"
+                  className="min-h-[130px] resize-none rounded-md border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus-visible:border-teal-700 focus-visible:ring-teal-700"
                 />
+
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="h-14 w-full rounded-none border border-[#C7A76C] bg-[#C7A76C] text-xs font-bold uppercase tracking-[0.32em] text-black hover:bg-[#d8bd82] disabled:opacity-70"
+                  className="h-14 w-full rounded-md bg-teal-700 text-sm font-medium text-white shadow-sm hover:bg-teal-800 disabled:opacity-70"
                 >
                   {isSubmitting ? (
                     <>
