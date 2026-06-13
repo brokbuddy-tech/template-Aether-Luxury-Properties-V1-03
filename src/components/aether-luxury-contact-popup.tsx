@@ -71,7 +71,7 @@ export function AetherLuxuryContactPopup() {
     const formData = new FormData(form);
 
     try {
-      await submitContactInquiryAction({
+      const response = await submitContactInquiryAction({
         name: String(formData.get("name") || "").trim(),
         email: String(formData.get("email") || "").trim(),
         phone: String(formData.get("phone") || "").trim(),
@@ -80,6 +80,10 @@ export function AetherLuxuryContactPopup() {
         formContext: "timed-contact-popup",
         agencySlug,
       });
+
+      if (response && !response.success) {
+        throw new Error(response.error as string);
+      }
 
       markPopupSeen("submitted");
       form.reset();

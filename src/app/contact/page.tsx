@@ -71,7 +71,7 @@ export default function ContactPage() {
   const onSubmit: SubmitHandler<ContactFormValues> = async (data) => {
     setIsSubmitting(true);
     try {
-      await submitContactInquiryAction({
+      const response = await submitContactInquiryAction({
         name: data.name,
         email: data.email,
         phone: data.phone,
@@ -80,6 +80,11 @@ export default function ContactPage() {
         formContext: 'contact-page',
         agencySlug,
       });
+
+      if (response && !response.success) {
+        throw new Error(response.error as string);
+      }
+
       toast({
           title: "Message Sent!",
           description: "Thank you for reaching out. We will get back to you shortly.",
