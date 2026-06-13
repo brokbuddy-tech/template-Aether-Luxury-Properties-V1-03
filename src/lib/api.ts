@@ -781,7 +781,7 @@ export async function submitOrgInquiry(payload: Record<string, unknown>, agencyS
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
-  }, 10000, agencySlug);
+  }, 30_000, agencySlug);
 
   if (!response.ok) {
     let message = 'We could not submit your request right now. Please try again shortly.';

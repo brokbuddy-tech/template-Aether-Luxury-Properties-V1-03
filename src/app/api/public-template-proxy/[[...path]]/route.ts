@@ -13,6 +13,7 @@ import {
 } from '@/lib/agency-routing';
 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
 
 type RouteContext = {
   params: Promise<{ path?: string[] }>;
@@ -117,7 +118,15 @@ function getConfiguredAgencyContext(agencySlug: string) {
   };
 }
 
-async function fetchWithTimeout(input: URL | string, init?: RequestInit, timeoutMs = 5000) {
+function getUpstreamTimeoutMs(method: string, pathSegments: string[]) {
+  if (method !== 'GET' && method !== 'HEAD' && pathSegments[0] === 'inquiry') {
+    return 30_000;
+  }
+
+  return 20_000;
+}
+
+async function fetchWithTimeout(input: URL | string, init?: RequestInit, timeoutMs = 20_000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
 
@@ -223,7 +232,7 @@ async function proxyRequest(request: NextRequest, context: RouteContext) {
         body: requestBody,
         redirect: 'follow',
         cache: 'no-store',
-      }, 5000);
+      }, getUpstreamTimeoutMs(request.method, upstreamPath));
 
       if (!upstreamResponse.ok && index < PUBLIC_API_BASE_URLS.length - 1 && await shouldRetryApiRequest(upstreamResponse)) {
         lastError = new Error(`Request failed for ${upstreamUrl.pathname}: ${upstreamResponse.status}`);
