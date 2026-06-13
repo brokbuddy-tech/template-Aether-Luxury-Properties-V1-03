@@ -2,7 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { Loader2 } from "lucide-react";
-
+import Image from "next/image";
 import {
   Dialog,
   DialogContent,
@@ -106,18 +106,29 @@ export function AetherLuxuryContactPopup() {
           <div className="absolute inset-0 -z-10 bg-white" />
 
           <div className="grid gap-0 md:grid-cols-[0.9fr_1.1fr]">
-            <div className="hidden border-r border-slate-200 bg-slate-50 p-8 md:flex md:flex-col md:justify-between">
+            <div className="hidden border-r border-slate-200 bg-slate-50 p-8 md:flex md:flex-col gap-6 md:justify-start">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.45em] text-teal-700">
                   Private advisory
                 </p>
 
-                <h3 className="mt-8 font-headline text-4xl font-bold leading-tight text-slate-950">
+                <h3 className="mt-3 font-headline text-4xl font-bold leading-tight text-slate-950">
                   A quieter way to begin.
                 </h3>
+
+                <div className="relative mt-3 h-[280px] w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-100 shadow-sm">
+                  <Image
+                    src="/contactleft.png"
+                    alt="Luxury real estate advisory"
+                    fill
+                    priority
+                    sizes="(min-width: 768px) 320px, 100vw"
+                    className="object-cover object-center"
+                  />
+                </div>
               </div>
 
-              <p className="text-sm leading-7 text-slate-500">
+              <p className=" text-sm leading-5 text-slate-500">
                 Share your brief and a specialist will respond with a tailored next step.
               </p>
             </div>
