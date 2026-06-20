@@ -355,7 +355,7 @@ export function mapListingToProperty(listing: any, agencySlug?: string | null): 
     recentlyListed: isRecentlyListed(createdAt),
     dldPermitNo: getStringValue(listing.trakheesiPermitNumber, listing.dldPermitNo, listing.permitNumber, listing.trakheesi, listing.fields?.dldPermitNo, listing.fields?.permitNumber, listing.fields?.trakheesiPermit),
     trakheesi: getStringValue(listing.trakheesiPermitNumber, listing.trakheesi, listing.permitNumber, listing.dldPermitNo, listing.fields?.trakheesi, listing.fields?.permitNumber, listing.fields?.trakheesiPermit),
-    reraPermit: getStringValue(listing.reraPermitNumber, listing.reraPermit, listing.reraNumber, listing.reraProjectNumber, listing.fields?.reraPermit, listing.fields?.reraNumber, listing.fields?.reraProjectNumber),
+    reraPermit: getStringValue(listing.reraPermitNumber, listing.reraPermit, listing.reraNumber, listing.reraProjectNumber != null ? String(listing.reraProjectNumber) : undefined, listing.fields?.reraPermit, listing.fields?.reraNumber, listing.fields?.reraProjectNumber != null ? String(listing.fields.reraProjectNumber) : undefined),
     dldPermitLink: listing.dldPermitLink || listing.trakheesiPermitLink || listing.fields?.dldPermitLink || undefined,
     handoverDate: listing.handoverDate || listing.fields?.handoverDate || undefined,
     developerName: listing.developer?.name || listing.fields?.developerName || undefined,

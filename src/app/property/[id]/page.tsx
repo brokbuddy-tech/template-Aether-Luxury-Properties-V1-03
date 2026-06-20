@@ -381,7 +381,7 @@ export default function PropertyDetailPage() {
 
               {property.type === 'BUY' && <MortgageCalculator price={property.price} />}
 
-              {(property.dldPermitNo || property.trakheesi || property.reraPermit || property.agent.brn) && (
+              {(property.dldPermitNo || property.trakheesi || property.reraPermit || property.agent.brn || property.dldPermitLink) && (
                 <>
                   <Separator />
                   <div className="py-8 mt-4">
@@ -396,7 +396,7 @@ export default function PropertyDetailPage() {
                         )}
                         {property.reraPermit && (
                           <div className="flex justify-between items-center border-b pb-3">
-                            <span className="text-muted-foreground flex items-center gap-2"><Info className="h-4 w-4" /> RERA Project Number</span>
+                            <span className="text-muted-foreground flex items-center gap-2"><Info className="h-4 w-4" /> RERA Licence</span>
                             <span className="font-semibold">{property.reraPermit}</span>
                           </div>
                         )}
@@ -407,18 +407,27 @@ export default function PropertyDetailPage() {
                           </div>
                         )}
                       </div>
-                      {(property.dldPermitNo || property.trakheesi || property.dldPermitLink) && qrCodeImage && (
+                      {property.dldPermitLink && (
                         <div className="flex flex-col items-center justify-center p-6 bg-muted/30 rounded-xl border">
                           <p className="text-sm font-bold mb-4 uppercase tracking-widest text-center">Trakheesi Permit</p>
                           <div className="bg-white p-2 rounded-lg shadow-sm border">
-                            <Image
-                              src={property.dldPermitLink || qrCodeImage.imageUrl.replace('data=Example', `data=${property.trakheesi || property.dldPermitNo}`)}
-                              alt="Trakheesi QR Code"
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={`https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(property.dldPermitLink)}`}
+                              alt="Trakheesi Permit QR Code"
                               width={140}
                               height={140}
-                              className='rounded-md'
+                              className="rounded-md"
                             />
                           </div>
+                          <a
+                            href={property.dldPermitLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-3 text-xs text-primary hover:underline"
+                          >
+                            Verify Permit →
+                          </a>
                         </div>
                       )}
                     </div>
