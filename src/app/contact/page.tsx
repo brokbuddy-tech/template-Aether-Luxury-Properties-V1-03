@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -21,23 +21,41 @@ import { submitContactInquiryAction } from '@/app/actions/submit-inquiry';
 import { getSiteConfig } from '@/lib/api';
 import { getEffectiveAgencySlug } from '@/lib/agency-routing';
 import { getAgencyDisplayName, getAgencyEmail, getAgencyPhone } from '@/lib/live-mappers';
+import { getPhoneRulesForCountry, getPhoneMaxLength, validatePhone } from '@/lib/phone-validation';
 import type { SiteConfig } from '@/lib/live-types';
 
-const contactSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email address'),
-  phone: z.string().min(1, 'Phone number is required'),
-  subject: z.string().min(1, 'Subject is required'),
-  message: z.string().min(10, 'Message must be at least 10 characters'),
-});
+function buildContactSchema(country?: string | null) {
+  const phoneRules = getPhoneRulesForCountry(country);
+  return z.object({
+    name: z.string().min(1, 'Name is required'),
+    email: z.string().email('Invalid email address'),
+    phone: z.string().min(1, 'Phone number is required').refine(
+      (val) => validatePhone(val, phoneRules) === null,
+      (val) => ({ message: validatePhone(val, phoneRules) || 'Invalid phone number' }),
+    ),
+    subject: z.string().min(1, 'Subject is required'),
+    message: z.string().min(10, 'Message must be at least 10 characters'),
+  });
+}
 
-type ContactFormValues = z.infer<typeof contactSchema>;
+type ContactFormValues = z.infer<ReturnType<typeof buildContactSchema>>;
 
 export default function ContactPage() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero-1');
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
+
+  const phoneRules = useMemo(
+    () => getPhoneRulesForCountry(siteConfig?.organization.country),
+    [siteConfig?.organization.country],
+  );
+  const phoneMaxLength = getPhoneMaxLength(phoneRules);
+
+  const contactSchema = useMemo(
+    () => buildContactSchema(siteConfig?.organization.country),
+    [siteConfig?.organization.country],
+  );
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
@@ -191,7 +209,7 @@ export default function ContactPage() {
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                           <FormField control={form.control} name="phone" render={({ field }) => (
-                            <FormItem><FormLabel>Phone</FormLabel><FormControl><Input type="tel" placeholder="+971..." {...field} /></FormControl><FormMessage /></FormItem>
+                            <FormItem><FormLabel>Phone</FormLabel><FormControl><Input type="tel" placeholder={phoneRules.placeholder} maxLength={phoneMaxLength} {...field} /></FormControl><FormMessage /></FormItem>
                           )} />
                           <FormField control={form.control} name="subject" render={({ field }) => (
                             <FormItem><FormLabel>Subject</FormLabel><FormControl><Input placeholder="e.g., Inquiry about Property #123" {...field} /></FormControl><FormMessage /></FormItem>

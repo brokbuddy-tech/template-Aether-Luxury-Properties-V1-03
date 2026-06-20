@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import {
@@ -16,6 +16,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { submitContactInquiryAction } from "@/app/actions/submit-inquiry";
 import { getEffectiveAgencySlug } from "@/lib/agency-routing";
+import { getSiteConfig } from "@/lib/api";
+import { getPhoneRulesForCountry, getPhoneMaxLength } from "@/lib/phone-validation";
+import type { SiteConfig } from "@/lib/live-types";
 
 const POPUP_STORAGE_KEY = "aetherLuxuryContactPopupClosed";
 const POPUP_DELAY_MS = 40_000;
@@ -40,7 +43,28 @@ export function AetherLuxuryContactPopup() {
   const agencySlug = getEffectiveAgencySlug();
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
   const { toast } = useToast();
+
+  const phoneRules = useMemo(
+    () => getPhoneRulesForCountry(siteConfig?.organization.country),
+    [siteConfig?.organization.country],
+  );
+  const phoneMaxLength = getPhoneMaxLength(phoneRules);
+
+  useEffect(() => {
+    let active = true;
+    async function loadConfig() {
+      try {
+        const config = await getSiteConfig();
+        if (active) setSiteConfig(config);
+      } catch {
+        // Non-critical – phone will use default rules.
+      }
+    }
+    void loadConfig();
+    return () => { active = false; };
+  }, []);
 
   useEffect(() => {
     if (hasPopupBeenSeen()) return;
@@ -175,7 +199,8 @@ export function AetherLuxuryContactPopup() {
                 <Input
                   name="phone"
                   type="tel"
-                  placeholder="Phone number"
+                  placeholder={phoneRules.placeholder}
+                  maxLength={phoneMaxLength}
                   className="h-12 rounded-md border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus-visible:border-teal-700 focus-visible:ring-teal-700"
                 />
 
