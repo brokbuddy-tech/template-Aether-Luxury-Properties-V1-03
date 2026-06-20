@@ -276,6 +276,49 @@ function isRecentlyListed(createdAt?: string) {
   return ageMs >= 0 && ageMs <= RECENTLY_LISTED_WINDOW_MS;
 }
 
+const CLASSIFICATION_LABELS = new Set([
+  'residential', 'commercial', 'industrial', 'property', 'properties',
+]);
+
+const KNOWN_PROPERTY_TYPES = [
+  'villa', 'apartment', 'penthouse', 'townhouse', 'duplex', 'studio',
+  'loft', 'bungalow', 'mansion', 'flat', 'condo', 'condominium',
+  'office', 'retail', 'warehouse', 'shop', 'land', 'plot', 'floor',
+  'building', 'compound', 'farmhouse', 'chalet',
+];
+
+function resolvePropertyType(listing: any) {
+  // Check all candidate fields for a specific property type
+  const candidates = [
+    listing.propertyType,
+    listing.subType,
+    listing.subCategory,
+    listing.type,
+    listing.category,
+    listing.fields?.propertyType,
+    listing.fields?.subType,
+    listing.fields?.type,
+  ].filter((v) => typeof v === 'string' && v.trim());
+
+  // Prefer values that are NOT broad classifications
+  for (const candidate of candidates) {
+    if (!CLASSIFICATION_LABELS.has(candidate.trim().toLowerCase())) {
+      return candidate.trim();
+    }
+  }
+
+  // Try to extract from title as last resort
+  const titleLower = (listing.title || '').toLowerCase();
+  for (const knownType of KNOWN_PROPERTY_TYPES) {
+    if (titleLower.includes(knownType)) {
+      return knownType.charAt(0).toUpperCase() + knownType.slice(1);
+    }
+  }
+
+  // Return classification if that's all we have
+  return candidates[0]?.trim() || 'Property';
+}
+
 export function mapListingToProperty(listing: any, agencySlug?: string | null): LiveProperty {
   const sourceImages: PublicListingImage[] = Array.isArray(listing.images) ? listing.images : [];
   const sortedImages = sourceImages
@@ -343,7 +386,8 @@ export function mapListingToProperty(listing: any, agencySlug?: string | null): 
       normalizeNumber(listing.builtUpArea)
       || normalizeNumber(listing.size)
       || normalizeNumber(listing.areaSqFt),
-    type: listing.category || listing.type || listing.propertyType || 'Property',
+    type: resolvePropertyType(listing),
+    category: listing.category || listing.type || undefined,
     amenities,
     images: mappedImages,
     media,
@@ -354,6 +398,7 @@ export function mapListingToProperty(listing: any, agencySlug?: string | null): 
     createdAt,
     recentlyListed: isRecentlyListed(createdAt),
     dldPermitNo: getStringValue(listing.trakheesiPermitNumber, listing.dldPermitNo, listing.permitNumber, listing.trakheesi, listing.fields?.dldPermitNo, listing.fields?.permitNumber, listing.fields?.trakheesiPermit),
+    referenceId: getStringValue(listing.referenceNumber, listing.referenceId, listing.ref, listing.property_ref_no, listing.fields?.referenceNumber, listing.fields?.referenceId) || undefined,
     trakheesi: getStringValue(listing.trakheesiPermitNumber, listing.trakheesi, listing.permitNumber, listing.dldPermitNo, listing.fields?.trakheesi, listing.fields?.permitNumber, listing.fields?.trakheesiPermit),
     reraPermit: getStringValue(listing.reraPermitNumber, listing.reraPermit, listing.reraNumber, listing.reraProjectNumber != null ? String(listing.reraProjectNumber) : undefined, listing.fields?.reraPermit, listing.fields?.reraNumber, listing.fields?.reraProjectNumber != null ? String(listing.fields.reraProjectNumber) : undefined),
     dldPermitLink: listing.dldPermitLink || listing.trakheesiPermitLink || listing.fields?.dldPermitLink || undefined,

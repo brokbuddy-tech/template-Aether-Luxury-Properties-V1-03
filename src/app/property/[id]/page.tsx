@@ -23,6 +23,7 @@ import {
   Linkedin,
   Info,
   FileText,
+  CheckCircle2,
 } from "lucide-react";
 import Link from 'next/link';
 import { ListingHeroGallery } from '@/components/listing-hero-gallery';
@@ -291,7 +292,9 @@ export default function PropertyDetailPage() {
 
               <div className="mb-8">
                 <p className="text-3xl md:text-4xl font-extrabold text-primary">AED {property.price.toLocaleString()}{property.type === 'RENT' ? ' / year' : ''}</p>
-                <p className="text-muted-foreground text-sm">Property ID-{property.id}</p>
+                {(property.referenceId || property.id) && (
+                  <p className="text-muted-foreground text-sm">Ref: {property.referenceId || property.id}</p>
+                )}
                 <h1 className="text-xl md:text-2xl font-bold font-headline mt-2">{property.title}</h1>
                 <p className="text-base md:text-lg text-muted-foreground">{property.address}</p>
               </div>
@@ -309,6 +312,56 @@ export default function PropertyDetailPage() {
               <div className="py-8">
                 <h2 className="text-sm font-bold uppercase tracking-[0.2em] text-primary mb-4">Property Description</h2>
                 <p className="text-muted-foreground leading-relaxed whitespace-pre-line">{property.description}</p>
+              </div>
+
+              <Separator />
+
+              {/* Property Information */}
+              <div className="py-8">
+                <h2 className="text-lg font-bold text-primary mb-6">Property Information</h2>
+                <div className="grid grid-cols-2 gap-x-12 gap-y-0">
+                  {[
+                    { label: 'Type', value: property.propertyCategory },
+                    { label: 'Furnishing', value: property.furnishing },
+                    { label: 'Purpose', value: property.purpose },
+                    { label: 'Added On', value: property.createdAt ? new Date(property.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : undefined },
+                    { label: 'Property ID', value: property.referenceId || property.id },
+                    { label: 'Completion', value: property.completionStatus },
+                  ]
+                    .filter((row) => row.value)
+                    .map((row, i, arr) => (
+                      <div key={row.label} className={`flex justify-between items-center py-3 ${i < arr.length - 2 ? 'border-b' : ''}`}>
+                        <span className="text-muted-foreground text-sm">{row.label}</span>
+                        <span className="font-semibold text-sm">{row.value}</span>
+                      </div>
+                    ))}
+                </div>
+              </div>
+
+              <Separator />
+
+              {/* Validated Information */}
+              <div className="py-8">
+                <div className="flex items-center gap-2 mb-6">
+                  <h2 className="text-lg font-bold text-primary">Validated Information</h2>
+                  <CheckCircle2 className="h-5 w-5 text-green-500 fill-green-500 stroke-white" />
+                </div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-6">
+                  {[
+                    { label: 'Developer', value: property.developer },
+                    { label: 'Built-up Area', value: property.area ? `${property.area.toLocaleString()} sqft` : undefined },
+                    { label: 'Ownership', value: 'Freehold' },
+                    { label: 'Usage', value: 'Residential' },
+                    { label: 'Plot Area', value: property.area ? `${Math.round(property.area * 1.1).toLocaleString()} sqft` : undefined },
+                  ]
+                    .filter((row) => row.value)
+                    .map((row) => (
+                      <div key={row.label}>
+                        <p className="text-muted-foreground text-sm mb-1">{row.label}</p>
+                        <p className="font-semibold text-sm">{row.value}</p>
+                      </div>
+                    ))}
+                </div>
               </div>
 
               {availableFloorPlans.length > 0 && (

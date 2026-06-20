@@ -34,6 +34,15 @@ export type Property = {
   reraPermit?: string;
   dldPermitLink?: string | null;
   floorPlans?: any[];
+  // Property Information fields
+  propertyCategory?: string;
+  purpose?: string;
+  referenceId?: string;
+  status?: string;
+  furnishing?: string;
+  parking?: number | null;
+  developer?: string;
+  completionStatus?: string;
 };
 
 export type CommercialProperty = {

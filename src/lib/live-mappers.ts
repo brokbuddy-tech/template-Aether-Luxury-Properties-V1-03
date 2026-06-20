@@ -128,6 +128,17 @@ export function toAetherProperty(listing: LiveProperty): Property {
     reraPermit: listing.reraPermit,
     dldPermitLink: listing.dldPermitLink,
     floorPlans: listing.floorPlans,
+    // Property Information fields
+    propertyCategory: listing.type || undefined,
+    purpose: listing.transactionType === 'Rent' ? 'For Rent' : 'For Sale',
+    referenceId: listing.referenceId || undefined,
+    status: listing.status || 'Ready',
+    furnishing: listing.amenities.some(a => a.toLowerCase().includes('furnished'))
+      ? (listing.amenities.some(a => a.toLowerCase() === 'fully furnished') ? 'Fully Furnished' : 'Furnished')
+      : 'Unfurnished',
+    parking: undefined,
+    developer: listing.developerName || undefined,
+    completionStatus: listing.status === 'Off-plan' ? 'Off-Plan' : 'Ready',
   };
 }
 
