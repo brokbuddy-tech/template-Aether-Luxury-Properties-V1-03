@@ -156,10 +156,27 @@ function getStringValue(...values: unknown[]) {
 }
 
 function normalizeLocation(listing: any) {
-  const parts = [listing.area, listing.emirate].filter(
-    (value) => typeof value === 'string' && value.trim(),
-  );
-  return parts.length > 0 ? parts.join(', ') : (listing.location || 'Dubai');
+  // Build a rich address from most-specific to least-specific
+  const parts = [
+    listing.streetAddress,
+    listing.buildingName || listing.building,
+    listing.subArea || listing.subCommunity || listing.subcommunity,
+    listing.area || listing.community,
+    listing.emirate,
+  ]
+    .filter((value) => typeof value === 'string' && value.trim())
+    .map((value) => value.trim());
+
+  // Deduplicate (e.g. "Dubai" appearing in both area and emirate)
+  const seen = new Set<string>();
+  const unique = parts.filter((part) => {
+    const lower = part.toLowerCase();
+    if (seen.has(lower)) return false;
+    seen.add(lower);
+    return true;
+  });
+
+  return unique.length > 0 ? unique.join(', ') : (listing.location || 'Dubai');
 }
 
 function collectLocationValues(listing: any) {

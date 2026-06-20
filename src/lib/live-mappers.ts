@@ -101,7 +101,7 @@ export function toAetherProperty(listing: LiveProperty): Property {
     type: listing.transactionType === 'Rent' ? 'RENT' : 'BUY',
     title: listing.title,
     price: listing.price,
-    address: listing.mapAddress || listing.location,
+    address: listing.location || listing.mapAddress || 'Dubai',
     latitude: listing.latitude ?? null,
     longitude: listing.longitude ?? null,
     bedrooms: listing.bedrooms,
