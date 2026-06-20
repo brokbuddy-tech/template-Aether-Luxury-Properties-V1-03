@@ -75,6 +75,7 @@ function getSearchDestination(filters: AiSearchFilters, fallbackMode: 'buy' | 'r
   if (filters.propertyType === 'COMMERCIAL' || filters.type === 'commercial') return '/commercial';
   if (filters.readiness === 'OFFPLAN' || filters.type === 'new-homes') return '/off-plan';
   if (filters.transactionType === 'RENT' || filters.type === 'rent') return '/rent';
+  if (filters.readiness === 'READY') return fallbackMode === 'rent' ? '/rent' : '/buy';
   return fallbackMode === 'rent' ? '/rent' : '/buy';
 }
 
@@ -117,6 +118,7 @@ export default function Home() {
   const [transactionMode, setTransactionMode] = useState<'buy' | 'rent'>('buy');
   const [searchQuery, setSearchQuery] = useState('');
   const [propertyCategory, setPropertyCategory] = useState('any');
+  const [readiness, setReadiness] = useState<'all' | 'ready' | 'offplan'>('all');
   const [bedrooms, setBedrooms] = useState('any');
   const [bathrooms, setBathrooms] = useState('any');
   const [isAiSearching, setIsAiSearching] = useState(false);
@@ -199,7 +201,7 @@ export default function Home() {
     const expertiseTimer = setInterval(() => {
       setExpertiseIndex(prevIndex => (prevIndex + 1) % expertiseSlides.length);
     }, 3000);
-    
+
     const newsTimer = setInterval(() => {
       setNewsIndex(prevIndex => (prevIndex + 1) % newsArticles.length);
     }, 3000);
@@ -230,6 +232,7 @@ export default function Home() {
     q: cleanQueryForCategory(searchQuery, propertyCategory),
     transactionType: transactionMode === 'rent' ? 'RENT' : 'SALE',
     category: normalizeCategory(propertyCategory),
+    readiness: readiness === 'ready' ? 'READY' : readiness === 'offplan' ? 'OFFPLAN' : undefined,
     bedrooms: bedrooms !== 'any' ? bedrooms : undefined,
     bathrooms: bathrooms !== 'any' ? bathrooms : undefined,
     maxPrice: priceRange[0] > 0 ? String(priceRange[0]) : undefined,
@@ -282,15 +285,15 @@ export default function Home() {
             </p>
           </FadeInOnScroll>
           <FadeInOnScroll delay={200}>
-            <div className="mt-12 w-full max-w-4xl">
+            <div className="mt-12 w-full max-w-5xl">
               <div className="p-2 rounded-lg bg-white/20 md:bg-white/10 backdrop-blur-xl border border-white/20">
-                <Tabs value={transactionMode} onValueChange={(value) => setTransactionMode(value as 'buy' | 'rent')}>
-                  <TabsList className="bg-transparent">
-                    <TabsTrigger value="buy" className="text-white data-[state=active]:bg-copper-gold data-[state=active]:text-white">BUY</TabsTrigger>
-                    <TabsTrigger value="rent" className="text-white data-[state=active]:bg-copper-gold data-[state=active]:text-white">RENT</TabsTrigger>
-                  </TabsList>
-                </Tabs>
-                <div className="mt-2 flex flex-col md:flex-row gap-2 items-center">
+                <div className="flex flex-col md:flex-row items-center gap-2">
+                  <Tabs value={transactionMode} onValueChange={(value) => setTransactionMode(value as 'buy' | 'rent')} className="shrink-0">
+                    <TabsList className="bg-transparent h-10">
+                      <TabsTrigger value="buy" className="text-white data-[state=active]:bg-copper-gold data-[state=active]:text-white px-4">BUY</TabsTrigger>
+                      <TabsTrigger value="rent" className="text-white data-[state=active]:bg-copper-gold data-[state=active]:text-white px-4">RENT</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
                   <Input
                     type="text"
                     placeholder="Search for community, building or location"
@@ -299,10 +302,23 @@ export default function Home() {
                     onKeyDown={(event) => {
                       if (event.key === 'Enter') handleSearch();
                     }}
-                    className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus-visible:ring-accent flex-grow"
+                    className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus-visible:ring-accent flex-1 min-w-0 h-10 w-full"
                   />
+                  <Button className="bg-accent hover:bg-accent/90 text-accent-foreground shrink-0 h-10 px-6 w-full md:w-auto" onClick={handleSearch}>
+                    <Search className="mr-2 h-4 w-4" />
+                    Search
+                  </Button>
+                </div>
+                <div className="mt-2 flex flex-col md:flex-row gap-2 items-center">
+                  <Tabs value={readiness} onValueChange={(value) => setReadiness(value as 'all' | 'ready' | 'offplan')} className="shrink-0">
+                    <TabsList className="bg-transparent h-10">
+                      <TabsTrigger value="all" className="text-white data-[state=active]:bg-white/25 data-[state=active]:text-white px-3 text-xs">All</TabsTrigger>
+                      <TabsTrigger value="ready" className="text-white data-[state=active]:bg-white/25 data-[state=active]:text-white px-3 text-xs">Ready</TabsTrigger>
+                      <TabsTrigger value="offplan" className="text-white data-[state=active]:bg-white/25 data-[state=active]:text-white px-3 text-xs">Off-plan</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
                   <Select value={propertyCategory} onValueChange={setPropertyCategory}>
-                    <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0 w-full md:w-[220px]">
+                    <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0 w-full md:w-[200px] h-10">
                       <SelectValue placeholder="Property Type" />
                     </SelectTrigger>
                     <SelectContent className='bg-black/60 md:bg-black/50 text-white border-white/20 backdrop-blur-xl'>
@@ -313,114 +329,111 @@ export default function Home() {
                       <SelectItem value="Townhouse">Townhouses</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Button className="bg-accent hover:bg-accent/90 text-accent-foreground w-full md:w-auto" onClick={handleSearch}>
-                    <Search className="mr-2 h-4 w-4" />
-                    Search
-                  </Button>
+
                   <Button variant="ghost" className="text-white hover:bg-white/20 hover:text-white w-full md:w-auto" onClick={handleAiSearch} disabled={isAiSearching}>
                     <Sparkles className="mr-2 h-4 w-4" />
                     {isAiSearching ? 'Searching...' : 'AI Search'}
                   </Button>
                   <Popover>
                     <PopoverTrigger asChild>
-                        <Button variant="ghost" className="text-white hover:bg-white/20 hover:text-white w-full md:w-auto">
-                            <SlidersHorizontal className="mr-2 h-4 w-4" />
-                            Advanced Filters
-                        </Button>
+                      <Button variant="ghost" className="text-white hover:bg-white/20 hover:text-white w-full md:w-auto">
+                        <SlidersHorizontal className="mr-2 h-4 w-4" />
+                        Advanced Filters
+                      </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-80 border border-white/20 bg-black/60 md:bg-black/50 text-white backdrop-blur-lg">
-                        <div className="grid gap-4">
-                            <div className="space-y-2">
-                                <h4 className="font-medium leading-none">Advanced Filters</h4>
-                                <p className="text-sm text-white/80">
-                                    Refine your search criteria.
-                                </p>
-                            </div>
-                            <div className="grid gap-y-6">
-                                <div className="space-y-3">
-                                  <div className="flex justify-between items-center">
-                                    <div className="flex items-center gap-2">
-                                      <Label htmlFor="price-range-popover" className='text-white'>Max Price</Label>
-                                      <Select value={currency} onValueChange={setCurrency}>
-                                          <SelectTrigger className="w-[90px] h-7 text-xs bg-white/20 border-0 text-white focus:ring-accent focus:ring-offset-0">
-                                              <SelectValue />
-                                          </SelectTrigger>
-                                          <SelectContent className='border border-white/20 bg-black/60 md:bg-black/50 text-white backdrop-blur-lg'>
-                                              <SelectItem value="AED">AED</SelectItem>
-                                              <SelectItem value="USD">USD</SelectItem>
-                                              <SelectItem value="EUR">EUR</SelectItem>
-                                              <SelectItem value="GBP">GBP</SelectItem>
-                                          </SelectContent>
-                                      </Select>
-                                    </div>
-                                    <span className='text-sm text-white/90'>
-                                      {formatPrice(priceRange[0])}
-                                    </span>
-                                  </div>
-                                  <Slider
-                                      id="price-range-popover"
-                                      value={priceRange}
-                                      onValueChange={setPriceRange}
-                                      min={0}
-                                      max={10000000}
-                                      step={100000}
-                                      dir="ltr"
-                                  />
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                  <div className="space-y-2">
-                                      <Label className='text-white'>Bedrooms</Label>
-                                      <Select value={bedrooms} onValueChange={setBedrooms}>
-                                          <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
-                                              <SelectValue placeholder="Any" />
-                                          </SelectTrigger>
-                                          <SelectContent className='border border-white/20 bg-black/60 md:bg-black/50 text-white backdrop-blur-lg'>
-                                              <SelectItem value="any">Any</SelectItem>
-                                              <SelectItem value="1">1+ Beds</SelectItem>
-                                              <SelectItem value="2">2+ Beds</SelectItem>
-                                              <SelectItem value="3">3+ Beds</SelectItem>
-                                              <SelectItem value="4">4+ Beds</SelectItem>
-                                              <SelectItem value="5">5+ Beds</SelectItem>
-                                          </SelectContent>
-                                      </Select>
-                                  </div>
-                                  <div className="space-y-2">
-                                      <Label className='text-white'>Bathrooms</Label>
-                                      <Select value={bathrooms} onValueChange={setBathrooms}>
-                                          <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
-                                              <SelectValue placeholder="Any" />
-                                          </SelectTrigger>
-                                          <SelectContent className='border border-white/20 bg-black/60 md:bg-black/50 text-white backdrop-blur-lg'>
-                                              <SelectItem value="any">Any</SelectItem>
-                                              <SelectItem value="1">1+ Baths</SelectItem>
-                                              <SelectItem value="2">2+ Baths</SelectItem>
-                                              <SelectItem value="3">3+ Baths</SelectItem>
-                                              <SelectItem value="4">4+ Baths</SelectItem>
-                                              <SelectItem value="5">5+ Baths</SelectItem>
-                                          </SelectContent>
-                                      </Select>
-                                  </div>
-                                </div>
-                                <div className="space-y-2">
-                                    <Label className='text-white'>Amenities</Label>
-                                    <Select>
-                                        <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
-                                            <SelectValue placeholder="Any" />
-                                        </SelectTrigger>
-                                        <SelectContent className='border border-white/20 bg-black/60 md:bg-black/50 text-white backdrop-blur-lg'>
-                                            <SelectItem value="any">Any</SelectItem>
-                                            <SelectItem value="pool">Swimming Pool</SelectItem>
-                                            <SelectItem value="gym">Gym</SelectItem>
-                                            <SelectItem value="view">Ocean View</SelectItem>
-                                            <SelectItem value="theater">Home Theater</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <Button className="bg-accent hover:bg-accent/90 text-accent-foreground w-full" onClick={handleSearch}>
-                                    Apply Filters
-                                  </Button>
-                            </div>
+                      <div className="grid gap-4">
+                        <div className="space-y-2">
+                          <h4 className="font-medium leading-none">Advanced Filters</h4>
+                          <p className="text-sm text-white/80">
+                            Refine your search criteria.
+                          </p>
                         </div>
+                        <div className="grid gap-y-6">
+                          <div className="space-y-3">
+                            <div className="flex justify-between items-center">
+                              <div className="flex items-center gap-2">
+                                <Label htmlFor="price-range-popover" className='text-white'>Max Price</Label>
+                                <Select value={currency} onValueChange={setCurrency}>
+                                  <SelectTrigger className="w-[90px] h-7 text-xs bg-white/20 border-0 text-white focus:ring-accent focus:ring-offset-0">
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent className='border border-white/20 bg-black/60 md:bg-black/50 text-white backdrop-blur-lg'>
+                                    <SelectItem value="AED">AED</SelectItem>
+                                    <SelectItem value="USD">USD</SelectItem>
+                                    <SelectItem value="EUR">EUR</SelectItem>
+                                    <SelectItem value="GBP">GBP</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <span className='text-sm text-white/90'>
+                                {formatPrice(priceRange[0])}
+                              </span>
+                            </div>
+                            <Slider
+                              id="price-range-popover"
+                              value={priceRange}
+                              onValueChange={setPriceRange}
+                              min={0}
+                              max={10000000}
+                              step={100000}
+                              dir="ltr"
+                            />
+                          </div>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                              <Label className='text-white'>Bedrooms</Label>
+                              <Select value={bedrooms} onValueChange={setBedrooms}>
+                                <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
+                                  <SelectValue placeholder="Any" />
+                                </SelectTrigger>
+                                <SelectContent className='border border-white/20 bg-black/60 md:bg-black/50 text-white backdrop-blur-lg'>
+                                  <SelectItem value="any">Any</SelectItem>
+                                  <SelectItem value="1">1+ Beds</SelectItem>
+                                  <SelectItem value="2">2+ Beds</SelectItem>
+                                  <SelectItem value="3">3+ Beds</SelectItem>
+                                  <SelectItem value="4">4+ Beds</SelectItem>
+                                  <SelectItem value="5">5+ Beds</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div className="space-y-2">
+                              <Label className='text-white'>Bathrooms</Label>
+                              <Select value={bathrooms} onValueChange={setBathrooms}>
+                                <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
+                                  <SelectValue placeholder="Any" />
+                                </SelectTrigger>
+                                <SelectContent className='border border-white/20 bg-black/60 md:bg-black/50 text-white backdrop-blur-lg'>
+                                  <SelectItem value="any">Any</SelectItem>
+                                  <SelectItem value="1">1+ Baths</SelectItem>
+                                  <SelectItem value="2">2+ Baths</SelectItem>
+                                  <SelectItem value="3">3+ Baths</SelectItem>
+                                  <SelectItem value="4">4+ Baths</SelectItem>
+                                  <SelectItem value="5">5+ Baths</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <Label className='text-white'>Amenities</Label>
+                            <Select>
+                              <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
+                                <SelectValue placeholder="Any" />
+                              </SelectTrigger>
+                              <SelectContent className='border border-white/20 bg-black/60 md:bg-black/50 text-white backdrop-blur-lg'>
+                                <SelectItem value="any">Any</SelectItem>
+                                <SelectItem value="pool">Swimming Pool</SelectItem>
+                                <SelectItem value="gym">Gym</SelectItem>
+                                <SelectItem value="view">Ocean View</SelectItem>
+                                <SelectItem value="theater">Home Theater</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <Button className="bg-accent hover:bg-accent/90 text-accent-foreground w-full" onClick={handleSearch}>
+                            Apply Filters
+                          </Button>
+                        </div>
+                      </div>
                     </PopoverContent>
                   </Popover>
                 </div>
@@ -434,12 +447,12 @@ export default function Home() {
       <section className="py-16 md:py-24 bg-background">
         <div className="container">
           <div className="text-left max-w-3xl mb-12 ml-[10px]">
-             <FadeInOnScroll>
-                <h2>Explore Property in Dubai</h2>
-                <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
-                  <strong>{agencyName}</strong> helps buyers, sellers, and investors navigate the Dubai real estate market with absolute clarity and confidence. Our teams combine deep local expertise with advanced digital systems and white-glove support, all built to deliver smoother transactions and superior outcomes every step of the way.
-                </p>
-             </FadeInOnScroll>
+            <FadeInOnScroll>
+              <h2>Explore Property in Dubai</h2>
+              <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
+                <strong>{agencyName}</strong> helps buyers, sellers, and investors navigate the Dubai real estate market with absolute clarity and confidence. Our teams combine deep local expertise with advanced digital systems and white-glove support, all built to deliver smoother transactions and superior outcomes every step of the way.
+              </p>
+            </FadeInOnScroll>
           </div>
           <Carousel
             setApi={setServiceCarouselApi}
@@ -507,8 +520,8 @@ export default function Home() {
 
       <LatestListingsSection />
 
-       {/* Section 5: Professional Expertise Section */}
-       <section className="py-16 md:py-24 bg-background">
+      {/* Section 5: Professional Expertise Section */}
+      <section className="py-16 md:py-24 bg-background">
         <div className="container">
           <div className="flex flex-col md:flex-row items-center justify-between gap-12 lg:gap-24">
             <div className="w-full md:w-1/2 lg:w-3/5">
@@ -556,7 +569,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      
+
       {/* Section 5.5: Insights & Achievements */}
       <section className="bg-muted py-16 md:py-24">
         <div className="container">
@@ -598,16 +611,16 @@ export default function Home() {
             {/* Right Column: Awards Image */}
             <div>
               <FadeInOnScroll delay={200}>
-                  {awardsImage && (
-                    <Image
-                        src={awardsImage.imageUrl}
-                        alt={awardsImage.description}
-                        data-ai-hint={awardsImage.imageHint}
-                        width={800}
-                        height={600}
-                        className="rounded-lg object-cover aspect-video"
-                    />
-                  )}
+                {awardsImage && (
+                  <Image
+                    src={awardsImage.imageUrl}
+                    alt={awardsImage.description}
+                    data-ai-hint={awardsImage.imageHint}
+                    width={800}
+                    height={600}
+                    className="rounded-lg object-cover aspect-video"
+                  />
+                )}
               </FadeInOnScroll>
             </div>
           </div>
@@ -645,30 +658,30 @@ export default function Home() {
                 const communityImage = PlaceHolderImages.find(p => p.id === community.image);
                 return (
                   <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
-                     <FadeInOnScroll delay={index * 100}>
+                    <FadeInOnScroll delay={index * 100}>
                       <Link href={community.href}>
-                         <Card className="group relative h-[450px] overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105">
-                           {communityImage && (
-                             <Image
-                               src={communityImage.imageUrl}
-                               alt={community.name}
-                               data-ai-hint={communityImage.imageHint}
-                               fill
-                               className="object-cover transition-transform duration-500 group-hover:scale-110"
-                             />
-                           )}
-                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                           <div className="absolute bottom-0 left-0 right-0 p-6">
-                              <div className="p-4 rounded-lg md:bg-transparent md:backdrop-blur-none md:border-transparent group-hover:bg-white/10 group-hover:backdrop-blur-md group-hover:border group-hover:border-white/20 transition-all duration-300 bg-white/10 backdrop-blur-md border border-white/20">
-                                <h3 className="text-3xl font-bold text-white font-headline">{community.name}</h3>
-                                <p className="text-white/80 mt-2 line-clamp-2 md:max-h-0 md:opacity-0 group-hover:max-h-12 group-hover:opacity-100 transition-all duration-300 delay-100 ease-in-out overflow-hidden">
-                                  {community.description}
-                                </p>
-                              </div>
-                           </div>
-                         </Card>
+                        <Card className="group relative h-[450px] overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105">
+                          {communityImage && (
+                            <Image
+                              src={communityImage.imageUrl}
+                              alt={community.name}
+                              data-ai-hint={communityImage.imageHint}
+                              fill
+                              className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                          )}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                          <div className="absolute bottom-0 left-0 right-0 p-6">
+                            <div className="p-4 rounded-lg md:bg-transparent md:backdrop-blur-none md:border-transparent group-hover:bg-white/10 group-hover:backdrop-blur-md group-hover:border group-hover:border-white/20 transition-all duration-300 bg-white/10 backdrop-blur-md border border-white/20">
+                              <h3 className="text-3xl font-bold text-white font-headline">{community.name}</h3>
+                              <p className="text-white/80 mt-2 line-clamp-2 md:max-h-0 md:opacity-0 group-hover:max-h-12 group-hover:opacity-100 transition-all duration-300 delay-100 ease-in-out overflow-hidden">
+                                {community.description}
+                              </p>
+                            </div>
+                          </div>
+                        </Card>
                       </Link>
-                     </FadeInOnScroll>
+                    </FadeInOnScroll>
                   </CarouselItem>
                 );
               })}
@@ -679,7 +692,7 @@ export default function Home() {
         </div>
       </section>
 
-       {/* Section 7: Find Your Next Home CTA */}
+      {/* Section 7: Find Your Next Home CTA */}
       <section
         className="relative h-[500px] w-full bg-cover bg-center bg-scroll lg:bg-fixed"
         style={{
@@ -709,17 +722,17 @@ export default function Home() {
     </div>
   );
 }
-    
-
-    
 
 
 
 
 
 
-    
 
-    
 
-    
+
+
+
+
+
+
