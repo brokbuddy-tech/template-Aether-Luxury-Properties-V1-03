@@ -3,7 +3,7 @@
 import { OffPlanCard } from "@/components/off-plan-card";
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
-import { OffPlanFilterBar } from '@/components/off-plan-filter-bar';
+import { FilterBar } from '@/components/filter-bar';
 import { getProperties } from '@/lib/api';
 import { toAetherOffPlanProject } from '@/lib/live-mappers';
 import { cleanQueryForCategory, matchesTemplateCategory, normalizeCategory } from '@/lib/search-utils';
@@ -59,7 +59,7 @@ export default async function OffPlanPage({ searchParams }: { searchParams?: Pag
       {/* Main Content */}
       <div className="bg-background">
         <div className="container py-8">
-            <OffPlanFilterBar />
+            <FilterBar variant="off-plan" />
             
             <div className="flex justify-start items-center mb-4">
                 <p className="text-sm text-muted-foreground">Showing 1–{offPlanProjects.length} of {offPlanProjects.length} results</p>

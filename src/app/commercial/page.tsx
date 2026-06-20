@@ -2,7 +2,7 @@
 
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
-import { CommercialFilterBar } from '@/components/commercial-filter-bar';
+import { FilterBar } from '@/components/filter-bar';
 import { CommercialPropertyCard } from '@/components/commercial-property-card';
 import { getProperties } from '@/lib/api';
 import { isLikelyCommercialProperty, toAetherCommercialProperty } from '@/lib/live-mappers';
@@ -58,7 +58,7 @@ export default async function CommercialPage({ searchParams }: { searchParams?: 
 
       {/* Main Content */}
       <div className="bg-white">
-        <CommercialFilterBar />
+        <FilterBar variant="commercial" />
         
         <div className="container py-12">
             <div className="flex justify-start items-center mb-4">
