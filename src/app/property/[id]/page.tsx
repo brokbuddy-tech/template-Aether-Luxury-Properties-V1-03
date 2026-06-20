@@ -204,9 +204,6 @@ export default function PropertyDetailPage() {
     property.title,
   );
   const qrCodeImage = PlaceHolderImages.find(p => p.id === 'qr-code');
-  const availableFloorPlans = (property.floorPlans ?? []).filter(
-    (fp) => typeof fp?.url === 'string' && fp.url.trim().length > 0
-  );
 
   const upfrontCosts = {
     securityDeposit: property.price * 0.05,
@@ -364,45 +361,89 @@ export default function PropertyDetailPage() {
                 </div>
               </div>
 
-              {availableFloorPlans.length > 0 && (
-                <>
-                  <Separator />
-                  <div className="py-8">
-                    <h2 className="text-xl font-bold font-headline mb-4">Floor Plans</h2>
-                    <Tabs defaultValue={availableFloorPlans[0]?.type || '0'} className="w-full mt-6">
-                      <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent mb-6 overflow-x-auto flex-nowrap">
-                        {availableFloorPlans.map((fp, i) => (
-                          <TabsTrigger
-                            key={i}
-                            value={fp.type || `${i}`}
-                            className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none px-4 py-3 uppercase text-sm tracking-wider font-semibold whitespace-nowrap"
-                          >
-                            {fp.type || fp.title || `Plan ${i + 1}`}
-                          </TabsTrigger>
-                        ))}
-                      </TabsList>
-                      {availableFloorPlans.map((fp, i) => (
-                        <TabsContent key={i} value={fp.type || `${i}`} className="mt-0 focus-visible:outline-none focus-visible:ring-0">
-                          <div className="relative w-full border rounded-lg overflow-hidden bg-white p-6 shadow-sm">
-                            <div className="relative w-full aspect-[4/3] md:aspect-[16/9] flex items-center justify-center">
-                              <Image
-                                src={fp.url}
-                                alt={fp.title || fp.type || 'Floor Plan'}
-                                fill
-                                className="object-contain"
-                                unoptimized={fp.url.endsWith('.svg')}
-                              />
+              {/* Floor Plans — 3D Live / 3D Image / 2D Image */}
+              {(() => {
+                const floorPlanTabs: { id: string; label: string; type: 'iframe' | 'image'; url: string; title?: string }[] = [];
+
+                if (property.floorPlanLiveUrl) {
+                  floorPlanTabs.push({ id: '3d-live', label: '3D LIVE', type: 'iframe', url: property.floorPlanLiveUrl });
+                }
+                if (property.floorPlan3DUrl) {
+                  floorPlanTabs.push({ id: '3d-image', label: '3D IMAGE', type: 'image', url: property.floorPlan3DUrl });
+                }
+                if (property.floorPlanUrl) {
+                  floorPlanTabs.push({ id: '2d-image', label: '2D IMAGE', type: 'image', url: property.floorPlanUrl });
+                }
+
+                // Also include legacy floorPlans array entries
+                const legacyPlans = (property.floorPlans ?? []).filter(
+                  (fp: any) => typeof fp?.url === 'string' && fp.url.trim().length > 0
+                );
+                legacyPlans.forEach((fp: any, i: number) => {
+                  // Avoid duplicates if URL already in tabs
+                  const alreadyAdded = floorPlanTabs.some((t) => t.url === fp.url);
+                  if (!alreadyAdded) {
+                    floorPlanTabs.push({
+                      id: `legacy-${i}`,
+                      label: fp.type || fp.title || `PLAN ${i + 1}`,
+                      type: 'image',
+                      url: fp.url,
+                      title: fp.title,
+                    });
+                  }
+                });
+
+                if (floorPlanTabs.length === 0) return null;
+
+                return (
+                  <>
+                    <Separator />
+                    <div className="py-8">
+                      <h2 className="text-lg font-bold text-primary mb-4">Floor Plans</h2>
+                      <Tabs defaultValue={floorPlanTabs[0].id} className="w-full">
+                        <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent mb-6 overflow-x-auto flex-nowrap">
+                          {floorPlanTabs.map((tab) => (
+                            <TabsTrigger
+                              key={tab.id}
+                              value={tab.id}
+                              className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:shadow-none rounded-none px-4 py-3 uppercase text-sm tracking-wider font-semibold whitespace-nowrap"
+                            >
+                              {tab.label}
+                            </TabsTrigger>
+                          ))}
+                        </TabsList>
+                        {floorPlanTabs.map((tab) => (
+                          <TabsContent key={tab.id} value={tab.id} className="mt-0 focus-visible:outline-none focus-visible:ring-0">
+                            <div className="relative w-full border rounded-lg overflow-hidden bg-white shadow-sm">
+                              {tab.type === 'iframe' ? (
+                                <iframe
+                                  src={tab.url}
+                                  className="w-full aspect-[4/3] md:aspect-[16/9]"
+                                  allowFullScreen
+                                  title="3D Floor Plan"
+                                />
+                              ) : (
+                                <div className="relative w-full aspect-[4/3] md:aspect-[16/9] flex items-center justify-center p-6">
+                                  <Image
+                                    src={tab.url}
+                                    alt={tab.title || tab.label || 'Floor Plan'}
+                                    fill
+                                    className="object-contain"
+                                    unoptimized
+                                  />
+                                </div>
+                              )}
+                              {tab.title && (
+                                <p className="text-center py-4 font-medium text-sm text-muted-foreground">{tab.title}</p>
+                              )}
                             </div>
-                            {fp.title && fp.title !== fp.type && (
-                              <p className="text-center mt-6 font-medium text-lg">{fp.title}</p>
-                            )}
-                          </div>
-                        </TabsContent>
-                      ))}
-                    </Tabs>
-                  </div>
-                </>
-              )}
+                          </TabsContent>
+                        ))}
+                      </Tabs>
+                    </div>
+                  </>
+                );
+              })()}
 
               {property.keyFeatures && property.keyFeatures.length > 0 && (
                 <>

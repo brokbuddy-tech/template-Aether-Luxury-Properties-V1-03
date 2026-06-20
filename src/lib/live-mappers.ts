@@ -128,6 +128,9 @@ export function toAetherProperty(listing: LiveProperty): Property {
     reraPermit: listing.reraPermit,
     dldPermitLink: listing.dldPermitLink,
     floorPlans: listing.floorPlans,
+    floorPlanUrl: listing.floorPlanUrl || undefined,
+    floorPlan3DUrl: listing.floorPlan3DUrl || undefined,
+    floorPlanLiveUrl: listing.floorPlanLiveUrl || undefined,
     // Property Information fields
     propertyCategory: listing.type || undefined,
     purpose: listing.transactionType === 'Rent' ? 'For Rent' : 'For Sale',

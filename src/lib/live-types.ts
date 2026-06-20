@@ -84,6 +84,9 @@ export type LiveProperty = {
   organizationSlug?: string;
   agent?: PropertyAgent;
   floorPlans?: any[];
+  floorPlanUrl?: string | null;
+  floorPlan3DUrl?: string | null;
+  floorPlanLiveUrl?: string | null;
 };
 
 export type SiteAgent = {

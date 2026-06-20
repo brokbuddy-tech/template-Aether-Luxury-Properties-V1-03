@@ -444,6 +444,10 @@ export function mapListingToProperty(listing: any, agencySlug?: string | null): 
     organizationName: getStringValue(listing.organizationName, listing.organization?.name),
     organizationSlug: getStringValue(listing.organizationSlug, listing.organization?.slug),
     agent: mapListingAgent(listing),
+    floorPlans: Array.isArray(listing.floorPlans) ? listing.floorPlans : Array.isArray(listing.fields?.floorPlans) ? listing.fields?.floorPlans : [],
+    floorPlanUrl: getStringValue(listing.floorPlanUrl, listing.fields?.floorPlanUrl) || undefined,
+    floorPlan3DUrl: getStringValue(listing.floorPlan3DUrl, listing.fields?.floorPlan3DUrl) || undefined,
+    floorPlanLiveUrl: getStringValue(listing.floorPlanLiveUrl, listing.fields?.floorPlanLiveUrl) || undefined,
   };
 }
 

@@ -34,6 +34,9 @@ export type Property = {
   reraPermit?: string;
   dldPermitLink?: string | null;
   floorPlans?: any[];
+  floorPlanUrl?: string | null;
+  floorPlan3DUrl?: string | null;
+  floorPlanLiveUrl?: string | null;
   // Property Information fields
   propertyCategory?: string;
   purpose?: string;
