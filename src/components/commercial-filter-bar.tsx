@@ -30,6 +30,16 @@ const commercialTypeOptions = [
   { value: "Office", label: "Office" },
   { value: "Retail", label: "Retail" },
   { value: "Warehouse", label: "Warehouse" },
+  { value: "Shop", label: "Shop" },
+  { value: "Showroom", label: "Showroom" },
+  { value: "Labour Camp", label: "Labour Camp" },
+  { value: "Staff Accommodation", label: "Staff Accommodation" },
+  { value: "Commercial Building", label: "Commercial Building" },
+  { value: "Commercial Floor", label: "Commercial Floor" },
+  { value: "Commercial Land", label: "Commercial Land" },
+  { value: "Industrial Land", label: "Industrial Land" },
+  { value: "Mixed Use Land", label: "Mixed Use Land" },
+  { value: "Clinic", label: "Clinic" },
 ];
 
 function setParam(params: URLSearchParams, key: string, value?: string) {

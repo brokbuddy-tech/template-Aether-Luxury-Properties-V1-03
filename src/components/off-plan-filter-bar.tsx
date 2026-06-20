@@ -12,10 +12,30 @@ import { useAiSearchModal } from "@/hooks/use-ai-search-modal";
 import { cleanQueryForCategory, normalizeCategory } from "@/lib/search-utils";
 
 const propertyTypeOptions = [
-  { value: "Apartment", label: "Apartments" },
-  { value: "Villa", label: "Villas" },
-  { value: "Penthouse", label: "Penthouses" },
-  { value: "Townhouse", label: "Townhouses" },
+  { value: "Apartment", label: "Apartment" },
+  { value: "Studio", label: "Studio" },
+  { value: "Penthouse", label: "Penthouse" },
+  { value: "Duplex", label: "Duplex" },
+  { value: "Duplex Apartment", label: "Duplex Apartment" },
+  { value: "Hotel Apartment", label: "Hotel Apartment" },
+  { value: "Flat", label: "Flat" },
+  { value: "Villa", label: "Villa" },
+  { value: "Townhouse", label: "Townhouse" },
+  { value: "Mansion", label: "Mansion" },
+  { value: "Bungalow", label: "Bungalow" },
+  { value: "Villa Compound", label: "Villa Compound" },
+  { value: "Compound", label: "Compound" },
+  { value: "House", label: "House" },
+  { value: "Residential Floor", label: "Residential Floor" },
+  { value: "Full Floor", label: "Full Floor" },
+  { value: "Half Floor", label: "Half Floor" },
+  { value: "Floor", label: "Floor" },
+  { value: "Bulk Rent unit", label: "Bulk Rent Unit" },
+  { value: "Building", label: "Building" },
+  { value: "Residential Building", label: "Residential Building" },
+  { value: "Whole building", label: "Whole Building" },
+  { value: "Land", label: "Land" },
+  { value: "Residential Land", label: "Residential Land" },
 ];
 
 function setParam(params: URLSearchParams, key: string, value?: string) {
