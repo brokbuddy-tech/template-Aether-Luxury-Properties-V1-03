@@ -59,6 +59,7 @@ export type LiveProperty = {
   media?: PropertyMedia[];
   description: string;
   referenceId?: string;
+  dldPermitNo?: string;
   trakheesi?: string;
   reraPermit?: string;
   dldPermitLink?: string | null;
