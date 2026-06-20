@@ -240,62 +240,6 @@ export default function PropertyDetailPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2">
-          {property.type === 'RENT' && (
-            <Accordion type="single" collapsible className="w-full bg-muted/50 rounded-lg mb-8">
-              <AccordionItem value="item-1" className="border-0">
-                <AccordionTrigger className="px-4 py-3 text-base font-semibold hover:no-underline">
-                  <div className="flex items-center gap-3">
-                    <Info className="h-5 w-5 text-muted-foreground" />
-                    Show upfront costs
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="px-4 pb-4">
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between items-center">
-                      <p>Rental Price (Yearly)</p>
-                      <p className="font-semibold">AED {property.price.toLocaleString()}</p>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <p>Security Deposit</p>
-                      <p className="font-semibold">AED {upfrontCosts.securityDeposit.toLocaleString()}</p>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <p>Agency Fee</p>
-                      <p className="font-semibold">AED {upfrontCosts.agencyFee.toLocaleString()} <span className="text-xs text-muted-foreground">+ 5% VAT</span></p>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <p>Ejari Fee</p>
-                      <p className="font-semibold">AED {upfrontCosts.ejariFee.toLocaleString()} <span className="text-xs text-muted-foreground">+ 5% VAT</span></p>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <p>DEWA Deposit</p>
-                      <p className="font-semibold">AED {upfrontCosts.dewaDeposit.toLocaleString()}</p>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <p>Empower/Chiller Deposit</p>
-                      <p className="font-semibold">AED {upfrontCosts.chillerDeposit.toLocaleString()}</p>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <p>Move-in Permit</p>
-                      <p className="font-semibold">AED {upfrontCosts.moveInPermit.toLocaleString()}</p>
-                    </div>
-                  </div>
-                  <Separator className="my-4" />
-                  <div className="text-center">
-                    <p className="text-lg font-bold">TOTAL: AED {totalCost.toLocaleString('en-US', { maximumFractionDigits: 0 })}</p>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          )}
-
-          <div className="mb-8">
-            <p className="text-3xl md:text-4xl font-extrabold text-primary">AED {property.price.toLocaleString()}{property.type === 'RENT' ? ' / year' : ''}</p>
-            <p className="text-muted-foreground text-sm">Property ID-{property.id}</p>
-            <h1 className="text-xl md:text-2xl font-bold font-headline mt-2">{property.title}</h1>
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            <div className="lg:col-span-2">
               {property.type === 'RENT' && (
                 <Accordion type="single" collapsible className="w-full bg-muted/50 rounded-lg mb-8">
                   <AccordionItem value="item-1" className="border-0">
@@ -556,30 +500,28 @@ export default function PropertyDetailPage() {
               </div>
             </div>
           </div>
-          {relatedProperties.length > 0 && (
-            <div className="mt-24">
-              <Separator />
-              <div className="py-16">
-                <h2 className="text-3xl font-bold font-headline mb-8 text-center">Other Properties in {getCommunityFromAddress(property.address)}</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                  {relatedProperties.map(p => (
-                    <PropertyCard key={p.id} property={p} />
-                  ))}
-                </div>
-              </div>
+      {relatedProperties.length > 0 && (
+        <div className="mt-24">
+          <Separator />
+          <div className="py-16">
+            <h2 className="text-3xl font-bold font-headline mb-8 text-center">Other Properties in {getCommunityFromAddress(property.address)}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+              {relatedProperties.map(p => (
+                <PropertyCard key={p.id} property={p} />
+              ))}
             </div>
-          )}
-          <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-sm p-2 border-t z-10">
-            <div className="container mx-auto">
-              <div className="grid grid-cols-2 gap-2 w-full">
-                <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold h-auto py-3">
-                  <Phone /> PHONE
-                </Button>
-                <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold h-auto py-3">
-                  <WhatsAppIcon /> WHATSAPP
-                </Button>
-              </div>
-            </div>
+          </div>
+        </div>
+      )}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-sm p-2 border-t z-10">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-2 gap-2 w-full">
+            <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold h-auto py-3">
+              <Phone /> PHONE
+            </Button>
+            <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground uppercase font-bold h-auto py-3">
+              <WhatsAppIcon /> WHATSAPP
+            </Button>
           </div>
         </div>
       </div>
