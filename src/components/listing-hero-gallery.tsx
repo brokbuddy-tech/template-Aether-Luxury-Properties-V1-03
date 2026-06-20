@@ -246,15 +246,17 @@ export function ListingHeroGallery({
             </button>
 
             <div className="relative w-full h-full flex items-center justify-center p-4 md:p-16">
-              <div className="relative w-full h-full">
+              <div key={`gallery-${activeIndex}`} className="relative w-full h-full">
                 <Image
+                  key={activeImage.src}
                   src={activeImage.src}
                   alt={activeImage.alt}
                   data-ai-hint={activeImage.hint}
                   fill
                   sizes="100vw"
                   className="object-contain"
-                  priority={isOpen}
+                  priority
+                  unoptimized
                 />
               </div>
 

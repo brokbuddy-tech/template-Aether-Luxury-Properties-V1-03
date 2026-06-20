@@ -301,7 +301,7 @@ export default function PropertyDetailPage() {
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 py-8">
                 {property.bedrooms > 0 && <div className="flex items-center gap-3"><BedDouble className="h-8 w-8 text-accent" /><div className=''><p className="font-bold">{property.bedrooms} Beds</p></div></div>}
                 {property.bathrooms > 0 && <div className="flex items-center gap-3"><Bath className="h-8 w-8 text-accent" /><div className=''><p className="font-bold">{property.bathrooms} Baths</p></div></div>}
-                <div className="flex items-center gap-3"><Square className="h-8 w-8 text-accent" /><div className=''><p className="font-bold">{property.area.toLocaleString()} sqft</p></div></div>
+                {property.area > 0 && <div className="flex items-center gap-3"><Square className="h-8 w-8 text-accent" /><div className=''><p className="font-bold">{property.area.toLocaleString()} sqft</p></div></div>}
               </div>
 
               <Separator />
@@ -554,7 +554,7 @@ export default function PropertyDetailPage() {
                             stats: [
                               ...(property.bedrooms > 0 ? [{ label: 'Bedrooms', value: `${property.bedrooms}` }] : []),
                               ...(property.bathrooms > 0 ? [{ label: 'Bathrooms', value: `${property.bathrooms}` }] : []),
-                              { label: 'Area', value: `${property.area.toLocaleString()} sqft` },
+                              ...(property.area > 0 ? [{ label: 'Area', value: `${property.area.toLocaleString()} sqft` }] : []),
                             ],
                             agentName: property.agent.name,
                             agentTitle: 'Luxury Property Specialist',

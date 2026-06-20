@@ -100,10 +100,12 @@ export function PropertyCard({ property }: { property: Property }) {
                   <span>{property.bathrooms} Baths</span>
                 </div>
               )}
-              <div className="flex items-center gap-1">
-                <Square className="h-4 w-4" />
-                <span>{property.area.toLocaleString()} sqft</span>
-              </div>
+              {property.area > 0 && (
+                <div className="flex items-center gap-1">
+                  <Square className="h-4 w-4" />
+                  <span>{property.area.toLocaleString()} sqft</span>
+                </div>
+              )}
             </div>
           </div>
           <div className="mt-4 pt-4 border-t flex justify-between items-center">

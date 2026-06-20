@@ -44,7 +44,7 @@ function truncateText(value: string, maxLength: number) {
   return `${value.slice(0, maxLength).trimEnd()}...`;
 }
 
-function waitForImageAsset(image: HTMLImageElement) {
+function waitForImageAsset(image: HTMLImageElement, timeoutMs = 3000) {
   if (image.complete && image.naturalWidth > 0) {
     return Promise.resolve();
   }
@@ -56,11 +56,15 @@ function waitForImageAsset(image: HTMLImageElement) {
       settled = true;
       image.removeEventListener('load', finish);
       image.removeEventListener('error', finish);
+      clearTimeout(timer);
       resolve();
     };
 
     image.addEventListener('load', finish, { once: true });
     image.addEventListener('error', finish, { once: true });
+
+    // Timeout so a broken image never blocks the download forever
+    const timer = setTimeout(finish, timeoutMs);
 
     if (typeof image.decode === 'function') {
       image.decode().then(finish).catch(() => undefined);
@@ -68,16 +72,24 @@ function waitForImageAsset(image: HTMLImageElement) {
   });
 }
 
-async function waitForBrochureAssets(rootId: string) {
+async function waitForBrochureAssets(rootId: string, overallTimeoutMs = 5000) {
   const root = document.getElementById(rootId);
   if (!root) return;
 
   const images = Array.from(root.querySelectorAll('img'));
-  await Promise.all(images.map((image) => waitForImageAsset(image)));
+
+  // Race all image loads against an overall timeout
+  await Promise.race([
+    Promise.all(images.map((image) => waitForImageAsset(image))),
+    new Promise<void>((resolve) => setTimeout(resolve, overallTimeoutMs)),
+  ]);
 
   if ('fonts' in document) {
     try {
-      await document.fonts.ready;
+      await Promise.race([
+        document.fonts.ready,
+        new Promise<void>((resolve) => setTimeout(resolve, 1000)),
+      ]);
     } catch {
       // Ignore font readiness failures and continue the export.
     }
@@ -204,7 +216,7 @@ export function PropertyBrochureButton({ brochure, children }: BrochureButtonPro
                       src={brochure.heroImage}
                       alt={brochure.title}
                       className="h-full w-full object-cover"
-                      crossOrigin="anonymous"
+                      crossOrigin="use-credentials"
                       loading="eager"
                     />
                   ) : null}
@@ -232,7 +244,7 @@ export function PropertyBrochureButton({ brochure, children }: BrochureButtonPro
                               src={image}
                               alt={`${brochure.title} view ${index + 2}`}
                               className="h-full w-full object-cover"
-                              crossOrigin="anonymous"
+                              crossOrigin="use-credentials"
                               loading="eager"
                             />
                           </div>
@@ -257,7 +269,7 @@ export function PropertyBrochureButton({ brochure, children }: BrochureButtonPro
                               src={brochure.agentImage}
                               alt={brochure.agentName || 'Listing specialist'}
                               className="h-full w-full rounded-full object-cover"
-                              crossOrigin="anonymous"
+                              crossOrigin="use-credentials"
                               loading="eager"
                             />
                           ) : (
