@@ -375,24 +375,6 @@ export default function PropertyDetailPage() {
                   floorPlanTabs.push({ id: '2d-image', label: '2D IMAGE', type: 'image', url: property.floorPlanUrl });
                 }
 
-                // Also include legacy floorPlans array entries
-                const legacyPlans = (property.floorPlans ?? []).filter(
-                  (fp: any) => typeof fp?.url === 'string' && fp.url.trim().length > 0
-                );
-                legacyPlans.forEach((fp: any, i: number) => {
-                  // Avoid duplicates if URL already in tabs
-                  const alreadyAdded = floorPlanTabs.some((t) => t.url === fp.url);
-                  if (!alreadyAdded) {
-                    floorPlanTabs.push({
-                      id: `legacy-${i}`,
-                      label: fp.type || fp.title || `PLAN ${i + 1}`,
-                      type: 'image',
-                      url: fp.url,
-                      title: fp.title,
-                    });
-                  }
-                });
-
                 if (floorPlanTabs.length === 0) return null;
 
                 return (
