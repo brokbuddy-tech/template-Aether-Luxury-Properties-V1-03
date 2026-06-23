@@ -46,6 +46,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { PropertyTypeDropdown } from '@/components/property-type-dropdown';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { useAiSearchModal } from '@/hooks/use-ai-search-modal';
@@ -288,7 +289,7 @@ export default function Home() {
             <div className="mt-12 w-full max-w-5xl">
               <div className="p-2 rounded-lg bg-white/20 md:bg-white/10 backdrop-blur-xl border border-white/20">
                 <div className="flex flex-col md:flex-row items-center gap-2">
-                  <Tabs value={transactionMode} onValueChange={(value) => setTransactionMode(value as 'buy' | 'rent')} className="shrink-0">
+                  <Tabs value={transactionMode} onValueChange={(value) => { setTransactionMode(value as 'buy' | 'rent'); if (value === 'rent') setReadiness('all'); }} className="shrink-0">
                     <TabsList className="bg-transparent h-10">
                       <TabsTrigger value="buy" className="text-white data-[state=active]:bg-copper-gold data-[state=active]:text-white px-4">BUY</TabsTrigger>
                       <TabsTrigger value="rent" className="text-white data-[state=active]:bg-copper-gold data-[state=active]:text-white px-4">RENT</TabsTrigger>
@@ -310,6 +311,7 @@ export default function Home() {
                   </Button>
                 </div>
                 <div className="mt-2 flex flex-col md:flex-row gap-2 items-center">
+                  {transactionMode === 'buy' && (
                   <Tabs value={readiness} onValueChange={(value) => setReadiness(value as 'all' | 'ready' | 'offplan')} className="shrink-0">
                     <TabsList className="bg-transparent h-10">
                       <TabsTrigger value="all" className="text-white data-[state=active]:bg-white/25 data-[state=active]:text-white px-3 text-xs">All</TabsTrigger>
@@ -317,38 +319,12 @@ export default function Home() {
                       <TabsTrigger value="offplan" className="text-white data-[state=active]:bg-white/25 data-[state=active]:text-white px-3 text-xs">Off-plan</TabsTrigger>
                     </TabsList>
                   </Tabs>
-                  <Select value={propertyCategory} onValueChange={setPropertyCategory}>
-                    <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0 w-full md:w-[200px] h-10">
-                      <SelectValue placeholder="Property Type" />
-                    </SelectTrigger>
-                    <SelectContent className='bg-black/60 md:bg-black/50 text-white border-white/20 backdrop-blur-xl'>
-                      <SelectItem value="any">Property Type</SelectItem>
-                      <SelectItem value="Apartment">Apartment</SelectItem>
-                      <SelectItem value="Studio">Studio</SelectItem>
-                      <SelectItem value="Penthouse">Penthouse</SelectItem>
-                      <SelectItem value="Duplex">Duplex</SelectItem>
-                      <SelectItem value="Duplex Apartment">Duplex Apartment</SelectItem>
-                      <SelectItem value="Hotel Apartment">Hotel Apartment</SelectItem>
-                      <SelectItem value="Flat">Flat</SelectItem>
-                      <SelectItem value="Villa">Villa</SelectItem>
-                      <SelectItem value="Townhouse">Townhouse</SelectItem>
-                      <SelectItem value="Mansion">Mansion</SelectItem>
-                      <SelectItem value="Bungalow">Bungalow</SelectItem>
-                      <SelectItem value="Villa Compound">Villa Compound</SelectItem>
-                      <SelectItem value="Compound">Compound</SelectItem>
-                      <SelectItem value="House">House</SelectItem>
-                      <SelectItem value="Residential Floor">Residential Floor</SelectItem>
-                      <SelectItem value="Full Floor">Full Floor</SelectItem>
-                      <SelectItem value="Half Floor">Half Floor</SelectItem>
-                      <SelectItem value="Floor">Floor</SelectItem>
-                      <SelectItem value="Bulk Rent unit">Bulk Rent Unit</SelectItem>
-                      <SelectItem value="Building">Building</SelectItem>
-                      <SelectItem value="Residential Building">Residential Building</SelectItem>
-                      <SelectItem value="Whole building">Whole Building</SelectItem>
-                      <SelectItem value="Land">Land</SelectItem>
-                      <SelectItem value="Residential Land">Residential Land</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  )}
+                  <PropertyTypeDropdown
+                    value={propertyCategory}
+                    onValueChange={setPropertyCategory}
+                    variant="hero"
+                  />
 
                   <Button variant="ghost" className="text-white hover:bg-white/20 hover:text-white w-full md:w-auto" onClick={handleAiSearch} disabled={isAiSearching}>
                     <Sparkles className="mr-2 h-4 w-4" />

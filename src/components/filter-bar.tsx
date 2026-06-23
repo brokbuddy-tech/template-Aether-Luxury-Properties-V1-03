@@ -109,10 +109,14 @@ export function FilterBar({ variant = "residential" }: FilterBarProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [transactionType, setTransactionType] = useState("SALE");
   const [category, setCategory] = useState("any");
+  const [readiness, setReadiness] = useState<'all' | 'ready' | 'offplan'>('all');
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [minArea, setMinArea] = useState("");
   const [maxArea, setMaxArea] = useState("");
+
+  // Show readiness toggle only on /buy page
+  const isBuyPage = pathname === '/buy';
 
   // Derived config based on variant
   const propertyTypeOptions = variant === "commercial" ? commercialPropertyTypes : residentialPropertyTypes;
@@ -135,7 +139,21 @@ export function FilterBar({ variant = "residential" }: FilterBarProps) {
     setMaxPrice(searchParams.get("maxPrice") || "");
     setMinArea(searchParams.get("minArea") || "");
     setMaxArea(searchParams.get("maxArea") || "");
+    const readinessParam = searchParams.get("readiness");
+    setReadiness(readinessParam === 'READY' ? 'ready' : readinessParam === 'OFFPLAN' ? 'offplan' : 'all');
   }, [searchKey, searchParams]);
+
+  const handleReadinessChange = (value: string) => {
+    const nextReadiness = value as 'all' | 'ready' | 'offplan';
+    setReadiness(nextReadiness);
+    if (nextReadiness === 'offplan') {
+      // Navigate to off-plan page, carrying over filters
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete('readiness');
+      const query = params.toString();
+      router.push(`/off-plan${query ? `?${query}` : ''}`);
+    }
+  };
 
   const applyFilters = () => {
     const params = new URLSearchParams(searchParams.toString());
@@ -148,6 +166,11 @@ export function FilterBar({ variant = "residential" }: FilterBarProps) {
     setParam(params, "maxPrice", maxPrice);
     setParam(params, "minArea", minArea);
     setParam(params, "maxArea", maxArea);
+    if (isBuyPage && readiness !== 'all') {
+      setParam(params, "readiness", readiness === 'ready' ? 'READY' : 'OFFPLAN');
+    } else {
+      params.delete('readiness');
+    }
 
     const query = params.toString();
     router.push(`${pathname}${query ? `?${query}` : ""}`);
@@ -217,6 +240,33 @@ export function FilterBar({ variant = "residential" }: FilterBarProps) {
 
           {/* Row 2: Filters + Find */}
           <div className="flex gap-2 items-stretch flex-wrap">
+            {/* Readiness toggle (buy page only) */}
+            {isBuyPage && (
+              <>
+                <div className="flex-none">
+                  <div className="inline-flex rounded-md border overflow-hidden h-10">
+                    {(['all', 'ready', 'offplan'] as const).map((value) => (
+                      <button
+                        key={value}
+                        type="button"
+                        onClick={() => handleReadinessChange(value)}
+                        className={`px-3 text-sm font-medium transition-colors duration-200 ${
+                          value !== 'all' ? 'border-l' : ''
+                        } ${
+                          readiness === value
+                            ? 'bg-accent text-accent-foreground'
+                            : 'bg-background text-muted-foreground hover:bg-muted'
+                        }`}
+                      >
+                        {value === 'all' ? 'All' : value === 'ready' ? 'Ready' : 'Off-plan'}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <Separator orientation="vertical" className="hidden sm:block h-10 self-center" />
+              </>
+            )}
+
             {/* Amenities (residential & commercial only) */}
             {showAmenities && (
               <Popover>

@@ -20,11 +20,13 @@ export default async function BuyPage({ searchParams }: { searchParams?: PageSea
   const community = getParam(resolvedSearchParams, 'community');
   const category = normalizeCategory(getParam(resolvedSearchParams, 'category'));
   const searchQuery = cleanQueryForCategory(getParam(resolvedSearchParams, 'q') || community, category);
+  const readiness = getParam(resolvedSearchParams, 'readiness');
   const headingLabel = searchQuery || category;
 
   const liveResponse = await getProperties({
     transactionType: 'SALE',
     q: searchQuery,
+    readiness: readiness || undefined,
     minPrice: getParam(resolvedSearchParams, 'minPrice'),
     maxPrice: getParam(resolvedSearchParams, 'maxPrice'),
     bedrooms: getParam(resolvedSearchParams, 'bedrooms'),

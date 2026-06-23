@@ -1,14 +1,68 @@
+/**
+ * All known UAE property types – used both for normalisation and direct
+ * type-field matching. Each key is the canonical display label; the array
+ * contains lowercase search/alias terms for fuzzy text matching.
+ */
 const CATEGORY_TERMS: Record<string, string[]> = {
+  // ── Residential Units ──────────────────────────────────────────────
   Apartment: ['apartment', 'apartments', 'flat', 'flats'],
-  Villa: ['villa', 'villas'],
+  Studio: ['studio', 'studios'],
   Penthouse: ['penthouse', 'penthouses'],
-  Townhouse: ['townhouse', 'townhouses', 'town', 'house'],
-  House: ['house', 'houses', 'home', 'homes', 'mansion', 'mansions'],
+  Duplex: ['duplex', 'duplexes'],
+  'Duplex Apartment': ['duplex apartment'],
+  'Hotel Apartment': ['hotel apartment'],
+  Flat: ['flat', 'flats'],
+  // ── Residential Houses ─────────────────────────────────────────────
+  Villa: ['villa', 'villas'],
+  Townhouse: ['townhouse', 'townhouses'],
+  Mansion: ['mansion', 'mansions'],
+  Bungalow: ['bungalow', 'bungalows'],
+  'Villa Compound': ['villa compound'],
+  Compound: ['compound', 'compounds'],
+  House: ['house', 'houses', 'home', 'homes'],
+  // ── Residential Floors ─────────────────────────────────────────────
+  'Residential Floor': ['residential floor'],
+  'Full Floor': ['full floor'],
+  'Half Floor': ['half floor'],
+  Floor: ['floor', 'floors'],
+  'Bulk Rent unit': ['bulk rent unit', 'bulk rent'],
+  // ── Residential Buildings ──────────────────────────────────────────
+  Building: ['building', 'buildings'],
+  'Residential Building': ['residential building'],
+  'Whole building': ['whole building'],
+  // ── Residential Land ───────────────────────────────────────────────
   Land: ['land', 'plot', 'plots'],
+  'Residential Land': ['residential land'],
+  // ── Commercial Units ───────────────────────────────────────────────
   Office: ['office', 'offices'],
-  Retail: ['retail', 'shop', 'shops', 'showroom', 'showrooms'],
-  Warehouse: ['warehouse', 'warehouses', 'industrial'],
-  Rural: ['rural', 'farm', 'acreage'],
+  Shop: ['shop', 'shops'],
+  Showroom: ['showroom', 'showrooms'],
+  Retail: ['retail'],
+  'Business Center': ['business center', 'business centre'],
+  'Co-working Space': ['co-working space', 'coworking space', 'co-working'],
+  'Co-Working space': ['co-working space', 'coworking space'],
+  // ── Commercial Floors ──────────────────────────────────────────────
+  'Commercial Floor': ['commercial floor'],
+  'Bulk Unit': ['bulk unit'],
+  'Full floor': ['full floor'],
+  // ── Commercial Buildings ───────────────────────────────────────────
+  'Commercial Building': ['commercial building'],
+  'Commercial Villa': ['commercial villa'],
+  // ── Commercial Land ────────────────────────────────────────────────
+  'Commercial Land': ['commercial land'],
+  'Mixed Use Land': ['mixed use land'],
+  Farm: ['farm', 'farms', 'acreage'],
+  // ── Industrial ─────────────────────────────────────────────────────
+  Warehouse: ['warehouse', 'warehouses'],
+  Factory: ['factory', 'factories'],
+  'Industrial Land': ['industrial land'],
+  // ── Accommodation ──────────────────────────────────────────────────
+  'Labour Camp': ['labour camp', 'labor camp'],
+  'Staff Accommodation': ['staff accommodation'],
+  // ── Other ──────────────────────────────────────────────────────────
+  Other: ['other'],
+  'Other Commercial': ['other commercial'],
+  Rural: ['rural'],
 };
 
 const CATEGORY_ALIASES = Object.entries(CATEGORY_TERMS).flatMap(([category, terms]) =>
@@ -40,14 +94,30 @@ function editDistance(left: string, right: string) {
   return matrix[left.length][right.length];
 }
 
+/**
+ * Normalise a user-supplied or URL-supplied category string to a canonical
+ * property-type key. Returns the raw value when it matches a known key
+ * exactly (case-insensitive), so unknown keys pass through as-is rather
+ * than being silently dropped.
+ */
 export function normalizeCategory(value?: string | null) {
-  const cleaned = cleanToken(value || '');
-  if (!cleaned || cleaned === 'any') return undefined;
+  const raw = (value || '').trim();
+  if (!raw || raw.toLowerCase() === 'any') return undefined;
 
-  const exact = Object.keys(CATEGORY_TERMS).find((category) => cleanToken(category) === cleaned);
-  if (exact) return exact;
+  // Exact key match (case-insensitive)
+  const exactKey = Object.keys(CATEGORY_TERMS).find(
+    (key) => key.toLowerCase() === raw.toLowerCase(),
+  );
+  if (exactKey) return exactKey;
 
-  return CATEGORY_ALIASES.find(([term]) => cleanToken(term) === cleaned)?.[1];
+  // Alias lookup via cleaned tokens
+  const cleaned = cleanToken(raw);
+  if (!cleaned) return undefined;
+  const aliasMatch = CATEGORY_ALIASES.find(([term]) => cleanToken(term) === cleaned)?.[1];
+  if (aliasMatch) return aliasMatch;
+
+  // Pass through as-is so the value reaches matchesTemplateCategory
+  return raw;
 }
 
 export function cleanQueryForCategory(query?: string | null, category?: string | null) {
@@ -88,6 +158,12 @@ export function matchesTemplateCategory(
   const categories = (category || '').split(',').map(normalizeCategory).filter(Boolean) as string[];
   if (categories.length === 0) return true;
 
+  // Direct field values for exact matching (the reliable path)
+  const directFields = [source.category, source.propertyType, source.type]
+    .filter(Boolean)
+    .map((field) => field!.toLowerCase());
+
+  // Full text haystack for fuzzy fallback
   const haystack = [
     source.category,
     source.propertyType,
@@ -95,10 +171,22 @@ export function matchesTemplateCategory(
     source.title,
     source.description,
     source.searchableText,
-  ].filter(Boolean).join(' ').toLowerCase();
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .toLowerCase();
 
   return categories.some((selectedCategory) => {
-    const terms = CATEGORY_TERMS[selectedCategory] || [selectedCategory];
-    return terms.some((term) => haystack.includes(term.toLowerCase()));
+    const categoryLower = selectedCategory.toLowerCase();
+
+    // 1. Exact match on the property's type / category / propertyType field
+    if (directFields.some((field) => field === categoryLower)) return true;
+
+    // 2. For known property types, ONLY match on direct fields (step 1).
+    //    Fuzzy text search causes false positives (e.g. "land" in "landmark").
+    if (selectedCategory in CATEGORY_TERMS) return false;
+
+    // 3. Fallback for unknown categories: substring match using the raw value
+    return haystack.includes(categoryLower);
   });
 }
