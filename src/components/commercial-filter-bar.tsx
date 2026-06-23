@@ -99,7 +99,7 @@ export function CommercialFilterBar() {
           {/* First Row */}
           <div className="flex flex-wrap gap-4 items-center">
             {/* Search Input */}
-            <div className="relative flex-auto lg:flex-1 min-w-[240px]">
+            <div className="relative flex-auto lg:flex-1 min-w-0">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-accent" />
               <Input
                 value={searchQuery}
@@ -153,7 +153,7 @@ export function CommercialFilterBar() {
             </div>
 
             {/* Property Type */}
-            <div className="flex-auto min-w-[180px]">
+            <div className="flex-auto min-w-0 w-full sm:w-auto sm:min-w-[180px]">
               <Label className="sr-only">Property Type</Label>
               <Select value={category} onValueChange={setCategory}>
                 <SelectTrigger>
@@ -173,7 +173,7 @@ export function CommercialFilterBar() {
             <Separator orientation="vertical" className="h-10 hidden xl:flex" />
 
             {/* Price Range - Custom Inputs */}
-            <div className="flex-auto min-w-[150px]">
+            <div className="flex-auto min-w-0 w-full sm:w-auto sm:min-w-[150px]">
               <Label className="sr-only">Min Price</Label>
               <Input
                 placeholder="Min Price (AED)"
@@ -185,7 +185,7 @@ export function CommercialFilterBar() {
                 }}
               />
             </div>
-            <div className="flex-auto min-w-[150px]">
+            <div className="flex-auto min-w-0 w-full sm:w-auto sm:min-w-[150px]">
               <Label className="sr-only">Max Price</Label>
               <Input
                 placeholder="Max Price (AED)"
@@ -231,11 +231,11 @@ export function CommercialFilterBar() {
                 </PopoverContent>
               </Popover>
               {/* Size Range */}
-              <div className="flex-auto min-w-[180px]">
+              <div className="flex-auto min-w-0 w-full sm:w-auto sm:min-w-[180px]">
                 <Label className="sr-only">Min Sq. Ft.</Label>
                 <Input placeholder="Min Sq. Ft." type="number" value={minArea} onChange={(event) => setMinArea(event.target.value)} />
               </div>
-              <div className="flex-auto min-w-[180px]">
+              <div className="flex-auto min-w-0 w-full sm:w-auto sm:min-w-[180px]">
                 <Label className="sr-only">Max Sq. Ft.</Label>
                 <Input placeholder="Max Sq. Ft." type="number" value={maxArea} onChange={(event) => setMaxArea(event.target.value)} />
               </div>

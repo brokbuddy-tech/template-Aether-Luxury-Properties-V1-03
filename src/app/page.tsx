@@ -384,7 +384,7 @@ export default function Home() {
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent
-                      className="w-[420px] p-0 rounded-xl shadow-2xl overflow-hidden border border-white/20 bg-black/70 backdrop-blur-2xl text-white flex flex-col"
+                      className="w-[calc(100vw-2rem)] sm:w-[420px] p-0 rounded-xl shadow-2xl overflow-hidden border border-white/20 bg-black/70 backdrop-blur-2xl text-white flex flex-col"
                       align="end"
                       sideOffset={8}
                       collisionPadding={16}
@@ -524,8 +524,8 @@ export default function Home() {
                 );
               })}
             </CarouselContent>
-            <CarouselPrevious className="ml-14" />
-            <CarouselNext className="mr-14" />
+            <CarouselPrevious className="ml-2 sm:ml-14" />
+            <CarouselNext className="mr-2 sm:mr-14" />
           </Carousel>
           <Progress value={scrollProgress} className="mt-4 w-1/3 mx-auto" />
         </div>
@@ -534,7 +534,7 @@ export default function Home() {
       {/* Section 4: Data-Driven Performance Bar */}
       <section className="py-8 bg-muted">
         <div className="container">
-          <div className="grid grid-cols-4 gap-4 text-center items-start">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center items-start">
             {stats.map((stat) => (
               <FadeInOnScroll key={stat.label}>
                 <stat.icon className="h-6 w-6 mx-auto mb-1 text-primary" />
@@ -551,7 +551,7 @@ export default function Home() {
       {/* Section 5: Professional Expertise Section */}
       <section className="py-16 md:py-24 bg-background">
         <div className="container">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-12 lg:gap-24">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12 lg:gap-24">
             <div className="w-full md:w-1/2 lg:w-3/5">
               <FadeInOnScroll>
                 {teamImage && (
@@ -572,7 +572,7 @@ export default function Home() {
                   <p className="text-xs font-bold uppercase tracking-widest text-accent">
                     {expertiseSlides[expertiseIndex].tagline}
                   </p>
-                  <h2 className="mt-2 text-4xl font-extrabold leading-tight font-headline text-primary">
+                  <h2 className="mt-2 text-2xl md:text-4xl font-extrabold leading-tight font-headline text-primary">
                     {expertiseSlides[expertiseIndex].headline}
                   </h2>
                   <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
@@ -601,7 +601,7 @@ export default function Home() {
       {/* Section 5.5: Insights & Achievements */}
       <section className="bg-muted py-16 md:py-24">
         <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Left Column: News Carousel */}
             <div className="flex flex-col justify-center">
               <div key={newsIndex}>
@@ -609,7 +609,7 @@ export default function Home() {
                   <p className="text-xs font-bold uppercase tracking-widest text-accent">
                     NEWS & UPDATES
                   </p>
-                  <h2 className="mt-4 mb-4 text-4xl font-extrabold text-primary font-headline">
+                  <h2 className="mt-4 mb-4 text-2xl md:text-4xl font-extrabold text-primary font-headline">
                     {newsArticles[newsIndex].title}
                   </h2>
                   <p className="text-lg leading-relaxed text-muted-foreground">
@@ -659,7 +659,7 @@ export default function Home() {
       <section className="py-8 bg-muted">
         <div className="container flex justify-center">
           <FadeInOnScroll>
-            <div className="grid grid-cols-4 gap-4 items-center justify-items-center text-muted-foreground/80 grayscale">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 items-center justify-items-center text-muted-foreground/80 grayscale">
               <span className="text-center text-sm sm:text-lg font-headline font-semibold">Arabian Business</span>
               <span className="text-center text-base sm:text-xl font-headline font-bold tracking-wider">INSIDER</span>
               <span className="text-center text-sm sm:text-lg font-headline font-bold">GULF NEWS</span>
@@ -674,7 +674,7 @@ export default function Home() {
         <div className="container">
           <FadeInOnScroll>
             <div className="text-left max-w-[900px] mb-12">
-              <h2 className="text-4xl font-bold text-primary mb-4 font-headline">Explore Communities in Dubai</h2>
+              <h2 className="text-2xl md:text-4xl font-bold text-primary mb-4 font-headline">Explore Communities in Dubai</h2>
               <p className="text-lg text-muted-foreground">
                 Choosing the right community is as fundamental as choosing the property itself. At <strong>{agencyName}</strong>, our specialized area experts provide you with deep, data-driven insights into localized pricing, market demand, and long-term investment value. We empower you to make confident, informed decisions rather than rushed ones, ensuring your future home or investment perfectly aligns with your lifestyle goals.
               </p>
@@ -714,8 +714,8 @@ export default function Home() {
                 );
               })}
             </CarouselContent>
-            <CarouselPrevious className="ml-14" />
-            <CarouselNext className="mr-14" />
+            <CarouselPrevious className="ml-2 sm:ml-14" />
+            <CarouselNext className="mr-2 sm:mr-14" />
           </Carousel>
         </div>
       </section>
@@ -730,7 +730,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white p-4">
           <FadeInOnScroll>
-            <h2 className="text-5xl font-extrabold tracking-tight">
+            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
               Find Your Next Home With {agencyName}.
             </h2>
             <p className="mt-6 max-w-2xl mx-auto text-lg leading-relaxed text-white/90">

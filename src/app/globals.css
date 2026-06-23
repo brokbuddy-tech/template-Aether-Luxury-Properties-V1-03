@@ -75,7 +75,7 @@
     appearance: textfield;
   }
   body {
-    @apply bg-muted text-foreground;
+    @apply bg-muted text-foreground overflow-x-hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

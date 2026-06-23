@@ -340,7 +340,7 @@ export function FilterBar({ variant = "residential" }: FilterBarProps) {
             <Separator orientation="vertical" className="hidden sm:block h-10 self-center" />
 
             {/* Property Type */}
-            <div className="flex-1 min-w-[140px]">
+            <div className="flex-1 min-w-0 w-full sm:w-auto sm:min-w-[140px]">
               <Select value={category} onValueChange={setCategory}>
                 <SelectTrigger className="h-10">
                   <SelectValue placeholder="Property Type" />
@@ -382,10 +382,10 @@ export function FilterBar({ variant = "residential" }: FilterBarProps) {
             {showAreaRange && (
               <>
                 <Separator orientation="vertical" className="hidden sm:block h-10 self-center" />
-                <div className="flex-1 min-w-[100px]">
+                <div className="flex-1 min-w-0 w-full sm:w-auto sm:min-w-[100px]">
                   <Input placeholder="Min Sq. Ft." type="number" value={minArea} onChange={(event) => setMinArea(event.target.value)} className="h-10" />
                 </div>
-                <div className="flex-1 min-w-[100px]">
+                <div className="flex-1 min-w-0 w-full sm:w-auto sm:min-w-[100px]">
                   <Input placeholder="Max Sq. Ft." type="number" value={maxArea} onChange={(event) => setMaxArea(event.target.value)} className="h-10" />
                 </div>
               </>
@@ -395,7 +395,7 @@ export function FilterBar({ variant = "residential" }: FilterBarProps) {
             {showOffPlanFields && (
               <>
                 <Separator orientation="vertical" className="hidden sm:block h-10 self-center" />
-                <div className="flex-1 min-w-[140px]">
+                <div className="flex-1 min-w-0 w-full sm:w-auto sm:min-w-[140px]">
                   <Select>
                     <SelectTrigger className="h-10">
                       <SelectValue placeholder="Developer" />
@@ -407,7 +407,7 @@ export function FilterBar({ variant = "residential" }: FilterBarProps) {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="flex-1 min-w-[140px]">
+                <div className="flex-1 min-w-0 w-full sm:w-auto sm:min-w-[140px]">
                   <Select>
                     <SelectTrigger className="h-10">
                       <SelectValue placeholder="Handover" />

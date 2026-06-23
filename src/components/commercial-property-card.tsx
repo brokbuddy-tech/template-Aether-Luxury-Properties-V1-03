@@ -32,7 +32,7 @@ export function CommercialPropertyCard({ property }: { property: CommercialPrope
 
   return (
     <div className="relative group">
-      <Card className="flex flex-col w-full max-w-[350px] mx-auto border border-gray-200 rounded-lg overflow-hidden shadow-sm bg-white group-hover:shadow-xl transition-shadow duration-300">
+      <Card className="flex flex-col w-full max-w-full sm:max-w-[350px] mx-auto border border-gray-200 rounded-lg overflow-hidden shadow-sm bg-white group-hover:shadow-xl transition-shadow duration-300">
         <Link href={`/commercial/${property.id}`} className="block">
           <div className="relative">
             <Carousel className="w-full">

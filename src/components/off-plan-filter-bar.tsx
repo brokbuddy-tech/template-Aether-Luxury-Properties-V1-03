@@ -83,10 +83,10 @@ export function OffPlanFilterBar() {
   };
 
   return (
-    <div className="mb-8">
-      <div className="p-4 rounded-lg border bg-background shadow-lg">
+    <div className="mb-8 -mx-4 sm:mx-0">
+      <div className="p-4 rounded-none sm:rounded-lg border-y sm:border bg-background shadow-lg">
         <div className="flex flex-wrap gap-4 items-center">
-            <div className="relative flex-auto lg:flex-1 min-w-[240px]">
+            <div className="relative flex-auto lg:flex-1 min-w-0">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-accent" />
               <Input
                 value={searchQuery}
@@ -139,7 +139,7 @@ export function OffPlanFilterBar() {
               </div>
             </div>
 
-            <div className="flex-auto min-w-[180px]">
+            <div className="flex-auto min-w-0 w-full sm:w-auto sm:min-w-[180px]">
               <Label className="sr-only">Property Type</Label>
               <Select value={category} onValueChange={setCategory}>
                 <SelectTrigger>
@@ -159,7 +159,7 @@ export function OffPlanFilterBar() {
             <Separator orientation="vertical" className="h-10 hidden xl:flex" />
 
             {/* Price Range - Custom Inputs */}
-            <div className="flex-auto min-w-[150px]">
+            <div className="flex-auto min-w-0 w-full sm:w-auto sm:min-w-[150px]">
               <Label className="sr-only">Min Price</Label>
               <Input
                 placeholder="Min Price (AED)"
@@ -171,7 +171,7 @@ export function OffPlanFilterBar() {
                 }}
               />
             </div>
-            <div className="flex-auto min-w-[150px]">
+            <div className="flex-auto min-w-0 w-full sm:w-auto sm:min-w-[150px]">
               <Label className="sr-only">Max Price</Label>
               <Input
                 placeholder="Max Price (AED)"
@@ -184,7 +184,7 @@ export function OffPlanFilterBar() {
               />
             </div>
 
-            <div className="flex-auto min-w-[180px]">
+            <div className="flex-auto min-w-0 w-full sm:w-auto sm:min-w-[180px]">
               <Label className="sr-only">Developer</Label>
               <Select>
                 <SelectTrigger>
@@ -198,7 +198,7 @@ export function OffPlanFilterBar() {
               </Select>
             </div>
 
-            <div className="flex-auto min-w-[180px]">
+            <div className="flex-auto min-w-0 w-full sm:w-auto sm:min-w-[180px]">
               <Label className="sr-only">Handover</Label>
               <Select>
                 <SelectTrigger>

@@ -178,7 +178,7 @@ export default function SellPage() {
           <FadeInOnScroll>
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Our Commitment to You</h2>
           </FadeInOnScroll>
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             {workPrinciples.map((principle, index) => (
               <FadeInOnScroll key={principle.title} delay={index * 100}>
                 <div className="text-center">
@@ -197,7 +197,7 @@ export default function SellPage() {
         style={{ backgroundImage: valuationBgImage ? `url(${valuationBgImage.imageUrl})` : 'none' }}
       >
         <div className="absolute inset-0 bg-black/60" />
-        <div className="relative container grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="relative container grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 items-center">
           <div>
               <FadeInOnScroll>
                   <h2 className="text-3xl md:text-4xl font-bold mb-4 font-headline text-white">Ready to Begin Your Selling Journey?</h2>
@@ -305,11 +305,11 @@ export default function SellPage() {
       </section>
 
       <section className="py-16 md:py-24 bg-background">
-        <div className="container grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="container grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
           <div className="lg:col-span-1">
             <div className="sticky top-24">
               <FadeInOnScroll>
-                <h2 className="text-4xl font-extrabold text-primary font-headline">
+                <h2 className="text-3xl md:text-4xl font-extrabold text-primary font-headline">
                   Valuation FAQs
                 </h2>
               </FadeInOnScroll>

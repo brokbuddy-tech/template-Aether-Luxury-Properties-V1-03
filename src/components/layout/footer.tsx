@@ -130,7 +130,7 @@ export function Footer() {
             <path d="M720 300L570 0" stroke="currentColor" strokeWidth="1" />
           </svg>
 
-          <div className="relative z-10 grid gap-12 lg:grid-cols-[minmax(260px,1fr)_minmax(320px,0.95fr)] lg:gap-24">
+          <div className="relative z-10 grid gap-8 lg:grid-cols-[minmax(260px,1fr)_minmax(320px,0.95fr)] lg:gap-24">
             <div className="flex max-w-[360px] flex-col items-start">
               <Link href="/" aria-label={displayName} className="inline-flex items-center gap-3">
                 {logoUrl ? (
@@ -146,7 +146,7 @@ export function Footer() {
                     </svg>
                   </span>
                 )}
-                <span className="font-headline text-2xl font-bold uppercase tracking-[0.08em] text-[#f2f5f2]">
+                <span className="font-headline text-xl sm:text-2xl font-bold uppercase tracking-[0.08em] text-[#f2f5f2]">
                   {displayName}
                 </span>
               </Link>

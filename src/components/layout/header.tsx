@@ -96,7 +96,7 @@ export function Header() {
       } : undefined}
       aria-current={isActive ? 'page' : undefined}
       className={cn(
-        'relative py-2 text-base font-bold transition-colors hover:text-primary uppercase tracking-wider',
+        'relative py-2 text-sm lg:text-base font-bold transition-colors hover:text-primary uppercase tracking-wider',
         isActive ? 'text-primary' : 'text-foreground/60'
       )}
       onClick={() => setIsMobileMenuOpen(false)}
@@ -113,7 +113,7 @@ export function Header() {
           <Logo logoUrl={logoUrl} name={displayName} />
         </Link>
         
-        <nav ref={desktopNavRef} className="relative hidden md:flex items-center gap-8 pb-1">
+        <nav ref={desktopNavRef} className="relative hidden md:flex items-center gap-3 lg:gap-6 xl:gap-8 pb-1">
           {activeUnderline && (
             <span
               className="pointer-events-none absolute bottom-0 h-0.5 rounded-full bg-primary transition-all duration-300 ease-out"

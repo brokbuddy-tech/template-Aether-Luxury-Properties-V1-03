@@ -102,7 +102,7 @@ function MortgageCalculator({ price }: { price: number }) {
           <div className="flex items-center justify-center bg-background rounded-lg p-6">
             <div className="text-center">
               <p className="text-muted-foreground">Monthly Payment</p>
-              <p className="text-4xl font-bold text-primary mt-2">AED {monthlyPayment.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</p>
+              <p className="text-3xl md:text-4xl font-bold text-primary mt-2">AED {monthlyPayment.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</p>
             </div>
           </div>
         </div>
@@ -236,7 +236,7 @@ export default function PropertyDetailPage() {
         virtualTourUrl={property.virtualTourUrl}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
         <div className="lg:col-span-2">
               {property.type === 'RENT' && (
                 <Accordion type="single" collapsible className="w-full bg-muted/50 rounded-lg mb-8">
@@ -462,7 +462,7 @@ export default function PropertyDetailPage() {
                   <Separator />
                   <div className="py-8 mt-4">
                     <h2 className="text-xl font-bold font-headline mb-6">Regulatory Information</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 items-start">
                       <div className="space-y-4">
                         {(property.dldPermitNo || property.trakheesi) && (
                           <div className="flex justify-between items-center border-b pb-3">

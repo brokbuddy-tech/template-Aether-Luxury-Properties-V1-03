@@ -208,7 +208,7 @@ export default function AboutPage() {
 
       <section className="bg-background py-16 md:py-24">
         <div className="container">
-          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
+          <div className="grid grid-cols-1 items-center gap-8 lg:gap-12 lg:grid-cols-2">
             <FadeInOnScroll>
               <div className="group relative aspect-video overflow-hidden rounded-lg">
                 {videoPlaceholder && (
@@ -226,7 +226,7 @@ export default function AboutPage() {
               </div>
             </FadeInOnScroll>
             <FadeInOnScroll delay={200}>
-              <h2 className="text-4xl font-bold font-headline text-primary md:text-5xl">
+              <h2 className="text-3xl font-bold font-headline text-primary md:text-4xl lg:text-5xl">
                 Who We Are
               </h2>
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
@@ -248,9 +248,9 @@ export default function AboutPage() {
 
       <section className="bg-muted py-16 md:py-24">
         <div className="container">
-          <div className="flex flex-col-reverse items-center gap-12 lg:flex-row">
+          <div className="flex flex-col-reverse items-center gap-8 lg:gap-12 lg:flex-row">
             <FadeInOnScroll>
-              <h2 className="text-4xl font-bold font-headline text-primary md:text-5xl">
+              <h2 className="text-3xl font-bold font-headline text-primary md:text-4xl lg:text-5xl">
                 How We Work
               </h2>
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
@@ -285,7 +285,7 @@ export default function AboutPage() {
       <section className="bg-background py-16 md:py-24">
         <div className="container text-center">
           <FadeInOnScroll>
-            <h2 className="text-4xl font-bold font-headline text-primary md:text-5xl">
+            <h2 className="text-3xl font-bold font-headline text-primary md:text-4xl lg:text-5xl">
               Our Mission
             </h2>
             <p className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground">
@@ -294,7 +294,7 @@ export default function AboutPage() {
               Dubai&apos;s dynamic real estate market.
             </p>
           </FadeInOnScroll>
-          <div className="mt-16 grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-16 grid grid-cols-1 gap-8 sm:gap-12 sm:grid-cols-2 lg:grid-cols-4">
             {coreValues.map((value, index) => (
               <FadeInOnScroll key={value.title} delay={index * 100}>
                 <div className="flex flex-col items-center text-center">
@@ -313,7 +313,7 @@ export default function AboutPage() {
       </section>
       <section className="bg-muted py-16 md:py-24">
         <div className="container">
-          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-24">
+          <div className="grid grid-cols-1 items-center gap-8 lg:gap-12 lg:grid-cols-2 lg:gap-24">
             <FadeInOnScroll>
               {ceoPortrait && (
                 <Image
@@ -327,7 +327,7 @@ export default function AboutPage() {
               )}
             </FadeInOnScroll>
             <FadeInOnScroll delay={200}>
-              <h2 className="text-4xl font-bold font-headline text-primary md:text-5xl">
+              <h2 className="text-3xl font-bold font-headline text-primary md:text-4xl lg:text-5xl">
                 Message from our CEO
               </h2>
               <div className="prose mt-6 max-w-none text-muted-foreground lg:prose-lg">
@@ -369,7 +369,7 @@ export default function AboutPage() {
         <div className="container mx-auto">
           <FadeInOnScroll>
             <div className="mb-12 text-center">
-              <h2 className="font-headline text-4xl font-bold text-primary md:text-5xl">
+              <h2 className="font-headline text-3xl font-bold text-primary md:text-4xl lg:text-5xl">
                 Meet Our Leadership
               </h2>
               <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
@@ -445,10 +445,10 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-black/50" />
         <div className="relative container flex items-center justify-center">
           <FadeInOnScroll>
-            <div className="mx-auto max-w-6xl rounded-lg border border-white/20 bg-white/20 p-12 backdrop-blur-xl md:bg-white/10">
+            <div className="mx-auto max-w-6xl rounded-lg border border-white/20 bg-white/20 p-6 sm:p-8 md:p-12 backdrop-blur-xl md:bg-white/10">
               <div className="grid grid-cols-1 gap-8 text-center text-white md:grid-cols-2 lg:grid-cols-4">
                 <div>
-                  <p className="text-5xl font-bold text-copper-gold">
+                  <p className="text-3xl sm:text-4xl md:text-5xl font-bold text-copper-gold">
                     AED 120B+
                   </p>
                   <p className="mt-2 text-sm uppercase tracking-widest">
@@ -456,19 +456,19 @@ export default function AboutPage() {
                   </p>
                 </div>
                 <div>
-                  <p className="text-5xl font-bold text-copper-gold">300+</p>
+                  <p className="text-3xl sm:text-4xl md:text-5xl font-bold text-copper-gold">300+</p>
                   <p className="mt-2 text-sm uppercase tracking-widest">
                     Specialized Community Brokers
                   </p>
                 </div>
                 <div>
-                  <p className="text-5xl font-bold text-copper-gold">15+</p>
+                  <p className="text-3xl sm:text-4xl md:text-5xl font-bold text-copper-gold">15+</p>
                   <p className="mt-2 text-sm uppercase tracking-widest">
                     International Real Estate Awards
                   </p>
                 </div>
                 <div>
-                  <p className="text-5xl font-bold text-copper-gold">24/7</p>
+                  <p className="text-3xl sm:text-4xl md:text-5xl font-bold text-copper-gold">24/7</p>
                   <p className="mt-2 text-sm uppercase tracking-widest">
                     Client Advisory & Support
                   </p>
@@ -486,7 +486,7 @@ export default function AboutPage() {
               <h2 className="font-headline text-base font-thin uppercase tracking-[0.3em] text-muted-foreground">
                 STAY AHEAD OF THE MARKET
               </h2>
-              <p className="mx-auto mt-4 max-w-2xl font-headline text-3xl text-primary">
+              <p className="mx-auto mt-4 max-w-2xl font-headline text-2xl sm:text-3xl text-primary">
                 Subscribe to the {agencyName} Insider for exclusive 2026 market
                 reports, off-plan launches, and luxury lifestyle insights.
               </p>

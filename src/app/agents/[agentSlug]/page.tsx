@@ -51,7 +51,7 @@ export default async function AgentProfilePage({
           />
         )}
         <div className="absolute inset-0 bg-black/65" />
-        <div className="relative z-10 mx-auto grid min-h-[60vh] max-w-[1600px] grid-cols-1 items-end gap-12 px-6 py-16 text-white md:px-12 lg:grid-cols-[280px_minmax(0,1fr)]">
+        <div className="relative z-10 mx-auto grid min-h-[50vh] lg:min-h-[60vh] max-w-[1600px] grid-cols-1 items-end gap-12 px-6 py-16 text-white md:px-12 lg:grid-cols-[280px_minmax(0,1fr)]">
           <div className="relative aspect-square w-full max-w-[280px] overflow-hidden border border-white/20 bg-white/10 shadow-2xl rounded-xl">
             {avatar && (
               <Image src={avatar.src} alt={avatar.alt} data-ai-hint={avatar.hint} fill className="object-cover" />
@@ -97,7 +97,7 @@ export default async function AgentProfilePage({
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-[1600px] grid-cols-1 gap-16 px-6 py-12 md:px-12 md:py-16 lg:grid-cols-[320px_minmax(0,1fr)]">
+      <section className="mx-auto grid max-w-[1600px] grid-cols-1 gap-8 md:gap-16 px-6 py-12 md:px-12 md:py-16 lg:grid-cols-[320px_minmax(0,1fr)]">
         <aside className="space-y-10">
           <div className="space-y-6 rounded-2xl border bg-card p-6 shadow-sm">
             <h2 className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">Profile</h2>

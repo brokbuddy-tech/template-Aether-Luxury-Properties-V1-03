@@ -166,7 +166,7 @@ export function ReviewCarousel({
           </button>
 
           <article
-            className={cn('min-h-[360px] w-full max-w-4xl px-6 py-10 text-center sm:px-10 md:px-16', styles.card)}
+            className={cn('min-h-[320px] sm:min-h-[360px] w-full max-w-4xl px-6 py-10 text-center sm:px-10 md:px-16', styles.card)}
             aria-live="polite"
           >
             <div className={cn('mx-auto flex h-20 w-20 items-center justify-center overflow-hidden rounded-full text-xl font-bold', styles.avatar)}>

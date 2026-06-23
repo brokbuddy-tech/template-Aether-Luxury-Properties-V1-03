@@ -104,13 +104,14 @@ export function PriceDropdown({
 
       <PopoverContent
         className={cn(
-          "w-[340px] p-0 rounded-xl shadow-2xl overflow-hidden",
+          "w-[calc(100vw-2rem)] sm:w-[340px] p-0 rounded-xl shadow-2xl overflow-hidden",
           isHero
             ? "bg-black/70 backdrop-blur-2xl border border-white/20 text-white"
             : "bg-background border text-foreground",
         )}
         align="start"
         sideOffset={8}
+        collisionPadding={16}
       >
         {/* ── Price Inputs ──────────────────────────────────────────── */}
         <div className="p-4">
