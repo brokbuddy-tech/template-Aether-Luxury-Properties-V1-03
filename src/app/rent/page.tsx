@@ -31,6 +31,7 @@ export default async function RentPage({ searchParams }: { searchParams?: PageSe
     bathrooms: getParam(resolvedSearchParams, 'bathrooms'),
     minArea: getParam(resolvedSearchParams, 'minArea'),
     maxArea: getParam(resolvedSearchParams, 'maxArea'),
+    amenities: getParam(resolvedSearchParams, 'amenities'),
     limit: category ? 96 : 48,
   });
   const rentProperties = liveResponse.properties

@@ -47,8 +47,11 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { PropertyTypeDropdown } from '@/components/property-type-dropdown';
+import { BedsAndBathsDropdown } from '@/components/beds-baths-dropdown';
+import { PriceDropdown } from '@/components/price-dropdown';
 import { Label } from '@/components/ui/label';
-import { Slider } from '@/components/ui/slider';
+import { Checkbox } from '@/components/ui/checkbox';
+import { AmenityIcon } from '@/components/amenity-icon';
 import { useAiSearchModal } from '@/hooks/use-ai-search-modal';
 import { Progress } from '@/components/ui/progress';
 import { getSiteConfig } from '@/lib/api';
@@ -56,6 +59,25 @@ import { getAgencyDisplayName } from '@/lib/live-mappers';
 import type { SiteConfig } from '@/lib/live-types';
 import { LatestListingsSection } from '@/components/latest-listings-section';
 import { cleanQueryForCategory, normalizeCategory } from '@/lib/search-utils';
+
+const HERO_AMENITIES = [
+  { id: 'swimming-pool', label: 'Swimming Pool' },
+  { id: 'gym', label: 'Gymnasium' },
+  { id: 'ocean-view', label: 'Ocean View' },
+  { id: 'home-theater', label: 'Home Theater' },
+  { id: 'private-garden', label: 'Private Garden' },
+  { id: 'smart-home', label: 'Smart Home System' },
+  { id: 'balcony', label: 'Balcony or Terrace' },
+  { id: 'concierge-service', label: 'Concierge Service' },
+  { id: 'covered-parking', label: 'Covered Parking' },
+  { id: 'security-24-7', label: '24/7 Security' },
+  { id: 'built-in-wardrobes', label: 'Built-in Wardrobes' },
+  { id: 'maids-room', label: 'Maids Room' },
+  { id: 'sea-view', label: 'Sea View' },
+  { id: 'pets-allowed', label: 'Pets Allowed' },
+  { id: 'spa', label: 'Spa' },
+  { id: 'private-pool', label: 'Private Pool' },
+];
 
 type AiSearchFilters = {
   q?: string;
@@ -70,6 +92,7 @@ type AiSearchFilters = {
   maxPrice?: string;
   minArea?: string;
   maxArea?: string;
+  amenities?: string;
 };
 
 function getSearchDestination(filters: AiSearchFilters, fallbackMode: 'buy' | 'rent') {
@@ -114,14 +137,17 @@ async function parseAiSearch(query: string, filters: AiSearchFilters) {
 
 export default function Home() {
   const router = useRouter();
-  const [priceRange, setPriceRange] = useState([0]);
-  const [currency, setCurrency] = useState('AED');
   const [transactionMode, setTransactionMode] = useState<'buy' | 'rent'>('buy');
   const [searchQuery, setSearchQuery] = useState('');
   const [propertyCategory, setPropertyCategory] = useState('any');
   const [readiness, setReadiness] = useState<'all' | 'ready' | 'offplan'>('all');
   const [bedrooms, setBedrooms] = useState('any');
   const [bathrooms, setBathrooms] = useState('any');
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const [minArea, setMinArea] = useState('');
+  const [maxArea, setMaxArea] = useState('');
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   const [isAiSearching, setIsAiSearching] = useState(false);
   const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
   const { openModal: openAiSearchModal } = useAiSearchModal();
@@ -213,20 +239,12 @@ export default function Home() {
     };
   }, [expertiseSlides.length, newsArticles.length]);
 
-  const formatPrice = (value: number) => {
-    const prefix = currency === 'USD' ? '$' : '';
-    const suffix = currency !== 'USD' ? ` ${currency}` : '';
-
-    if (value >= 10000000) {
-      return `${prefix}10M+${suffix}`;
-    }
-    if (value >= 1000000) {
-      return `${prefix}${(value / 1000000).toFixed(value % 1000000 === 0 ? 0 : 1)}M${suffix}`;
-    }
-    if (value >= 1000) {
-      return `${prefix}${(value / 1000).toFixed(value % 1000 === 0 ? 0 : 1)}k${suffix}`;
-    }
-    return `${prefix}${value}${suffix}`;
+  const toggleAmenity = (amenityId: string) => {
+    setSelectedAmenities(prev =>
+      prev.includes(amenityId)
+        ? prev.filter(id => id !== amenityId)
+        : [...prev, amenityId]
+    );
   };
 
   const getCurrentFilters = (): AiSearchFilters => ({
@@ -236,7 +254,11 @@ export default function Home() {
     readiness: readiness === 'ready' ? 'READY' : readiness === 'offplan' ? 'OFFPLAN' : undefined,
     bedrooms: bedrooms !== 'any' ? bedrooms : undefined,
     bathrooms: bathrooms !== 'any' ? bathrooms : undefined,
-    maxPrice: priceRange[0] > 0 ? String(priceRange[0]) : undefined,
+    minPrice: minPrice || undefined,
+    maxPrice: maxPrice || undefined,
+    minArea: minArea || undefined,
+    maxArea: maxArea || undefined,
+    amenities: selectedAmenities.length > 0 ? selectedAmenities.join(',') : undefined,
   });
 
   const handleSearch = () => {
@@ -312,123 +334,133 @@ export default function Home() {
                 </div>
                 <div className="mt-2 flex flex-col md:flex-row gap-2 items-center">
                   {transactionMode === 'buy' && (
-                  <Tabs value={readiness} onValueChange={(value) => setReadiness(value as 'all' | 'ready' | 'offplan')} className="shrink-0">
-                    <TabsList className="bg-transparent h-10">
-                      <TabsTrigger value="all" className="text-white data-[state=active]:bg-white/25 data-[state=active]:text-white px-3 text-xs">All</TabsTrigger>
-                      <TabsTrigger value="ready" className="text-white data-[state=active]:bg-white/25 data-[state=active]:text-white px-3 text-xs">Ready</TabsTrigger>
-                      <TabsTrigger value="offplan" className="text-white data-[state=active]:bg-white/25 data-[state=active]:text-white px-3 text-xs">Off-plan</TabsTrigger>
-                    </TabsList>
-                  </Tabs>
+                    <Tabs value={readiness} onValueChange={(value) => setReadiness(value as 'all' | 'ready' | 'offplan')} className="shrink-0">
+                      <TabsList className="bg-transparent h-10">
+                        <TabsTrigger value="all" className="text-white data-[state=active]:bg-white/25 data-[state=active]:text-white px-3 text-xs">All</TabsTrigger>
+                        <TabsTrigger value="ready" className="text-white data-[state=active]:bg-white/25 data-[state=active]:text-white px-3 text-xs">Ready</TabsTrigger>
+                        <TabsTrigger value="offplan" className="text-white data-[state=active]:bg-white/25 data-[state=active]:text-white px-3 text-xs">Off-plan</TabsTrigger>
+                      </TabsList>
+                    </Tabs>
                   )}
                   <PropertyTypeDropdown
                     value={propertyCategory}
                     onValueChange={setPropertyCategory}
                     variant="hero"
                   />
+                  <BedsAndBathsDropdown
+                    bedrooms={bedrooms}
+                    bathrooms={bathrooms}
+                    onBedroomsChange={setBedrooms}
+                    onBathroomsChange={setBathrooms}
+                    variant="hero"
+                  />
+                  <PriceDropdown
+                    minPrice={minPrice}
+                    maxPrice={maxPrice}
+                    onMinPriceChange={setMinPrice}
+                    onMaxPriceChange={setMaxPrice}
+                    variant="hero"
+                  />
 
-                  <Button variant="ghost" className="text-white hover:bg-white/20 hover:text-white w-full md:w-auto" onClick={handleAiSearch} disabled={isAiSearching}>
-                    <Sparkles className="mr-2 h-4 w-4" />
-                    {isAiSearching ? 'Searching...' : 'AI Search'}
+                  {/* AI Search – icon only, tooltip on hover */}
+                  <Button
+                    variant="ghost"
+                    className="group relative text-white hover:bg-white/20 hover:text-white w-auto shrink-0 px-3"
+                    onClick={handleAiSearch}
+                    disabled={isAiSearching}
+                  >
+                    <Sparkles className="h-4 w-4" />
+                    <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-9 px-2.5 py-1 rounded-md bg-black/80 backdrop-blur-sm text-white text-xs whitespace-nowrap opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 border border-white/15">
+                      {isAiSearching ? 'Searching...' : 'AI Search'}
+                    </span>
                   </Button>
+
+                  {/* Advanced Filters */}
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button variant="ghost" className="text-white hover:bg-white/20 hover:text-white w-full md:w-auto">
                         <SlidersHorizontal className="mr-2 h-4 w-4" />
-                        Advanced Filters
+                        Filters
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-80 border border-white/20 bg-black/60 md:bg-black/50 text-white backdrop-blur-lg">
-                      <div className="grid gap-4">
-                        <div className="space-y-2">
-                          <h4 className="font-medium leading-none">Advanced Filters</h4>
-                          <p className="text-sm text-white/80">
-                            Refine your search criteria.
-                          </p>
+                    <PopoverContent
+                      className="w-[420px] p-0 rounded-xl shadow-2xl overflow-hidden border border-white/20 bg-black/70 backdrop-blur-2xl text-white flex flex-col"
+                      align="end"
+                      sideOffset={8}
+                      collisionPadding={16}
+                      style={{ maxHeight: 'var(--radix-popover-content-available-height, 500px)' }}
+                    >
+                      <div className="p-4 border-b border-white/15 shrink-0">
+                        <h4 className="font-semibold leading-none">Filters</h4>
+                        <p className="text-sm text-white/60 mt-1">
+                          Refine your search criteria.
+                        </p>
+                      </div>
+                      <div className="p-4 space-y-5 overflow-y-auto custom-scrollbar flex-1 min-h-0">
+                        {/* Area (Sq. Ft.) */}
+                        <div className="space-y-3">
+                          <Label className='text-sm font-semibold text-white'>Area (Sq. Ft.)</Label>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="space-y-1.5">
+                              <label className="text-xs text-accent font-semibold">Minimum</label>
+                              <Input
+                                type="number"
+                                placeholder="0"
+                                value={minArea}
+                                onChange={(e) => setMinArea(e.target.value)}
+                                className="h-10 bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-accent"
+                              />
+                            </div>
+                            <div className="space-y-1.5">
+                              <label className="text-xs text-accent font-semibold">Maximum</label>
+                              <Input
+                                type="number"
+                                placeholder="Any"
+                                value={maxArea}
+                                onChange={(e) => setMaxArea(e.target.value)}
+                                className="h-10 bg-white/10 border-white/20 text-white placeholder:text-white/40 focus-visible:ring-accent"
+                              />
+                            </div>
+                          </div>
                         </div>
-                        <div className="grid gap-y-6">
-                          <div className="space-y-3">
-                            <div className="flex justify-between items-center">
-                              <div className="flex items-center gap-2">
-                                <Label htmlFor="price-range-popover" className='text-white'>Max Price</Label>
-                                <Select value={currency} onValueChange={setCurrency}>
-                                  <SelectTrigger className="w-[90px] h-7 text-xs bg-white/20 border-0 text-white focus:ring-accent focus:ring-offset-0">
-                                    <SelectValue />
-                                  </SelectTrigger>
-                                  <SelectContent className='border border-white/20 bg-black/60 md:bg-black/50 text-white backdrop-blur-lg'>
-                                    <SelectItem value="AED">AED</SelectItem>
-                                    <SelectItem value="USD">USD</SelectItem>
-                                    <SelectItem value="EUR">EUR</SelectItem>
-                                    <SelectItem value="GBP">GBP</SelectItem>
-                                  </SelectContent>
-                                </Select>
+
+                        {/* Amenities */}
+                        <div className="space-y-3">
+                          <Label className='text-sm font-semibold text-white'>Amenities</Label>
+                          <p className="text-xs text-white/50">Select desired features.</p>
+                          <div className="grid grid-cols-2 gap-3">
+                            {HERO_AMENITIES.map((amenity) => (
+                              <div key={amenity.id} className="flex items-center space-x-2">
+                                <Checkbox
+                                  id={`hero-${amenity.id}`}
+                                  checked={selectedAmenities.includes(amenity.id)}
+                                  onCheckedChange={() => toggleAmenity(amenity.id)}
+                                  className="border-white/40 data-[state=checked]:bg-accent data-[state=checked]:border-accent"
+                                />
+                                <Label htmlFor={`hero-${amenity.id}`} className="flex cursor-pointer items-center gap-2 text-sm font-normal text-white/80">
+                                  <AmenityIcon name={amenity.label} className="h-4 w-4" />
+                                  {amenity.label}
+                                </Label>
                               </div>
-                              <span className='text-sm text-white/90'>
-                                {formatPrice(priceRange[0])}
-                              </span>
-                            </div>
-                            <Slider
-                              id="price-range-popover"
-                              value={priceRange}
-                              onValueChange={setPriceRange}
-                              min={0}
-                              max={10000000}
-                              step={100000}
-                              dir="ltr"
-                            />
+                            ))}
                           </div>
-                          <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                              <Label className='text-white'>Bedrooms</Label>
-                              <Select value={bedrooms} onValueChange={setBedrooms}>
-                                <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
-                                  <SelectValue placeholder="Any" />
-                                </SelectTrigger>
-                                <SelectContent className='border border-white/20 bg-black/60 md:bg-black/50 text-white backdrop-blur-lg'>
-                                  <SelectItem value="any">Any</SelectItem>
-                                  <SelectItem value="1">1+ Beds</SelectItem>
-                                  <SelectItem value="2">2+ Beds</SelectItem>
-                                  <SelectItem value="3">3+ Beds</SelectItem>
-                                  <SelectItem value="4">4+ Beds</SelectItem>
-                                  <SelectItem value="5">5+ Beds</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-                            <div className="space-y-2">
-                              <Label className='text-white'>Bathrooms</Label>
-                              <Select value={bathrooms} onValueChange={setBathrooms}>
-                                <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
-                                  <SelectValue placeholder="Any" />
-                                </SelectTrigger>
-                                <SelectContent className='border border-white/20 bg-black/60 md:bg-black/50 text-white backdrop-blur-lg'>
-                                  <SelectItem value="any">Any</SelectItem>
-                                  <SelectItem value="1">1+ Baths</SelectItem>
-                                  <SelectItem value="2">2+ Baths</SelectItem>
-                                  <SelectItem value="3">3+ Baths</SelectItem>
-                                  <SelectItem value="4">4+ Baths</SelectItem>
-                                  <SelectItem value="5">5+ Baths</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          </div>
-                          <div className="space-y-2">
-                            <Label className='text-white'>Amenities</Label>
-                            <Select>
-                              <SelectTrigger className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus:ring-accent focus:ring-offset-0">
-                                <SelectValue placeholder="Any" />
-                              </SelectTrigger>
-                              <SelectContent className='border border-white/20 bg-black/60 md:bg-black/50 text-white backdrop-blur-lg'>
-                                <SelectItem value="any">Any</SelectItem>
-                                <SelectItem value="pool">Swimming Pool</SelectItem>
-                                <SelectItem value="gym">Gym</SelectItem>
-                                <SelectItem value="view">Ocean View</SelectItem>
-                                <SelectItem value="theater">Home Theater</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                          <Button className="bg-accent hover:bg-accent/90 text-accent-foreground w-full" onClick={handleSearch}>
-                            Apply Filters
-                          </Button>
                         </div>
+                      </div>
+                      {/* Footer */}
+                      <div className="flex gap-3 p-4 border-t border-white/15">
+                        <Button
+                          variant="outline"
+                          className="flex-1 rounded-full font-semibold border-white/30 bg-transparent text-white/80 hover:bg-white/10 hover:text-white"
+                          onClick={() => { setMinArea(''); setMaxArea(''); setSelectedAmenities([]); }}
+                        >
+                          Reset
+                        </Button>
+                        <Button
+                          className="flex-1 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground font-semibold"
+                          onClick={handleSearch}
+                        >
+                          Apply Filters
+                        </Button>
                       </div>
                     </PopoverContent>
                   </Popover>

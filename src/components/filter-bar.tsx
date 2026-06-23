@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
@@ -12,19 +12,29 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { useAiSearchModal } from "@/hooks/use-ai-search-modal";
 import { AmenityIcon } from "@/components/amenity-icon";
+import { BedsAndBathsDropdown } from "@/components/beds-baths-dropdown";
+import { PriceDropdown } from "@/components/price-dropdown";
 import { cleanQueryForCategory, normalizeCategory } from "@/lib/search-utils";
 
 // --- Data by variant ---
 
 const residentialAmenities = [
   { id: 'swimming-pool', label: 'Swimming Pool' },
-  { id: 'gym', label: 'Gym' },
+  { id: 'gym', label: 'Gymnasium' },
   { id: 'ocean-view', label: 'Ocean View' },
   { id: 'home-theater', label: 'Home Theater' },
   { id: 'private-garden', label: 'Private Garden' },
-  { id: 'smart-home', label: 'Smart Home' },
-  { id: 'balcony', label: 'Balcony' },
+  { id: 'smart-home', label: 'Smart Home System' },
+  { id: 'balcony', label: 'Balcony or Terrace' },
   { id: 'concierge-service', label: 'Concierge Service' },
+  { id: 'covered-parking', label: 'Covered Parking' },
+  { id: 'security-24-7', label: '24/7 Security' },
+  { id: 'built-in-wardrobes', label: 'Built-in Wardrobes' },
+  { id: 'maids-room', label: 'Maids Room' },
+  { id: 'sea-view', label: 'Sea View' },
+  { id: 'pets-allowed', label: 'Pets Allowed' },
+  { id: 'spa', label: 'Spa' },
+  { id: 'private-pool', label: 'Private Pool' },
 ];
 
 const commercialAmenities = [
@@ -110,10 +120,13 @@ export function FilterBar({ variant = "residential" }: FilterBarProps) {
   const [transactionType, setTransactionType] = useState("SALE");
   const [category, setCategory] = useState("any");
   const [readiness, setReadiness] = useState<'all' | 'ready' | 'offplan'>('all');
+  const [bedrooms, setBedrooms] = useState('any');
+  const [bathrooms, setBathrooms] = useState('any');
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [minArea, setMinArea] = useState("");
   const [maxArea, setMaxArea] = useState("");
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
 
   // Show readiness toggle only on /buy page
   const isBuyPage = pathname === '/buy';
@@ -135,13 +148,25 @@ export function FilterBar({ variant = "residential" }: FilterBarProps) {
     setSearchQuery(cleanQueryForCategory(searchParams.get("q"), nextCategory) || "");
     setTransactionType(searchParams.get("transactionType") === "RENT" ? "RENT" : "SALE");
     setCategory(nextCategory);
+    setBedrooms(searchParams.get("bedrooms") || 'any');
+    setBathrooms(searchParams.get("bathrooms") || 'any');
     setMinPrice(searchParams.get("minPrice") || "");
     setMaxPrice(searchParams.get("maxPrice") || "");
     setMinArea(searchParams.get("minArea") || "");
     setMaxArea(searchParams.get("maxArea") || "");
+    const amenitiesParam = searchParams.get("amenities");
+    setSelectedAmenities(amenitiesParam ? amenitiesParam.split(',').filter(Boolean) : []);
     const readinessParam = searchParams.get("readiness");
     setReadiness(readinessParam === 'READY' ? 'ready' : readinessParam === 'OFFPLAN' ? 'offplan' : 'all');
   }, [searchKey, searchParams]);
+
+  const toggleAmenity = useCallback((amenityId: string) => {
+    setSelectedAmenities(prev =>
+      prev.includes(amenityId)
+        ? prev.filter(id => id !== amenityId)
+        : [...prev, amenityId]
+    );
+  }, []);
 
   const handleReadinessChange = (value: string) => {
     const nextReadiness = value as 'all' | 'ready' | 'offplan';
@@ -162,10 +187,13 @@ export function FilterBar({ variant = "residential" }: FilterBarProps) {
     setParam(params, "q", cleanQueryForCategory(searchQuery, normalizedCategory));
     setParam(params, "transactionType", transactionType);
     setParam(params, "category", normalizedCategory);
+    setParam(params, "bedrooms", bedrooms !== 'any' ? bedrooms : '');
+    setParam(params, "bathrooms", bathrooms !== 'any' ? bathrooms : '');
     setParam(params, "minPrice", minPrice);
     setParam(params, "maxPrice", maxPrice);
     setParam(params, "minArea", minArea);
     setParam(params, "maxArea", maxArea);
+    setParam(params, "amenities", selectedAmenities.length > 0 ? selectedAmenities.join(',') : '');
     if (isBuyPage && readiness !== 'all') {
       setParam(params, "readiness", readiness === 'ready' ? 'READY' : 'OFFPLAN');
     } else {
@@ -274,24 +302,35 @@ export function FilterBar({ variant = "residential" }: FilterBarProps) {
                   <Button variant="outline" className="flex-none h-10">
                     <Plus className="mr-2 h-4 w-4" />
                     AMENITIES
+                    {selectedAmenities.length > 0 && (
+                      <span className="ml-1.5 inline-flex items-center justify-center rounded-full bg-accent text-accent-foreground text-xs font-semibold w-5 h-5">
+                        {selectedAmenities.length}
+                      </span>
+                    )}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-80">
-                  <div className="grid gap-4">
-                    <div className="space-y-2">
+                <PopoverContent className="w-80 p-0 rounded-xl shadow-2xl overflow-hidden" align="start" sideOffset={8} collisionPadding={16} style={{ maxHeight: 'var(--radix-popover-content-available-height, 450px)' }}>
+                  <div className="flex flex-col" style={{ maxHeight: 'inherit' }}>
+                    <div className="p-4 pb-2 shrink-0">
                       <h4 className="font-medium leading-none">{amenitiesTitle}</h4>
-                      <p className="text-sm text-muted-foreground">Select desired features.</p>
+                      <p className="text-sm text-muted-foreground mt-1">Select desired features.</p>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      {amenitiesList.map((amenity) => (
-                        <div key={amenity.id} className="flex items-center space-x-2">
-                          <Checkbox id={amenity.id} />
-                          <Label htmlFor={amenity.id} className="flex cursor-pointer items-center gap-2 font-normal">
-                            <AmenityIcon name={amenity.label} className="h-4 w-4" />
-                            {amenity.label}
-                          </Label>
-                        </div>
-                      ))}
+                    <div className="px-4 pb-4 overflow-y-auto custom-scrollbar flex-1 min-h-0">
+                      <div className="grid grid-cols-2 gap-3">
+                        {amenitiesList.map((amenity) => (
+                          <div key={amenity.id} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={`filter-${amenity.id}`}
+                              checked={selectedAmenities.includes(amenity.id)}
+                              onCheckedChange={() => toggleAmenity(amenity.id)}
+                            />
+                            <Label htmlFor={`filter-${amenity.id}`} className="flex cursor-pointer items-center gap-2 font-normal">
+                              <AmenityIcon name={amenity.label} className="h-4 w-4" />
+                              {amenity.label}
+                            </Label>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </PopoverContent>
@@ -319,31 +358,25 @@ export function FilterBar({ variant = "residential" }: FilterBarProps) {
 
             <Separator orientation="vertical" className="hidden sm:block h-10 self-center" />
 
+            {/* Beds & Baths */}
+            <BedsAndBathsDropdown
+              bedrooms={bedrooms}
+              bathrooms={bathrooms}
+              onBedroomsChange={setBedrooms}
+              onBathroomsChange={setBathrooms}
+              variant="page"
+            />
+
+            <Separator orientation="vertical" className="hidden sm:block h-10 self-center" />
+
             {/* Price Range */}
-            <div className="flex-1 min-w-[120px]">
-              <Input
-                placeholder="Min Price (AED)"
-                type="number"
-                value={minPrice}
-                onChange={(event) => setMinPrice(event.target.value)}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") applyFilters();
-                }}
-                className="h-10"
-              />
-            </div>
-            <div className="flex-1 min-w-[120px]">
-              <Input
-                placeholder="Max Price (AED)"
-                type="number"
-                value={maxPrice}
-                onChange={(event) => setMaxPrice(event.target.value)}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") applyFilters();
-                }}
-                className="h-10"
-              />
-            </div>
+            <PriceDropdown
+              minPrice={minPrice}
+              maxPrice={maxPrice}
+              onMinPriceChange={setMinPrice}
+              onMaxPriceChange={setMaxPrice}
+              variant="page"
+            />
 
             {/* Size Range (residential & commercial only) */}
             {showAreaRange && (

@@ -33,6 +33,7 @@ export default async function BuyPage({ searchParams }: { searchParams?: PageSea
     bathrooms: getParam(resolvedSearchParams, 'bathrooms'),
     minArea: getParam(resolvedSearchParams, 'minArea'),
     maxArea: getParam(resolvedSearchParams, 'maxArea'),
+    amenities: getParam(resolvedSearchParams, 'amenities'),
     limit: category ? 96 : 48,
   });
   const buyProperties = liveResponse.properties

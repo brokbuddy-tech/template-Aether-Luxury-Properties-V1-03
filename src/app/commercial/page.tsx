@@ -26,8 +26,11 @@ export default async function CommercialPage({ searchParams }: { searchParams?: 
     q: searchQuery,
     minPrice: getParam(resolvedSearchParams, 'minPrice'),
     maxPrice: getParam(resolvedSearchParams, 'maxPrice'),
+    bedrooms: getParam(resolvedSearchParams, 'bedrooms'),
+    bathrooms: getParam(resolvedSearchParams, 'bathrooms'),
     minArea: getParam(resolvedSearchParams, 'minArea'),
     maxArea: getParam(resolvedSearchParams, 'maxArea'),
+    amenities: getParam(resolvedSearchParams, 'amenities'),
     limit: category ? 96 : 48,
   });
   const commercialProperties = liveResponse.properties
