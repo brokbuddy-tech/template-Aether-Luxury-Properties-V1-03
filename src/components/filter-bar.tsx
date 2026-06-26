@@ -14,7 +14,9 @@ import { useAiSearchModal } from "@/hooks/use-ai-search-modal";
 import { AmenityIcon } from "@/components/amenity-icon";
 import { BedsAndBathsDropdown } from "@/components/beds-baths-dropdown";
 import { PriceDropdown } from "@/components/price-dropdown";
+import { PropertyTypeDropdown } from "@/components/property-type-dropdown";
 import { cleanQueryForCategory, normalizeCategory } from "@/lib/search-utils";
+import { getPropertyTypeGroup } from "@/lib/property-types";
 
 // --- Data by variant ---
 
@@ -107,9 +109,10 @@ export type FilterBarVariant = "residential" | "commercial" | "off-plan";
 
 interface FilterBarProps {
   variant?: FilterBarVariant;
+  availablePropertyTypes?: string[];
 }
 
-export function FilterBar({ variant = "residential" }: FilterBarProps) {
+export function FilterBar({ variant = "residential", availablePropertyTypes }: FilterBarProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -132,7 +135,7 @@ export function FilterBar({ variant = "residential" }: FilterBarProps) {
   const isBuyPage = pathname === '/buy';
 
   // Derived config based on variant
-  const propertyTypeOptions = variant === "commercial" ? commercialPropertyTypes : residentialPropertyTypes;
+  const preferredPropertyTypeTab = variant === "commercial" ? "commercial" : "residential";
   const amenitiesList = variant === "commercial" ? commercialAmenities : residentialAmenities;
   const showAmenities = variant !== "off-plan";
   const showAreaRange = variant !== "off-plan";
@@ -183,6 +186,7 @@ export function FilterBar({ variant = "residential" }: FilterBarProps) {
   const applyFilters = () => {
     const params = new URLSearchParams(searchParams.toString());
     const normalizedCategory = normalizeCategory(category);
+    const selectedTypeGroup = getPropertyTypeGroup(normalizedCategory);
 
     setParam(params, "q", cleanQueryForCategory(searchQuery, normalizedCategory));
     setParam(params, "transactionType", transactionType);
@@ -200,8 +204,23 @@ export function FilterBar({ variant = "residential" }: FilterBarProps) {
       params.delete('readiness');
     }
 
+    let nextPathname = pathname;
+    if (selectedTypeGroup === "commercial") {
+      nextPathname = "/commercial";
+      params.delete('readiness');
+    } else if (isBuyPage && readiness === 'offplan') {
+      nextPathname = "/off-plan";
+      params.delete('readiness');
+    } else if (pathname === "/commercial" && selectedTypeGroup === "residential") {
+      nextPathname = transactionType === "RENT" ? "/rent" : "/buy";
+    }
+
+    if (nextPathname === "/buy" || nextPathname === "/rent") {
+      params.delete('transactionType');
+    }
+
     const query = params.toString();
-    router.push(`${pathname}${query ? `?${query}` : ""}`);
+    router.push(`${nextPathname}${query ? `?${query}` : ""}`);
   };
 
   return (
@@ -340,20 +359,15 @@ export function FilterBar({ variant = "residential" }: FilterBarProps) {
             <Separator orientation="vertical" className="hidden sm:block h-10 self-center" />
 
             {/* Property Type */}
-            <div className="flex-1 min-w-0 w-full sm:w-auto sm:min-w-[140px]">
-              <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger className="h-10">
-                  <SelectValue placeholder="Property Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="any">Property Type (Any)</SelectItem>
-                  {propertyTypeOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="flex-1 min-w-0 w-full sm:w-auto sm:min-w-[220px] lg:max-w-[280px]">
+              <PropertyTypeDropdown
+                value={category}
+                onValueChange={setCategory}
+                availablePropertyTypes={availablePropertyTypes}
+                preferredTab={preferredPropertyTypeTab}
+                variant="page"
+                className="md:w-full"
+              />
             </div>
 
             <Separator orientation="vertical" className="hidden sm:block h-10 self-center" />

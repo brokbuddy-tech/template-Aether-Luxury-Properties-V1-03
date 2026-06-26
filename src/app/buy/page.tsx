@@ -1,6 +1,6 @@
 
 import { PropertyCard } from "@/components/property-card";
-import { getProperties } from "@/lib/api";
+import { getAvailablePropertyTypes, getProperties } from "@/lib/api";
 import { FilterBar } from "@/components/filter-bar";
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
@@ -23,7 +23,8 @@ export default async function BuyPage({ searchParams }: { searchParams?: PageSea
   const readiness = getParam(resolvedSearchParams, 'readiness');
   const headingLabel = searchQuery || category;
 
-  const liveResponse = await getProperties({
+  const [liveResponse, availablePropertyTypes] = await Promise.all([
+    getProperties({
     transactionType: 'SALE',
     q: searchQuery,
     readiness: readiness || undefined,
@@ -35,7 +36,9 @@ export default async function BuyPage({ searchParams }: { searchParams?: PageSea
     maxArea: getParam(resolvedSearchParams, 'maxArea'),
     amenities: getParam(resolvedSearchParams, 'amenities'),
     limit: category ? 96 : 48,
-  });
+    }),
+    getAvailablePropertyTypes(),
+  ]);
   const buyProperties = liveResponse.properties
     .filter((property) => matchesTemplateCategory(property, category))
     .map(toAetherProperty);
@@ -70,7 +73,7 @@ export default async function BuyPage({ searchParams }: { searchParams?: PageSea
 
         <div className="bg-background">
             <div className="container py-12">
-                <FilterBar />
+                <FilterBar availablePropertyTypes={availablePropertyTypes} />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-8">
                     {buyProperties.map(property => (
                     <PropertyCard key={property.id} property={property} />

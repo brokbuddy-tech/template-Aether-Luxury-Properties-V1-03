@@ -1,6 +1,6 @@
 
 import { PropertyCard } from "@/components/property-card";
-import { getProperties } from "@/lib/api";
+import { getAvailablePropertyTypes, getProperties } from "@/lib/api";
 import { FilterBar } from "@/components/filter-bar";
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
@@ -22,7 +22,8 @@ export default async function RentPage({ searchParams }: { searchParams?: PageSe
   const searchQuery = cleanQueryForCategory(getParam(resolvedSearchParams, 'q') || community, category);
   const headingLabel = searchQuery || category;
 
-  const liveResponse = await getProperties({
+  const [liveResponse, availablePropertyTypes] = await Promise.all([
+    getProperties({
     transactionType: 'RENT',
     q: searchQuery,
     minPrice: getParam(resolvedSearchParams, 'minPrice'),
@@ -33,7 +34,9 @@ export default async function RentPage({ searchParams }: { searchParams?: PageSe
     maxArea: getParam(resolvedSearchParams, 'maxArea'),
     amenities: getParam(resolvedSearchParams, 'amenities'),
     limit: category ? 96 : 48,
-  });
+    }),
+    getAvailablePropertyTypes(),
+  ]);
   const rentProperties = liveResponse.properties
     .filter((property) => matchesTemplateCategory(property, category))
     .map(toAetherProperty);
@@ -68,7 +71,7 @@ export default async function RentPage({ searchParams }: { searchParams?: PageSe
 
         <div className="bg-background">
             <div className="container py-12">
-                <FilterBar />
+                <FilterBar availablePropertyTypes={availablePropertyTypes} />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mt-8">
                     {rentProperties.map(property => (
                     <PropertyCard key={property.id} property={property} />

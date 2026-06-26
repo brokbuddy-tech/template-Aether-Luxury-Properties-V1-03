@@ -117,7 +117,7 @@ export function Footer() {
   return (
     <footer className="bg-[#004d46] text-[#d9ebe7]">
       <div className="w-full overflow-hidden bg-[#004d46]">
-        <div className="relative min-h-[420px] px-8 py-14 sm:px-12 md:px-20 lg:px-28">
+        <div className="relative min-h-[420px] px-5 py-10 sm:px-8 sm:py-12 md:px-20 md:py-14 lg:px-28">
           <svg
             className="pointer-events-none absolute inset-y-0 right-0 hidden h-full w-[62%] text-[#2c7069] opacity-55 md:block"
             viewBox="0 0 720 430"
@@ -130,15 +130,15 @@ export function Footer() {
             <path d="M720 300L570 0" stroke="currentColor" strokeWidth="1" />
           </svg>
 
-          <div className="relative z-10 grid gap-8 lg:grid-cols-[minmax(260px,1fr)_minmax(320px,0.95fr)] lg:gap-24">
-            <div className="flex max-w-[360px] flex-col items-start">
-              <Link href="/" aria-label={displayName} className="inline-flex items-center gap-3">
+          <div className="relative z-10 grid gap-10 lg:grid-cols-[minmax(260px,1fr)_minmax(320px,0.95fr)] lg:gap-24">
+            <div className="flex max-w-none flex-col items-start sm:max-w-[420px]">
+              <Link href="/" aria-label={displayName} className="inline-flex max-w-full items-center gap-3">
                 {logoUrl ? (
-                  <span className="relative h-9 w-9 overflow-hidden rounded-full border border-[#e3aa1d]/50 bg-white">
+                  <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-full border border-[#e3aa1d]/50 bg-white">
                     <Image src={logoUrl} alt={displayName} fill className="object-contain p-1" />
                   </span>
                 ) : (
-                  <span className="flex h-8 w-8 items-center justify-center text-[#e3aa1d]">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center text-[#e3aa1d]">
                     <svg viewBox="0 0 32 32" className="h-8 w-8" fill="none" aria-hidden="true">
                       <path d="M16 4L27 26H5L16 4Z" stroke="currentColor" strokeWidth="2.2" />
                       <path d="M16 10L22 23H10L16 10Z" stroke="currentColor" strokeWidth="2.2" />
@@ -146,16 +146,16 @@ export function Footer() {
                     </svg>
                   </span>
                 )}
-                <span className="font-headline text-xl sm:text-2xl font-bold uppercase tracking-[0.08em] text-[#f2f5f2]">
+                <span className="min-w-0 break-words font-headline text-lg font-bold uppercase leading-tight tracking-[0.08em] text-[#f2f5f2] sm:text-2xl">
                   {displayName}
                 </span>
               </Link>
 
-              <p className="mt-11 max-w-[310px] text-[17px] font-bold leading-7 text-[#e1efeb]">
+              <p className="mt-6 max-w-none text-sm font-medium leading-6 text-[#e1efeb] sm:mt-8 sm:max-w-[34rem] sm:text-[16px] sm:font-bold sm:leading-7">
                 {footerDescription}
               </p>
 
-              <div className="mt-9 flex items-center gap-7">
+              <div className="mt-7 flex flex-wrap items-center gap-5 sm:mt-9 sm:gap-7">
                 {socialColumns.map((link) => {
                   const Icon = link.icon;
                   return (
@@ -176,7 +176,7 @@ export function Footer() {
               <button
                 type="button"
                 onClick={scrollToTop}
-                className="mt-12 inline-flex h-12 items-center gap-4 border border-[#d9ebe7]/80 px-5 text-[11px] font-bold uppercase tracking-[0.08em] text-[#d9ebe7] transition-colors hover:border-[#e3aa1d] hover:text-[#e3aa1d]"
+                className="mt-8 inline-flex h-11 w-full items-center justify-center gap-3 border border-[#d9ebe7]/80 px-5 text-[11px] font-bold uppercase tracking-[0.08em] text-[#d9ebe7] transition-colors hover:border-[#e3aa1d] hover:text-[#e3aa1d] sm:mt-12 sm:w-auto sm:justify-start sm:gap-4"
               >
                 <span className="flex h-5 w-5 items-center justify-center">
                   <ArrowUp className="h-5 w-5" />
@@ -185,13 +185,13 @@ export function Footer() {
               </button>
             </div>
 
-            <div className="grid max-w-[520px] grid-cols-1 gap-10 sm:grid-cols-2 lg:ml-auto lg:mr-16 xl:mr-24">
+            <div className="grid w-full max-w-none grid-cols-2 gap-8 sm:max-w-[520px] sm:gap-10 lg:ml-auto lg:mr-16 xl:mr-24">
               {footerLinkColumns.map((column) => (
                 <div key={column.title}>
-                  <h3 className="mb-8 font-body text-[15px] font-bold tracking-normal text-[#f2f5f2]">
+                  <h3 className="mb-5 font-body text-[15px] font-bold tracking-normal text-[#f2f5f2] sm:mb-8">
                     {column.title}
                   </h3>
-                  <ul className="space-y-4">
+                  <ul className="space-y-3 sm:space-y-4">
                     {column.links.map((link, index) => (
                       <li key={link.label}>
                         {renderLink(
@@ -210,7 +210,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="bg-[#e3aa1d] px-6 py-2 text-center text-[10px] leading-none text-[#164942]">
+        <div className="bg-[#e3aa1d] px-4 py-2 text-center text-[10px] leading-snug text-[#164942] sm:px-6">
           {copyrightText}
         </div>
       </div>

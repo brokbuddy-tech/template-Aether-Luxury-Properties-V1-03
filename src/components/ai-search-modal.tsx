@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Sparkles } from 'lucide-react';
 import { cleanQueryForCategory, normalizeCategory } from '@/lib/search-utils';
+import { getPropertyTypeGroup } from '@/lib/property-types';
 
 type AiSearchFilters = {
   q?: string;
@@ -26,7 +27,9 @@ type AiSearchFilters = {
 };
 
 function getSearchDestination(filters: AiSearchFilters) {
-  if (filters.propertyType === 'COMMERCIAL' || filters.type === 'commercial') return '/commercial';
+  const categoryGroup = getPropertyTypeGroup(filters.category);
+
+  if (filters.propertyType === 'COMMERCIAL' || filters.type === 'commercial' || categoryGroup === 'commercial') return '/commercial';
   if (filters.readiness === 'OFFPLAN' || filters.type === 'new-homes') return '/off-plan';
   if (filters.transactionType === 'RENT' || filters.type === 'rent') return '/rent';
   return '/buy';
@@ -47,7 +50,7 @@ function buildSearchHref(filters: AiSearchFilters) {
   });
 
   const query = params.toString();
-  return `${getSearchDestination(filters)}${query ? `?${query}` : ''}`;
+  return `${getSearchDestination(normalizedFilters)}${query ? `?${query}` : ''}`;
 }
 
 export function AiSearchModal() {

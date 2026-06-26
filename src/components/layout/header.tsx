@@ -109,7 +109,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/30 bg-background/80 md:bg-background/50 backdrop-blur-lg supports-[backdrop-filter]:bg-background/70 md:supports-[backdrop-filter]:bg-background/30">
       <div className="container flex h-16 items-center justify-between">
-        <Link href="/" aria-label={displayName}>
+        <Link href="/" aria-label={displayName} className="min-w-0">
           <Logo logoUrl={logoUrl} name={displayName} />
         </Link>
         

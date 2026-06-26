@@ -17,6 +17,7 @@ import {
   shouldRetryApiRequest,
 } from './api-base';
 import { getDefaultAgencySlug, getEffectiveAgencySlug } from './agency-routing';
+import { getAvailablePropertyTypeValuesFromListings } from './property-types';
 
 export type GetPropertiesParams = Record<string, string | number | boolean | undefined | null>;
 
@@ -26,6 +27,8 @@ export type PaginatedProperties = {
   page: number;
   totalPages: number;
 };
+
+const PROPERTY_TYPE_DISCOVERY_LIMIT = 500;
 
 type PublicTemplateSiteSnapshot = SiteConfig & {
   profile?: SiteConfig['profile'];
@@ -762,7 +765,9 @@ export async function getProperties(
   }
 
   const data = await response.json() as any;
-  const rawListings = Array.isArray(data) ? data : (data.listings || []);
+  const rawListings = Array.isArray(data)
+    ? data
+    : (data.listings || data.properties || data.data?.listings || data.data?.properties || []);
   const total = data.total || rawListings.length;
   const page = data.page || 1;
   const totalPages = data.totalPages || Math.ceil(total / Number(params.limit || 10)) || 1;
@@ -773,6 +778,30 @@ export async function getProperties(
     page,
     totalPages,
   };
+}
+
+export async function getAvailablePropertyTypes(agencySlug?: string | null) {
+  const response = await fetchTemplateResponse(
+    `/listings?limit=${PROPERTY_TYPE_DISCOVERY_LIMIT}`,
+    { next: { revalidate: 300 } },
+    8000,
+    agencySlug,
+  );
+
+  if (!response.ok) return [];
+
+  const data = await response.json() as any;
+  const rawListings = Array.isArray(data)
+    ? data
+    : (data.listings || data.properties || data.data?.listings || data.data?.properties || []);
+
+  return getAvailablePropertyTypeValuesFromListings(
+    rawListings.map((listing: any) => ({
+      type: resolvePropertyType(listing),
+      propertyType: listing.propertyType || listing.fields?.propertyType,
+      category: listing.category || listing.type || listing.fields?.type,
+    })),
+  );
 }
 
 export async function getPropertyById(id: string, agencySlug?: string | null) {

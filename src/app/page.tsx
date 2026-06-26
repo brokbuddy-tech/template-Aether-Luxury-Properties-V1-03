@@ -44,7 +44,6 @@ import {
 } from '@/components/ui/carousel';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { PropertyTypeDropdown } from '@/components/property-type-dropdown';
 import { BedsAndBathsDropdown } from '@/components/beds-baths-dropdown';
@@ -53,12 +52,14 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { AmenityIcon } from '@/components/amenity-icon';
 import { useAiSearchModal } from '@/hooks/use-ai-search-modal';
+import { useAvailablePropertyTypes } from '@/hooks/use-available-property-types';
 import { Progress } from '@/components/ui/progress';
 import { getSiteConfig } from '@/lib/api';
 import { getAgencyDisplayName } from '@/lib/live-mappers';
 import type { SiteConfig } from '@/lib/live-types';
 import { LatestListingsSection } from '@/components/latest-listings-section';
 import { cleanQueryForCategory, normalizeCategory } from '@/lib/search-utils';
+import { getPropertyTypeGroup } from '@/lib/property-types';
 
 const HERO_AMENITIES = [
   { id: 'swimming-pool', label: 'Swimming Pool' },
@@ -96,7 +97,9 @@ type AiSearchFilters = {
 };
 
 function getSearchDestination(filters: AiSearchFilters, fallbackMode: 'buy' | 'rent') {
-  if (filters.propertyType === 'COMMERCIAL' || filters.type === 'commercial') return '/commercial';
+  const categoryGroup = getPropertyTypeGroup(filters.category);
+
+  if (filters.propertyType === 'COMMERCIAL' || filters.type === 'commercial' || categoryGroup === 'commercial') return '/commercial';
   if (filters.readiness === 'OFFPLAN' || filters.type === 'new-homes') return '/off-plan';
   if (filters.transactionType === 'RENT' || filters.type === 'rent') return '/rent';
   if (filters.readiness === 'READY') return fallbackMode === 'rent' ? '/rent' : '/buy';
@@ -119,7 +122,7 @@ function buildSearchHref(filters: AiSearchFilters, fallbackMode: 'buy' | 'rent')
   });
 
   const query = params.toString();
-  return `${getSearchDestination(filters, fallbackMode)}${query ? `?${query}` : ''}`;
+  return `${getSearchDestination(normalizedFilters, fallbackMode)}${query ? `?${query}` : ''}`;
 }
 
 async function parseAiSearch(query: string, filters: AiSearchFilters) {
@@ -151,6 +154,7 @@ export default function Home() {
   const [isAiSearching, setIsAiSearching] = useState(false);
   const [siteConfig, setSiteConfig] = useState<SiteConfig | null>(null);
   const { openModal: openAiSearchModal } = useAiSearchModal();
+  const availablePropertyTypes = useAvailablePropertyTypes();
   const [expertiseIndex, setExpertiseIndex] = useState(0);
   const [newsIndex, setNewsIndex] = useState(0);
 
@@ -285,7 +289,7 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Section 2: Hero & Search */}
-      <section className="relative h-[90vh] w-full overflow-hidden">
+      <section className="relative min-h-[calc(100svh-4rem)] w-full overflow-hidden py-8 sm:py-12 md:h-[90vh] md:py-0">
         <video
           className="absolute inset-0 h-full w-full object-cover"
           autoPlay
@@ -298,21 +302,21 @@ export default function Home() {
           <source src="/home.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/60" />
-        <div className="relative flex h-full flex-col items-center justify-center text-center text-white p-4">
+        <div className="relative flex min-h-[calc(100svh-8rem)] flex-col items-center justify-center px-4 text-center text-white md:h-full md:min-h-0">
           <FadeInOnScroll className="w-full">
-            <h1>
+            <h1 className="mx-auto max-w-[21rem] text-[2.05rem] leading-[1.15] tracking-[0.08em] sm:max-w-3xl sm:text-5xl sm:tracking-widest md:max-w-none md:text-6xl">
               Dubai Real Estate. Built Better.
             </h1>
-            <p className="mx-auto mt-6 max-w-3xl text-center text-lg font-light tracking-widest text-white/90">
+            <p className="mx-auto mt-5 max-w-[22rem] text-center text-sm font-light leading-6 tracking-[0.08em] text-white/90 sm:max-w-3xl sm:text-base sm:leading-7 md:text-lg md:tracking-widest">
               Buying, selling, renting or investing in Dubai should feel clear, seamless and well handled. At <strong>{agencyName}</strong>, we&apos;ve built our business to remove friction, raise standards and deliver better outcomes for clients and brokers alike.
             </p>
           </FadeInOnScroll>
-          <FadeInOnScroll delay={200}>
-            <div className="mt-12 w-full max-w-5xl">
-              <div className="p-2 rounded-lg bg-white/20 md:bg-white/10 backdrop-blur-xl border border-white/20">
-                <div className="flex flex-col md:flex-row items-center gap-2">
-                  <Tabs value={transactionMode} onValueChange={(value) => { setTransactionMode(value as 'buy' | 'rent'); if (value === 'rent') setReadiness('all'); }} className="shrink-0">
-                    <TabsList className="bg-transparent h-10">
+          <FadeInOnScroll delay={200} className="w-full">
+            <div className="mx-auto mt-7 w-full max-w-[40rem] md:mt-12 md:max-w-5xl">
+              <div className="rounded-lg border border-white/20 bg-black/35 p-3 shadow-2xl backdrop-blur-xl sm:bg-white/15 md:bg-white/10">
+                <div className="grid grid-cols-1 gap-2 md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-center">
+                  <Tabs value={transactionMode} onValueChange={(value) => { setTransactionMode(value as 'buy' | 'rent'); if (value === 'rent') setReadiness('all'); }} className="w-full md:w-auto md:shrink-0">
+                    <TabsList className="grid h-10 w-full grid-cols-2 bg-white/10 md:flex md:w-auto md:bg-transparent">
                       <TabsTrigger value="buy" className="text-white data-[state=active]:bg-copper-gold data-[state=active]:text-white px-4">BUY</TabsTrigger>
                       <TabsTrigger value="rent" className="text-white data-[state=active]:bg-copper-gold data-[state=active]:text-white px-4">RENT</TabsTrigger>
                     </TabsList>
@@ -325,17 +329,17 @@ export default function Home() {
                     onKeyDown={(event) => {
                       if (event.key === 'Enter') handleSearch();
                     }}
-                    className="bg-white/20 border-0 text-white placeholder:text-gray-300 focus-visible:ring-accent flex-1 min-w-0 h-10 w-full"
+                    className="h-11 w-full min-w-0 border-0 bg-white/20 text-white placeholder:text-gray-300 focus-visible:ring-accent md:h-10"
                   />
-                  <Button className="bg-accent hover:bg-accent/90 text-accent-foreground shrink-0 h-10 px-6 w-full md:w-auto" onClick={handleSearch}>
+                  <Button className="h-11 w-full shrink-0 bg-accent px-6 text-accent-foreground hover:bg-accent/90 md:h-10 md:w-auto" onClick={handleSearch}>
                     <Search className="mr-2 h-4 w-4" />
                     Search
                   </Button>
                 </div>
-                <div className="mt-2 flex flex-col md:flex-row gap-2 items-center">
+                <div className="mt-2 grid grid-cols-2 gap-2 md:flex md:items-center">
                   {transactionMode === 'buy' && (
-                    <Tabs value={readiness} onValueChange={(value) => setReadiness(value as 'all' | 'ready' | 'offplan')} className="shrink-0">
-                      <TabsList className="bg-transparent h-10">
+                    <Tabs value={readiness} onValueChange={(value) => setReadiness(value as 'all' | 'ready' | 'offplan')} className="col-span-2 w-full md:w-auto md:shrink-0">
+                      <TabsList className="grid h-10 w-full grid-cols-3 bg-white/10 md:flex md:w-auto md:bg-transparent">
                         <TabsTrigger value="all" className="text-white data-[state=active]:bg-white/25 data-[state=active]:text-white px-3 text-xs">All</TabsTrigger>
                         <TabsTrigger value="ready" className="text-white data-[state=active]:bg-white/25 data-[state=active]:text-white px-3 text-xs">Ready</TabsTrigger>
                         <TabsTrigger value="offplan" className="text-white data-[state=active]:bg-white/25 data-[state=active]:text-white px-3 text-xs">Off-plan</TabsTrigger>
@@ -345,7 +349,9 @@ export default function Home() {
                   <PropertyTypeDropdown
                     value={propertyCategory}
                     onValueChange={setPropertyCategory}
+                    availablePropertyTypes={availablePropertyTypes}
                     variant="hero"
+                    className="h-11 md:h-10"
                   />
                   <BedsAndBathsDropdown
                     bedrooms={bedrooms}
@@ -353,6 +359,7 @@ export default function Home() {
                     onBedroomsChange={setBedrooms}
                     onBathroomsChange={setBathrooms}
                     variant="hero"
+                    className="h-11 md:h-10"
                   />
                   <PriceDropdown
                     minPrice={minPrice}
@@ -360,16 +367,18 @@ export default function Home() {
                     onMinPriceChange={setMinPrice}
                     onMaxPriceChange={setMaxPrice}
                     variant="hero"
+                    className="h-11 md:h-10"
                   />
 
                   {/* AI Search – icon only, tooltip on hover */}
                   <Button
                     variant="ghost"
-                    className="group relative text-white hover:bg-white/20 hover:text-white w-auto shrink-0 px-3"
+                    className="group relative h-11 w-full shrink-0 px-3 text-white hover:bg-white/20 hover:text-white md:h-10 md:w-auto"
                     onClick={handleAiSearch}
                     disabled={isAiSearching}
                   >
                     <Sparkles className="h-4 w-4" />
+                    <span className="ml-2 text-sm md:hidden">AI</span>
                     <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-9 px-2.5 py-1 rounded-md bg-black/80 backdrop-blur-sm text-white text-xs whitespace-nowrap opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 border border-white/15">
                       {isAiSearching ? 'Searching...' : 'AI Search'}
                     </span>
@@ -378,7 +387,7 @@ export default function Home() {
                   {/* Advanced Filters */}
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button variant="ghost" className="text-white hover:bg-white/20 hover:text-white w-full md:w-auto">
+                      <Button variant="ghost" className="col-span-2 h-11 w-full text-white hover:bg-white/20 hover:text-white md:col-span-1 md:h-10 md:w-auto">
                         <SlidersHorizontal className="mr-2 h-4 w-4" />
                         Filters
                       </Button>
@@ -472,9 +481,9 @@ export default function Home() {
       </section>
 
       {/* Section 3: Service Discovery Grid */}
-      <section className="py-16 md:py-24 bg-background">
+      <section className="bg-background py-12 md:py-24">
         <div className="container">
-          <div className="text-left max-w-3xl mb-12 ml-[10px]">
+          <div className="mb-10 max-w-3xl text-left md:mb-12 md:ml-[10px]">
             <FadeInOnScroll>
               <h2>Explore Property in Dubai</h2>
               <p className="mt-4 text-lg text-muted-foreground leading-relaxed">
@@ -496,7 +505,7 @@ export default function Home() {
                   <CarouselItem key={service.title} className="pl-4 sm:basis-1/2 lg:basis-1/3 xl:basis-1/4">
                     <FadeInOnScroll delay={index * 100}>
                       <Link href={service.href}>
-                        <Card className="group relative h-[400px] overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105">
+                        <Card className="group relative h-[340px] overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105 sm:h-[400px]">
                           {serviceImage && (
                             <Image
                               src={serviceImage.imageUrl}
@@ -549,7 +558,7 @@ export default function Home() {
       <LatestListingsSection />
 
       {/* Section 5: Professional Expertise Section */}
-      <section className="py-16 md:py-24 bg-background">
+      <section className="bg-background py-12 md:py-24">
         <div className="container">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12 lg:gap-24">
             <div className="w-full md:w-1/2 lg:w-3/5">
@@ -599,7 +608,7 @@ export default function Home() {
       </section>
 
       {/* Section 5.5: Insights & Achievements */}
-      <section className="bg-muted py-16 md:py-24">
+      <section className="bg-muted py-12 md:py-24">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Left Column: News Carousel */}
@@ -638,7 +647,7 @@ export default function Home() {
 
             {/* Right Column: Awards Image */}
             <div>
-              <FadeInOnScroll delay={200}>
+              <FadeInOnScroll delay={200} className="w-full">
                 {awardsImage && (
                   <Image
                     src={awardsImage.imageUrl}
@@ -670,7 +679,7 @@ export default function Home() {
       </section>
 
       {/* Section 6: Community Guide Scroller */}
-      <section className="py-16 md:py-24 bg-background">
+      <section className="bg-background py-12 md:py-24">
         <div className="container">
           <FadeInOnScroll>
             <div className="text-left max-w-[900px] mb-12">
@@ -688,7 +697,7 @@ export default function Home() {
                   <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-1/3">
                     <FadeInOnScroll delay={index * 100}>
                       <Link href={community.href}>
-                        <Card className="group relative h-[450px] overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105">
+                        <Card className="group relative h-[360px] overflow-hidden rounded-lg shadow-lg transition-transform hover:scale-105 sm:h-[450px]">
                           {communityImage && (
                             <Image
                               src={communityImage.imageUrl}
@@ -722,13 +731,13 @@ export default function Home() {
 
       {/* Section 7: Find Your Next Home CTA */}
       <section
-        className="relative h-[500px] w-full bg-cover bg-center bg-scroll lg:bg-fixed"
+        className="relative min-h-[420px] w-full bg-cover bg-center bg-scroll py-14 lg:bg-fixed"
         style={{
           backgroundImage: ctaImage ? `url(${ctaImage.imageUrl})` : 'none',
         }}
       >
         <div className="absolute inset-0 bg-black/40" />
-        <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white p-4">
+        <div className="relative z-10 flex min-h-[320px] flex-col items-center justify-center px-4 text-center text-white">
           <FadeInOnScroll>
             <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight">
               Find Your Next Home With {agencyName}.

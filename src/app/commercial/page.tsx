@@ -4,7 +4,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { FadeInOnScroll } from '@/components/fade-in-on-scroll';
 import { FilterBar } from '@/components/filter-bar';
 import { CommercialPropertyCard } from '@/components/commercial-property-card';
-import { getProperties } from '@/lib/api';
+import { getAvailablePropertyTypes, getProperties } from '@/lib/api';
 import { isLikelyCommercialProperty, toAetherCommercialProperty } from '@/lib/live-mappers';
 import { cleanQueryForCategory, matchesTemplateCategory, normalizeCategory } from '@/lib/search-utils';
 
@@ -20,7 +20,8 @@ export default async function CommercialPage({ searchParams }: { searchParams?: 
   const category = normalizeCategory(getParam(resolvedSearchParams, 'category'));
   const searchQuery = cleanQueryForCategory(getParam(resolvedSearchParams, 'q'), category);
   const headingLabel = searchQuery || category;
-  const liveResponse = await getProperties({
+  const [liveResponse, availablePropertyTypes] = await Promise.all([
+    getProperties({
     propertyType: 'COMMERCIAL',
     transactionType: getParam(resolvedSearchParams, 'transactionType'),
     q: searchQuery,
@@ -32,7 +33,9 @@ export default async function CommercialPage({ searchParams }: { searchParams?: 
     maxArea: getParam(resolvedSearchParams, 'maxArea'),
     amenities: getParam(resolvedSearchParams, 'amenities'),
     limit: category ? 96 : 48,
-  });
+    }),
+    getAvailablePropertyTypes(),
+  ]);
   const commercialProperties = liveResponse.properties
     .filter(isLikelyCommercialProperty)
     .filter((property) => matchesTemplateCategory(property, category))
@@ -61,7 +64,7 @@ export default async function CommercialPage({ searchParams }: { searchParams?: 
 
       {/* Main Content */}
       <div className="bg-white">
-        <FilterBar variant="commercial" />
+        <FilterBar variant="commercial" availablePropertyTypes={availablePropertyTypes} />
         
         <div className="container py-12">
             <div className="flex justify-start items-center mb-4">
