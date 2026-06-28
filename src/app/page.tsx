@@ -336,7 +336,7 @@ export default function Home() {
                     Search
                   </Button>
                 </div>
-                <div className="mt-2 grid grid-cols-2 gap-2 md:flex md:items-center">
+                <div className="mt-2 grid grid-cols-2 gap-2 md:flex md:items-center md:justify-center">
                   {transactionMode === 'buy' && (
                     <Tabs value={readiness} onValueChange={(value) => setReadiness(value as 'all' | 'ready' | 'offplan')} className="col-span-2 w-full md:w-auto md:shrink-0">
                       <TabsList className="grid h-10 w-full grid-cols-3 bg-white/10 md:flex md:w-auto md:bg-transparent">
