@@ -37,6 +37,7 @@ import { resolveTemplateGallery, resolveTemplateImage } from '@/lib/media';
 import { toAetherProperty } from '@/lib/live-mappers';
 import type { Property } from '@/lib/types';
 import { AmenityIcon } from '@/components/amenity-icon';
+import { ListingViewTracker } from '@/components/listing-view-tracker';
 
 function MortgageCalculator({ price }: { price: number }) {
   const [purchasePrice, setPurchasePrice] = useState(price);
@@ -229,6 +230,8 @@ export default function PropertyDetailPage() {
 
   return (
     <div className="container py-12">
+      <ListingViewTracker canonicalListingId={property.id} />
+
       {/* Gallery */}
       <ListingHeroGallery
         images={galleryImages}
