@@ -31,7 +31,7 @@ export function PropertyCard({ property }: { property: Property }) {
   return (
     <div className="relative group h-full">
       <Card className="mx-auto flex h-full w-full max-w-full sm:max-w-[350px] flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-shadow duration-300 group-hover:shadow-xl">
-        <Link href={`/property/${property.id}`} className="block">
+        <Link href={`/properties/${property.id}`} className="block">
           <div className="relative">
             <Carousel className="w-full">
               <CarouselContent>
@@ -77,7 +77,7 @@ export function PropertyCard({ property }: { property: Property }) {
             AED {property.price.toLocaleString()}
             {property.type === 'RENT' ? ' / year' : ''}
           </p>
-          <Link href={`/property/${property.id}`} className="block">
+          <Link href={`/properties/${property.id}`} className="block">
             <h3 className="mt-2 text-sm font-bold tracking-wide text-[#374151] uppercase hover:underline">
               {property.title}
             </h3>

@@ -5,5 +5,5 @@ import { redirect } from "next/navigation";
 
 export default function CommercialPropertyDetailPage() {
   const params = useParams();
-  redirect(`/property/${params.id}`);
+  redirect(`/properties/${params.id}`);
 }
